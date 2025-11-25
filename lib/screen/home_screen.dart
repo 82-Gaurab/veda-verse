@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:vedaverse/screen/second_screen.dart';
 
@@ -10,13 +12,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    await Future.delayed(Duration(seconds: 4), () {
+    Timer(Duration(seconds: 4), () {
       if (context.mounted) {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (context) => SecondScreen()));
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => SecondScreen()),
+        );
       }
     });
   }
