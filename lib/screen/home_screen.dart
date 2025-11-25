@@ -1,7 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:vedaverse/screen/second_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() async {
+    super.initState();
+    await Future.delayed(Duration(seconds: 4), () {
+      if (context.mounted) {
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => SecondScreen()));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
