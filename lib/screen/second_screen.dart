@@ -10,9 +10,14 @@ class SecondScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Image.asset("assets/images/book-stack.jpg", height: 500),
-            Text("Enjoy your reading journey through us"),
+            Text(
+              "Enjoy your reading journey through us",
+              style: TextStyle(fontSize: 30),
+              textAlign: TextAlign.center,
+            ),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -22,9 +27,12 @@ class SecondScreen extends StatelessWidget {
                   );
                 },
                 style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.amber),
+                  backgroundColor: WidgetStatePropertyAll(Color(0xFFFFAE37)),
                 ),
-                child: Text("Continue"),
+                child: Text(
+                  "Continue",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
               ),
             ),
           ],
