@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vedaverse/common/my_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -45,23 +46,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Color(0xFFFFAE37)),
-                  ),
-                  child: Text(
-                    "Login",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ),
-              ),
+              showMyButton(text: "Login", onPressed: () {}),
             ],
           ),
         ),

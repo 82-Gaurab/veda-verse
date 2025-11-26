@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vedaverse/common/my_button.dart';
 import 'package:vedaverse/screen/login_screen.dart';
 
 class SecondScreen extends StatelessWidget {
@@ -18,22 +19,14 @@ class SecondScreen extends StatelessWidget {
               style: TextStyle(fontSize: 30),
               textAlign: TextAlign.center,
             ),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Color(0xFFFFAE37)),
-                ),
-                child: Text(
-                  "Continue",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
+
+            showMyButton(
+              text: "Continue",
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
             ),
           ],
         ),
