@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/common/my_button.dart';
+import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/screen/login_screen.dart';
 
 class SecondScreen extends StatelessWidget {
@@ -20,7 +20,7 @@ class SecondScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
 
-            showMyButton(
+            MyButton(
               text: "Continue",
               onPressed: () {
                 Navigator.of(context).pushReplacement(

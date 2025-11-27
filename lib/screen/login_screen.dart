@@ -1,52 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/common/my_button.dart';
+import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/widgets/my_button.dart';
+import 'package:vedaverse/widgets/my_input_form_field.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _email = TextEditingController();
-    TextEditingController _password = TextEditingController();
+    TextEditingController _emailController = TextEditingController();
+    TextEditingController _passwordController = TextEditingController();
+
+    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      appBar: AppBar(title: Text("Login Screen")),
+      appBar: AppBar(
+        title: Text(
+          "Login Screen",
+          style: TextStyle(fontSize: 28, color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Color(0xFFFFAE37),
+      ),
       body: Padding(
         padding: EdgeInsets.all(20),
         child: Form(
+          key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              TextFormField(
-                controller: _email,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: "Email",
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFFFAE37)),
-                  ),
-
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFFFAE37), width: 2),
-                  ),
-                ),
+              MyInputFormField(
+                controller: _emailController,
+                labelText: "Email",
+                inputType: TextInputType.emailAddress,
               ),
-              TextFormField(
-                controller: _password,
+
+              SizedBox(height: 25),
+              MyInputFormField(
                 obscureText: true,
-                decoration: InputDecoration(
-                  hintText: "Password",
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFFFAE37), width: 2),
-                  ),
-
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFFFAE37)),
-                  ),
-                ),
+                controller: _passwordController,
+                labelText: "Password",
               ),
+              SizedBox(height: 25),
 
-              showMyButton(text: "Login", onPressed: () {}),
+              MyButton(
+                text: "Login",
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    showMySnackBar(context: context, message: "Login Success");
+                  }
+                },
+              ),
             ],
           ),
         ),
