@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/screen/sign_up_screen.dart';
 import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/widgets/my_input_form_field.dart';
 
@@ -49,6 +50,18 @@ class LoginScreen extends StatelessWidget {
                     showMySnackBar(context: context, message: "Login Success");
                   }
                 },
+              ),
+
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  );
+                },
+                child: Text(
+                  "Sign Up",
+                  style: TextStyle(fontSize: 24, color: Color(0xFFFFAE37)),
+                ),
               ),
             ],
           ),
