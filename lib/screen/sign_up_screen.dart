@@ -62,6 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 MyInputFormField(
                   controller: _userNameController,
                   labelText: "Username",
+                  icon: Icon(Icons.person),
                 ),
                 SizedBox(height: 15),
 
@@ -69,6 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: _emailController,
                   labelText: "Email",
                   inputType: TextInputType.emailAddress,
+                  icon: Icon(Icons.email),
                 ),
                 SizedBox(height: 15),
 
@@ -76,6 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: _passwordController,
                   labelText: "Password",
                   obscureText: true,
+                  icon: Icon(Icons.key),
                 ),
                 SizedBox(height: 15),
 
@@ -83,6 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: _confirmPasswordController,
                   labelText: "Confirm Password",
                   obscureText: true,
+                  icon: Icon(Icons.key_off),
                 ),
 
                 SizedBox(height: 15),
