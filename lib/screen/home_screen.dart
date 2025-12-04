@@ -1,37 +1,43 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:vedaverse/screen/second_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Timer(Duration(seconds: 4), () {
-      if (context.mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => SecondScreen()),
-        );
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Image.asset("assets/images/logo.png"),
-            Image.asset("assets/images/title.png"),
-          ],
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(13),
+          child: Column(
+            children: [
+              SizedBox(height: 40),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/title.png", width: 180),
+                  Spacer(),
+                  Icon(Icons.search, size: 40),
+                  SizedBox(width: 10),
+                  Icon(Icons.notifications, size: 40),
+                ],
+              ),
+
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+              Text("data"),
+            ],
+          ),
         ),
       ),
     );

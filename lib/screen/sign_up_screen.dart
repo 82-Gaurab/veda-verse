@@ -3,6 +3,7 @@ import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/screen/first_on_boarding_screen.dart';
 import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/widgets/my_input_form_field.dart';
+import 'package:vedaverse/widgets/my_progress_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -23,68 +24,98 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Create an Account",
-          style: TextStyle(fontSize: 28, color: Colors.white),
-        ),
-        centerTitle: true,
-        backgroundColor: Color(0xFFFFAE37),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(15),
-        child: Form(
-          key: _formKey,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(15),
+          child: Form(
+            key: _formKey,
 
-          child: Column(
-            children: [
-              MyInputFormField(
-                controller: _userNameController,
-                labelText: "Username",
-              ),
-              SizedBox(height: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 30),
+                MyProgressBar(notProgressFlex: 7),
 
-              MyInputFormField(
-                controller: _emailController,
-                labelText: "Email",
-                inputType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 20),
+                SizedBox(height: 50),
 
-              MyInputFormField(
-                controller: _passwordController,
-                labelText: "Password",
-                obscureText: true,
-              ),
-              SizedBox(height: 20),
+                Text(
+                  "Create New Account",
+                  style: TextStyle(
+                    fontSize: 35,
+                    color: Color(0xFF38B120),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
 
-              MyInputFormField(
-                controller: _confirmPasswordController,
-                labelText: "Confirm Password",
-                obscureText: true,
-              ),
+                Text(
+                  "Enter Username, Email and Password to create new account",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
 
-              SizedBox(height: 20),
+                SizedBox(height: 50),
 
-              MyButton(
-                text: "Sign Up",
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    showMySnackBar(
-                      context: context,
-                      message: "Successfully created new account",
-                    );
+                MyInputFormField(
+                  controller: _userNameController,
+                  labelText: "Username",
+                ),
+                SizedBox(height: 20),
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FirstOnBoardingScreen(),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
+                MyInputFormField(
+                  controller: _emailController,
+                  labelText: "Email",
+                  inputType: TextInputType.emailAddress,
+                ),
+                SizedBox(height: 20),
+
+                MyInputFormField(
+                  controller: _passwordController,
+                  labelText: "Password",
+                  obscureText: true,
+                ),
+                SizedBox(height: 20),
+
+                MyInputFormField(
+                  controller: _confirmPasswordController,
+                  labelText: "Confirm Password",
+                  obscureText: true,
+                ),
+
+                SizedBox(height: 20),
+
+                Row(
+                  children: [
+                    Icon(Icons.check_box, color: Color(0xFFFFAE37), size: 30),
+                    SizedBox(width: 10),
+                    Text("Remember Me", style: TextStyle(fontSize: 15)),
+                  ],
+                ),
+
+                Spacer(),
+
+                MyButton(
+                  text: "Sign Up",
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      showMySnackBar(
+                        context: context,
+                        message: "Successfully created new account",
+                      );
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FirstOnBoardingScreen(),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

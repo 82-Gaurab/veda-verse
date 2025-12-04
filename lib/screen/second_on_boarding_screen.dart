@@ -24,35 +24,50 @@ class SecondOnBoardingScreen extends StatelessWidget {
         child: Padding(
           padding: EdgeInsetsGeometry.all(13),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 30),
               MyProgressBar(notProgressFlex: 1),
 
-              SizedBox(height: 70),
+              SizedBox(height: 50),
 
-              Wrap(
-                spacing: 20,
-                runSpacing: 40,
-                children: _lstAge
-                    .map(
-                      (ele) => Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 70,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Color(0xFFFFAE37),
-                            width: 2,
+              Text(
+                "Select your Age",
+                style: TextStyle(
+                  fontSize: 35,
+                  color: Color(0xFF38B120),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(height: 50),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  spacing: 20,
+                  runSpacing: 40,
+                  children: _lstAge
+                      .map(
+                        (ele) => Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 70,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Color(0xFFFFAE37),
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
 
-                        // color: const Color.fromARGB(255, 129, 176, 214),
-                        child: Text(ele, style: TextStyle(fontSize: 18)),
-                      ),
-                    )
-                    .toList(),
+                          // color: const Color.fromARGB(255, 129, 176, 214),
+                          child: Text(ele, style: TextStyle(fontSize: 18)),
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
 
               Spacer(),
