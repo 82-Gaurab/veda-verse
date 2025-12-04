@@ -43,7 +43,7 @@ class OnBoardingScreen extends StatelessWidget {
                   "Choose The Book Genre You Like",
                   style: TextStyle(
                     fontSize: 35,
-                    color: Color.fromARGB(255, 55, 255, 98),
+                    color: Color(0xFF38B120),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
