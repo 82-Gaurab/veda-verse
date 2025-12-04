@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vedaverse/screen/second_on_boarding_screen.dart';
 import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/widgets/my_progress_bar.dart';
 
@@ -72,7 +73,17 @@ class FirstOnBoardingScreen extends StatelessWidget {
               ),
               Spacer(),
 
-              MyButton(text: "Continue", onPressed: () {}),
+              MyButton(
+                text: "Continue",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SecondOnBoardingScreen(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),

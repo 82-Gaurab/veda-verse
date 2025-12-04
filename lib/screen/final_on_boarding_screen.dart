@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/widgets/my_progress_bar.dart';
 
-class OnBoardingScreen extends StatelessWidget {
-  const OnBoardingScreen({super.key});
+class FinalOnBoardingScreen extends StatelessWidget {
+  const FinalOnBoardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
