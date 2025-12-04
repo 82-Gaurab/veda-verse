@@ -52,11 +52,13 @@ class LoginScreen extends StatelessWidget {
                       controller: _emailController,
                       labelText: "Email",
                       inputType: TextInputType.emailAddress,
+                      icon: Icon(Icons.email),
                     ),
 
                     SizedBox(height: 15),
 
                     MyInputFormField(
+                      icon: Icon(Icons.key),
                       obscureText: true,
                       controller: _passwordController,
                       labelText: "Password",
