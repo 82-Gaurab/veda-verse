@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/screen/on_boarding_screen.dart';
 import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/widgets/my_input_form_field.dart';
 
@@ -72,6 +73,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     showMySnackBar(
                       context: context,
                       message: "Successfully created new account",
+                    );
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OnBoardingScreen(),
+                      ),
                     );
                   }
                 },

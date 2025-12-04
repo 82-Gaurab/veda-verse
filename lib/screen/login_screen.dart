@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
-import 'package:vedaverse/screen/on_boarding_screen.dart';
 import 'package:vedaverse/screen/sign_up_screen.dart';
 import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/widgets/my_input_form_field.dart';
@@ -56,7 +55,7 @@ class LoginScreen extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => OnBoardingScreen()),
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
                   );
                 },
                 child: Text(
