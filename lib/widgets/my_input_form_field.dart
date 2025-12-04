@@ -6,6 +6,7 @@ class MyInputFormField extends StatelessWidget {
   final String labelText;
   final bool? obscureText;
   final String? hintText;
+  final Icon? icon;
   const MyInputFormField({
     super.key,
     required this.controller,
@@ -13,6 +14,7 @@ class MyInputFormField extends StatelessWidget {
     required this.labelText,
     this.hintText,
     this.obscureText,
+    this.icon,
   });
 
   @override
@@ -24,6 +26,7 @@ class MyInputFormField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
+        prefixIcon: icon,
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Color(0xFFFFAE37)),
         ),
@@ -34,7 +37,7 @@ class MyInputFormField extends StatelessWidget {
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return "Please Enter value";
+          return "Please Enter $labelText";
         }
         return null;
       },
