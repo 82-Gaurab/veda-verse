@@ -105,11 +105,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   text: "Sign Up",
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      showMySnackBar(
-                        context: context,
-                        message: "Successfully created new account",
-                      );
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(
