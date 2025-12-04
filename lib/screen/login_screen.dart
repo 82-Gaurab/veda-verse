@@ -54,6 +54,8 @@ class LoginScreen extends StatelessWidget {
                       inputType: TextInputType.emailAddress,
                     ),
 
+                    SizedBox(height: 15),
+
                     MyInputFormField(
                       obscureText: true,
                       controller: _passwordController,

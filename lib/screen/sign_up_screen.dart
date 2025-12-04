@@ -32,6 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(height: 30),
                 MyProgressBar(notProgressFlex: 7),
@@ -62,21 +63,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: _userNameController,
                   labelText: "Username",
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
 
                 MyInputFormField(
                   controller: _emailController,
                   labelText: "Email",
                   inputType: TextInputType.emailAddress,
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
 
                 MyInputFormField(
                   controller: _passwordController,
                   labelText: "Password",
                   obscureText: true,
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
 
                 MyInputFormField(
                   controller: _confirmPasswordController,
@@ -84,7 +85,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   obscureText: true,
                 ),
 
-                SizedBox(height: 20),
+                SizedBox(height: 15),
 
                 Row(
                   children: [
