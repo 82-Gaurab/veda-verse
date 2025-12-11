@@ -8,6 +8,8 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,6 +25,17 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Wishlist"),
         ],
+
+        backgroundColor: Colors.amber.shade400,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.black,
+
+        currentIndex: _selectedIndex,
+        onTap: (value) {
+          setState(() {
+            _selectedIndex = value;
+          });
+        },
       ),
     );
   }
