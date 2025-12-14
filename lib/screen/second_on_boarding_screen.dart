@@ -44,29 +44,36 @@ class SecondOnBoardingScreen extends StatelessWidget {
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  spacing: 20,
-                  runSpacing: 40,
-                  children: _lstAge
-                      .map(
-                        (ele) => Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 70,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Color(0xFFFFAE37),
-                              width: 2,
+                child: Center(
+                  child: Wrap(
+                    spacing: 20,
+                    runSpacing: 40,
+                    children: _lstAge
+                        .map(
+                          (ele) => Container(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 5,
+                              // horizontal: 70,
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color(0xFFFFAE37),
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
 
-                          // color: const Color.fromARGB(255, 129, 176, 214),
-                          child: Text(ele, style: TextStyle(fontSize: 18)),
-                        ),
-                      )
-                      .toList(),
+                            // color: const Color.fromARGB(255, 129, 176, 214),
+                            child: Center(
+                              child: Text(ele, style: TextStyle(fontSize: 18)),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
               ),
 
