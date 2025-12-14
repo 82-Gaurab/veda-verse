@@ -24,98 +24,119 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(15),
-          child: Form(
-            key: _formKey,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Padding(
+              padding: EdgeInsets.all(15),
+              child: Form(
+                key: _formKey,
 
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(height: 30),
-                MyProgressBar(notProgressFlex: 7),
+                child: SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(height: 30),
+                          MyProgressBar(notProgressFlex: 7),
 
-                SizedBox(height: 50),
+                          SizedBox(height: 50),
 
-                Text(
-                  "Create New Account",
-                  style: TextStyle(
-                    fontSize: 35,
-                    color: Color(0xFF38B120),
-                    fontWeight: FontWeight.bold,
+                          Text(
+                            "Create New Account",
+                            style: TextStyle(
+                              fontSize: 35,
+                              color: Color(0xFF38B120),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          Text(
+                            "Enter Username, Email and Password to create new account",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          SizedBox(height: 50),
+
+                          MyInputFormField(
+                            controller: _userNameController,
+                            labelText: "Username",
+                            icon: Icon(Icons.person),
+                          ),
+                          SizedBox(height: 15),
+
+                          MyInputFormField(
+                            controller: _emailController,
+                            labelText: "Email",
+                            inputType: TextInputType.emailAddress,
+                            icon: Icon(Icons.email),
+                          ),
+                          SizedBox(height: 15),
+
+                          MyInputFormField(
+                            controller: _passwordController,
+                            labelText: "Password",
+                            obscureText: true,
+                            icon: Icon(Icons.key),
+                          ),
+                          SizedBox(height: 15),
+
+                          MyInputFormField(
+                            controller: _confirmPasswordController,
+                            labelText: "Confirm Password",
+                            obscureText: true,
+                            icon: Icon(Icons.key_off),
+                          ),
+
+                          SizedBox(height: 15),
+
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.check_box,
+                                color: Color(0xFFFFAE37),
+                                size: 30,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "Remember Me",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ],
+                          ),
+
+                          Spacer(),
+
+                          MyButton(
+                            text: "Sign Up",
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        FirstOnBoardingScreen(),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-
-                Text(
-                  "Enter Username, Email and Password to create new account",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                SizedBox(height: 50),
-
-                MyInputFormField(
-                  controller: _userNameController,
-                  labelText: "Username",
-                  icon: Icon(Icons.person),
-                ),
-                SizedBox(height: 15),
-
-                MyInputFormField(
-                  controller: _emailController,
-                  labelText: "Email",
-                  inputType: TextInputType.emailAddress,
-                  icon: Icon(Icons.email),
-                ),
-                SizedBox(height: 15),
-
-                MyInputFormField(
-                  controller: _passwordController,
-                  labelText: "Password",
-                  obscureText: true,
-                  icon: Icon(Icons.key),
-                ),
-                SizedBox(height: 15),
-
-                MyInputFormField(
-                  controller: _confirmPasswordController,
-                  labelText: "Confirm Password",
-                  obscureText: true,
-                  icon: Icon(Icons.key_off),
-                ),
-
-                SizedBox(height: 15),
-
-                Row(
-                  children: [
-                    Icon(Icons.check_box, color: Color(0xFFFFAE37), size: 30),
-                    SizedBox(width: 10),
-                    Text("Remember Me", style: TextStyle(fontSize: 15)),
-                  ],
-                ),
-
-                Spacer(),
-
-                MyButton(
-                  text: "Sign Up",
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FirstOnBoardingScreen(),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
