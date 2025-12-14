@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
-import 'package:vedaverse/screen/home_screen.dart';
+import 'package:vedaverse/screen/dashboard_screen.dart';
 import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/widgets/my_progress_bar.dart';
 
@@ -98,7 +98,7 @@ class FinalOnBoardingScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomeScreen(),
+                                builder: (context) => DashboardScreen(),
                               ),
                             );
                           },

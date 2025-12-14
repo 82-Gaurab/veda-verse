@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
-import 'package:vedaverse/screen/home_screen.dart';
+import 'package:vedaverse/screen/dashboard_screen.dart';
 import 'package:vedaverse/screen/sign_up_screen.dart';
 import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/widgets/my_input_form_field.dart';
@@ -99,7 +99,7 @@ class LoginScreen extends StatelessWidget {
 
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
+                              builder: (context) => DashboardScreen(),
                             ),
                           );
                         }
