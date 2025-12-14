@@ -27,13 +27,6 @@ class MyInputFormField extends StatelessWidget {
         labelText: labelText,
         hintText: hintText,
         prefixIcon: icon,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFFFAE37)),
-        ),
-
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFFFAE37), width: 2),
-        ),
       ),
       validator: (value) {
         if (value!.isEmpty) {

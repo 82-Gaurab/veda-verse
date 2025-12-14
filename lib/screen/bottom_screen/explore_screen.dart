@@ -6,7 +6,11 @@ class ExploreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: Center(child: Text("Explore Screen"))),
+      body: SafeArea(
+        child: Center(
+          child: Text("Explore Screen", style: TextStyle(fontSize: 30)),
+        ),
+      ),
     );
   }
 }
