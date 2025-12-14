@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/screen/first_on_boarding_screen.dart';
 import 'package:vedaverse/widgets/my_button.dart';
 import 'package:vedaverse/widgets/my_input_form_field.dart';
