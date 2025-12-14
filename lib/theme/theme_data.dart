@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(
+    fontFamily: "Bricolage",
+
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: Color(0xFFFFAE37),
