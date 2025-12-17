@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(
+    textTheme: TextTheme(
+      bodyMedium: TextStyle(fontSize: 23),
+      displayMedium: TextStyle(fontSize: 18),
+    ),
+
+    scaffoldBackgroundColor: Color(0xFFf2e9e0),
     fontFamily: "Bricolage",
 
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: Color(0xFFFFAE37),
-      unselectedItemColor: Colors.black,
+      unselectedItemColor: Color.fromARGB(255, 110, 110, 110),
+      selectedIconTheme: IconThemeData(size: 30),
+      selectedLabelStyle: TextStyle(fontSize: 18),
     ),
 
     elevatedButtonTheme: ElevatedButtonThemeData(

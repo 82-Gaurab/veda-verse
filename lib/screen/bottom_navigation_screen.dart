@@ -24,7 +24,10 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Dashboard")),
+      appBar: AppBar(
+        title: Text("Dashboard"),
+        backgroundColor: Color(0xFFf2e9e0),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: [
@@ -34,7 +37,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             icon: Icon(Icons.list_alt_sharp),
             label: "Wishlist",
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Wishlist"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
 
         currentIndex: _selectedIndex,
