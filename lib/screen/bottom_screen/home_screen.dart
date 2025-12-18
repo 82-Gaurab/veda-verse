@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsetsGeometry.all(13),
+        padding: EdgeInsetsGeometry.all(15),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -18,14 +18,29 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Image.asset("assets/icons/icon.png", height: 40),
 
-                  Text(
-                    "Veda",
-                    style: TextStyle(
-                      fontFamily: "Namaste",
-                      fontSize: 30,
-                      letterSpacing: 2,
+                  SizedBox(width: 8),
+
+                  RichText(
+                    text: TextSpan(
+                      text: "Veda",
+                      style: TextStyle(
+                        fontFamily: "Qawatone",
+                        fontSize: 33,
+                        letterSpacing: 3,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: "Verse",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: "Taiganja",
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
                   Spacer(),
                   Icon(Icons.notifications, size: 40),
                 ],
@@ -44,21 +59,30 @@ class HomeScreen extends StatelessWidget {
                           borderSide: BorderSide(color: Color(0xFFe7dbcf)),
                           borderRadius: BorderRadius.circular(55),
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFFFAE37)),
+                          borderRadius: BorderRadius.circular(55),
+                        ),
                       ),
                     ),
                   ),
 
                   SizedBox(width: 20),
 
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(10),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: ShapeDecoration(
                       shape: CircleBorder(),
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.black,
+                      gradient: RadialGradient(
+                        center: Alignment.topCenter,
+                        radius: 1.5,
+                        colors: [
+                          Colors.greenAccent.shade400,
+                          Colors.green.shade700,
+                        ],
+                      ),
                     ),
-                    onPressed: () {},
-                    label: Icon(Icons.search, size: 30),
+                    child: Icon(Icons.search, color: Colors.white, size: 30),
                   ),
                 ],
               ),
@@ -91,7 +115,7 @@ class HomeScreen extends StatelessWidget {
                         padding: EdgeInsets.all(0),
                         backgroundColor: Colors.white,
                       ),
-                      child: Icon(Icons.chevron_left_rounded),
+                      child: Icon(Icons.chevron_left_rounded, size: 25),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -103,7 +127,7 @@ class HomeScreen extends StatelessWidget {
                         backgroundColor: Colors.white,
                       ),
                       onPressed: () {},
-                      child: Icon(Icons.chevron_right_rounded),
+                      child: Icon(Icons.chevron_right_rounded, size: 25),
                     ),
                   ),
                 ],
@@ -156,7 +180,7 @@ class HomeScreen extends StatelessWidget {
                         padding: EdgeInsets.all(0),
                         backgroundColor: Colors.white,
                       ),
-                      child: Icon(Icons.chevron_left_rounded),
+                      child: Icon(Icons.chevron_left_rounded, size: 25),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -168,7 +192,7 @@ class HomeScreen extends StatelessWidget {
                         backgroundColor: Colors.white,
                       ),
                       onPressed: () {},
-                      child: Icon(Icons.chevron_right_rounded),
+                      child: Icon(Icons.chevron_right_rounded, size: 25),
                     ),
                   ),
                 ],

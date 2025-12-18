@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 ThemeData getApplicationTheme() {
   return ThemeData(
     textTheme: TextTheme(
-      bodyMedium: TextStyle(fontSize: 23),
+      bodyMedium: TextStyle(fontSize: 25),
       displayMedium: TextStyle(fontSize: 18),
     ),
 
