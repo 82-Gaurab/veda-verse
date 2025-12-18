@@ -76,6 +76,9 @@ flutter:
     - family: Bricolage
       fonts:
         - asset: assets\fonts\BricolageGrotesque-Regular.ttf
+    - family: Namaste
+      fonts:
+        - asset: assets\fonts\AnandaNamaste-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

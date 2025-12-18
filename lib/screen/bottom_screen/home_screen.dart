@@ -14,15 +14,55 @@ class HomeScreen extends StatelessWidget {
             children: [
               SizedBox(height: 5),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset("assets/images/title.png", width: 180),
+                  Image.asset("assets/icons/icon.png", height: 40),
+
+                  Text(
+                    "Veda",
+                    style: TextStyle(
+                      fontFamily: "Namaste",
+                      fontSize: 30,
+                      letterSpacing: 2,
+                    ),
+                  ),
                   Spacer(),
-                  Icon(Icons.search, size: 40),
-                  SizedBox(width: 10),
                   Icon(Icons.notifications, size: 40),
                 ],
               ),
+              SizedBox(height: 20),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "Search for books",
+                        fillColor: Color(0xFFe7dbcf),
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFe7dbcf)),
+                          borderRadius: BorderRadius.circular(55),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(width: 20),
+
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(10),
+                      shape: CircleBorder(),
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.black,
+                    ),
+                    onPressed: () {},
+                    label: Icon(Icons.search, size: 30),
+                  ),
+                ],
+              ),
+
               SizedBox(height: 20),
 
               Row(
