@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/widgets/my_button.dart';
+import 'package:vedaverse/core/widgets/my_button.dart';
 import 'package:vedaverse/screen/login_screen.dart';
 
 class SecondScreen extends StatelessWidget {

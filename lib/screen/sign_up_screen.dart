@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/screen/first_on_boarding_screen.dart';
-import 'package:vedaverse/widgets/my_button.dart';
-import 'package:vedaverse/widgets/my_input_form_field.dart';
-import 'package:vedaverse/widgets/my_progress_bar.dart';
+import 'package:vedaverse/core/widgets/my_button.dart';
+import 'package:vedaverse/core/widgets/my_input_form_field.dart';
+import 'package:vedaverse/core/widgets/my_progress_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

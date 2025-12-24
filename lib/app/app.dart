@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/screen/splash_screen.dart';
-import 'package:vedaverse/theme/theme_data.dart';
+import 'package:vedaverse/app/theme/theme_data.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/widgets/my_book_card.dart';
+import 'package:vedaverse/core/widgets/my_book_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

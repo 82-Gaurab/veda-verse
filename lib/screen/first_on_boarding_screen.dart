@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/screen/second_on_boarding_screen.dart';
-import 'package:vedaverse/widgets/my_button.dart';
-import 'package:vedaverse/widgets/my_progress_bar.dart';
+import 'package:vedaverse/core/widgets/my_button.dart';
+import 'package:vedaverse/core/widgets/my_progress_bar.dart';
 
 class FirstOnBoardingScreen extends StatelessWidget {
   const FirstOnBoardingScreen({super.key});
