@@ -1,19 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
+import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/dashboard/presentation/pages/dashboard_screen.dart';
 import 'package:vedaverse/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:vedaverse/core/widgets/my_button.dart';
 import 'package:vedaverse/core/widgets/my_input_form_field.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
 
-    final _formKey = GlobalKey<FormState>();
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      ref
+          .read(authViewModelProvider.notifier)
+          .login(
+            email: _emailController.text,
+            password: _passwordController.text,
+          );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(authViewModelProvider, (previous, next) {
+      if (next.status == AuthStatus.error) {
+        showMySnackBar(
+          context: context,
+          message: next.errorMessage ?? "Login Failed",
+          color: Colors.redAccent,
+        );
+      } else if (next.status == AuthStatus.authenticated) {
+        showMySnackBar(
+          context: context,
+          message: "Login Successful",
+          color: Colors.green.shade900,
+        );
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => DashboardScreen()));
+      }
+    });
 
     return Scaffold(
       body: SafeArea(
@@ -88,26 +133,10 @@ class LoginScreen extends StatelessWidget {
 
                 Column(
                   children: [
-                    MyButton(
-                      text: "Login",
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          showMySnackBar(
-                            context: context,
-                            message: "Login Success",
-                          );
-
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => DashboardScreen(),
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                    MyButton(text: "Login", onPressed: _handleLogin),
 
                     TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => SignUpScreen(),

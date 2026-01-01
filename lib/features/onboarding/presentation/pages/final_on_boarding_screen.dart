@@ -1,14 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
-import 'package:vedaverse/features/dashboard/presentation/pages/dashboard_screen.dart';
+import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
+import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
+import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/core/widgets/my_button.dart';
 import 'package:vedaverse/core/widgets/my_progress_bar.dart';
 
-class FinalOnBoardingScreen extends StatelessWidget {
-  const FinalOnBoardingScreen({super.key});
+class FinalOnBoardingScreen extends ConsumerStatefulWidget {
+  final String fullName;
+  final String email;
+  final String password;
+  final String username;
+
+  const FinalOnBoardingScreen({
+    super.key,
+    required this.fullName,
+    required this.email,
+    required this.password,
+    required this.username,
+  });
+
+  @override
+  ConsumerState<FinalOnBoardingScreen> createState() =>
+      _FinalOnBoardingScreenState();
+}
+
+class _FinalOnBoardingScreenState extends ConsumerState<FinalOnBoardingScreen> {
+  Future<void> _handleSignup() async {
+    // NOTE: Passing the data from here to view model
+    ref
+        .read(authViewModelProvider.notifier)
+        .register(
+          fullName: widget.fullName,
+          email: widget.email,
+          password: widget.password,
+          username: widget.username,
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AuthState>(authViewModelProvider, (previous, next) {
+      if (next.status == AuthStatus.error) {
+        showMySnackBar(
+          context: context,
+          message: next.errorMessage ?? "Registration failed",
+        );
+      } else if (next.status == AuthStatus.register) {
+        showMySnackBar(context: context, message: "Registration successful");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      }
+    });
+
     List<String> genreList = [
       "Romance",
       "Fantasy",
@@ -88,21 +135,7 @@ class FinalOnBoardingScreen extends StatelessWidget {
 
                         Spacer(),
 
-                        MyButton(
-                          text: "Continue",
-                          onPressed: () {
-                            showMySnackBar(
-                              context: context,
-                              message: "Successfully created new account",
-                            );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DashboardScreen(),
-                              ),
-                            );
-                          },
-                        ),
+                        MyButton(text: "Continue", onPressed: _handleSignup),
                       ],
                     ),
                   ),

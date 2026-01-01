@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/onboarding/presentation/pages/first_on_boarding_screen.dart';
 import 'package:vedaverse/core/widgets/my_button.dart';
 import 'package:vedaverse/core/widgets/my_input_form_field.dart';
 import 'package:vedaverse/core/widgets/my_progress_bar.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _userNameController = TextEditingController();
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
+  final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -22,6 +24,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final authState = ref.watch(authViewModelProvider);
+
     return Scaffold(
       body: SafeArea(
         child: LayoutBuilder(
@@ -67,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           SizedBox(height: 50),
 
                           MyInputFormField(
-                            controller: _userNameController,
+                            controller: _fullNameController,
                             labelText: "Username",
                             icon: Icon(Icons.person),
                           ),
@@ -122,8 +127,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        FirstOnBoardingScreen(),
+                                    builder: (context) => FirstOnBoardingScreen(
+                                      fullName: _fullNameController.text,
+                                      email: _emailController.text,
+                                      password: _passwordController.text,
+                                      username: _emailController.text
+                                          .trim()
+                                          .split("@")
+                                          .first,
+                                    ),
                                   ),
                                 );
                               }

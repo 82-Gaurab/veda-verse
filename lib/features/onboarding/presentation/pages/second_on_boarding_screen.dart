@@ -4,7 +4,17 @@ import 'package:vedaverse/core/widgets/my_button.dart';
 import 'package:vedaverse/core/widgets/my_progress_bar.dart';
 
 class SecondOnBoardingScreen extends StatelessWidget {
-  const SecondOnBoardingScreen({super.key});
+  final String fullName;
+  final String email;
+  final String password;
+  final String username;
+  const SecondOnBoardingScreen({
+    super.key,
+    required this.fullName,
+    required this.email,
+    required this.password,
+    required this.username,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +94,12 @@ class SecondOnBoardingScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FinalOnBoardingScreen(),
+                      builder: (context) => FinalOnBoardingScreen(
+                        fullName: fullName,
+                        email: email,
+                        password: password,
+                        username: username,
+                      ),
                     ),
                   );
                 },
