@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
-import 'package:vedaverse/screen/dashboard_screen.dart';
-import 'package:vedaverse/screen/sign_up_screen.dart';
+import 'package:vedaverse/features/dashboard/presentation/pages/dashboard_screen.dart';
+import 'package:vedaverse/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:vedaverse/core/widgets/my_button.dart';
 import 'package:vedaverse/core/widgets/my_input_form_field.dart';
 

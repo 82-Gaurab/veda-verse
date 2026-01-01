@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/core/widgets/my_button.dart';
-import 'package:vedaverse/screen/login_screen.dart';
+import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
 
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key});

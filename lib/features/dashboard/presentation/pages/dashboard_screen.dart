@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/screen/bottom_navigation_screen.dart';
+import 'package:vedaverse/features/dashboard/presentation/pages/bottom_navigation_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});

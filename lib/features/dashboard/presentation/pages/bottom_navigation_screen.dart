@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/screen/bottom_screen/explore_screen.dart';
-import 'package:vedaverse/screen/bottom_screen/home_screen.dart';
-import 'package:vedaverse/screen/bottom_screen/profile_screen.dart';
-import 'package:vedaverse/screen/bottom_screen/wishlist_screen.dart';
+import 'package:vedaverse/features/dashboard/presentation/pages/bottom_screen/explore_screen.dart';
+import 'package:vedaverse/features/dashboard/presentation/pages/bottom_screen/home_screen.dart';
+import 'package:vedaverse/features/dashboard/presentation/pages/bottom_screen/profile_screen.dart';
+import 'package:vedaverse/features/dashboard/presentation/pages/bottom_screen/wishlist_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});

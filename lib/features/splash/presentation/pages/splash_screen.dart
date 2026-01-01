@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:vedaverse/screen/second_screen.dart';
+import 'package:vedaverse/features/splash/presentation/pages/second_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

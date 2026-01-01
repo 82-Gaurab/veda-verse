@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/screen/final_on_boarding_screen.dart';
+import 'package:vedaverse/features/onboarding/presentation/pages/final_on_boarding_screen.dart';
 import 'package:vedaverse/core/widgets/my_button.dart';
 import 'package:vedaverse/core/widgets/my_progress_bar.dart';
 
