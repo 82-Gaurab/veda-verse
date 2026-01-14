@@ -81,16 +81,16 @@ class HiveService {
     return _genreBox.get(genreId);
   }
 
-  Future<GenreHiveModel> createBatch(GenreHiveModel genre) async {
+  Future<GenreHiveModel> createGenre(GenreHiveModel genre) async {
     await _genreBox.put(genre.genreId, genre);
     return genre;
   }
 
-  Future<void> updateBatch(GenreHiveModel genre) async {
+  Future<void> updateGenre(GenreHiveModel genre) async {
     await _genreBox.put(genre.genreId, genre);
   }
 
-  Future<void> deleteBatch(String genreId) async {
+  Future<void> deleteGenre(String genreId) async {
     await _genreBox.delete(genreId);
   }
 

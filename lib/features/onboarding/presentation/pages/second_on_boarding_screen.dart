@@ -7,6 +7,7 @@ class SecondOnBoardingScreen extends StatelessWidget {
   final String fullName;
   final String email;
   final String password;
+  final String confirmPassword;
   final String username;
   const SecondOnBoardingScreen({
     super.key,
@@ -14,6 +15,7 @@ class SecondOnBoardingScreen extends StatelessWidget {
     required this.email,
     required this.password,
     required this.username,
+    required this.confirmPassword,
   });
 
   @override
@@ -98,6 +100,7 @@ class SecondOnBoardingScreen extends StatelessWidget {
                         fullName: fullName,
                         email: email,
                         password: password,
+                        confirmPassword: confirmPassword,
                         username: username,
                       ),
                     ),
