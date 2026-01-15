@@ -131,6 +131,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                       fullName: _fullNameController.text,
                                       email: _emailController.text,
                                       password: _passwordController.text,
+                                      confirmPassword:
+                                          _confirmPasswordController.text,
                                       username: _emailController.text
                                           .trim()
                                           .split("@")

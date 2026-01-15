@@ -11,6 +11,7 @@ class FinalOnBoardingScreen extends ConsumerStatefulWidget {
   final String fullName;
   final String email;
   final String password;
+  final String confirmPassword;
   final String username;
 
   const FinalOnBoardingScreen({
@@ -19,6 +20,7 @@ class FinalOnBoardingScreen extends ConsumerStatefulWidget {
     required this.email,
     required this.password,
     required this.username,
+    required this.confirmPassword,
   });
 
   @override
@@ -36,6 +38,7 @@ class _FinalOnBoardingScreenState extends ConsumerState<FinalOnBoardingScreen> {
           email: widget.email,
           password: widget.password,
           username: widget.username,
+          confirmPassword: widget.confirmPassword,
         );
   }
 

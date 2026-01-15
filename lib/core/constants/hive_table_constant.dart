@@ -7,4 +7,8 @@ class HiveTableConstant {
   // NOTE: Tables -> Box : Index
   static const int authTypeId = 0;
   static const String authTable = "auth_table";
+
+  // NOTE: Tables -> Box : Index
+  static const int genreTypeId = 1;
+  static const String genreTable = "genre_table";
 }
