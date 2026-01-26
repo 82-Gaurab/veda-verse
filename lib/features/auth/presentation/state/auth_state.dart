@@ -1,7 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:vedaverse/features/auth/domain/entities/auth_entity.dart';
 
-enum AuthStatus { initial, loading, authenticated, register, error }
+enum AuthStatus {
+  initial,
+  loading,
+  authenticated,
+  unauthenticated,
+  register,
+  error,
+}
 
 class AuthState extends Equatable {
   final AuthStatus status;

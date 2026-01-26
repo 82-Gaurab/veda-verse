@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/features/auth/domain/usecases/login_usecase.dart';
+import 'package:vedaverse/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/register_usecase.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 
@@ -11,11 +12,13 @@ final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(
 class AuthViewModel extends Notifier<AuthState> {
   late final RegisterUsecase _registerUsecase;
   late final LoginUsecase _loginUsecase;
+  late final LogoutUsecase _logoutUsecase;
 
   @override
   AuthState build() {
     _registerUsecase = ref.read(registerUsecaseProvider);
     _loginUsecase = ref.read(loginUseCaseProvider);
+    _logoutUsecase = ref.read(logoutUsecaseProvider);
     return AuthState();
   }
 
@@ -71,6 +74,24 @@ class AuthViewModel extends Notifier<AuthState> {
       (entity) => state = state.copyWith(
         status: AuthStatus.authenticated,
         entity: entity,
+      ),
+    );
+  }
+
+  //Logout
+  Future<void> logout() async {
+    state = state.copyWith(status: AuthStatus.loading);
+
+    final result = await _logoutUsecase();
+
+    result.fold(
+      (failure) => state = state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: failure.message,
+      ),
+      (success) => state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        entity: null,
       ),
     );
   }
