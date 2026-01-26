@@ -40,12 +40,13 @@ class AuthLocalDatasource implements IAuthLocalDatasource {
         await _userSessionService.saveUserSession(
           userId: user.authId!,
           email: user.email,
-          fullName: user.fullName,
+          firstName: user.firstName,
           username: user.username,
           profilePicture: user.profilePicture,
+          lastName: user.lastName,
         );
-        return user;
       }
+      return user;
     } catch (e) {
       return null;
     }

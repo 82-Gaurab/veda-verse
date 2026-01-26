@@ -26,7 +26,8 @@ class UserSessionService {
   static const String _keyUserId = "user_id";
   static const String _keyUserEmail = "user_email";
   static const String _keyUsername = "username";
-  static const String _keyUserFullName = "user_full_name";
+  static const String _keyUserFirstName = "user_first_name";
+  static const String _keyUserLastName = "user_last_name";
   static const String _keyUserProfileImage = "user_profile_image";
 
   // Info: save user session data
@@ -34,14 +35,16 @@ class UserSessionService {
     required String userId,
     required String email,
     required String username,
-    required String fullName,
+    required String firstName,
+    required String lastName,
     String? profilePicture,
   }) async {
     await _sharedPreferences.setBool(_keysIsLoggedIn, true);
     await _sharedPreferences.setString(_keyUserId, userId);
     await _sharedPreferences.setString(_keyUserEmail, email);
     await _sharedPreferences.setString(_keyUsername, username);
-    await _sharedPreferences.setString(_keyUserFullName, fullName);
+    await _sharedPreferences.setString(_keyUserFirstName, firstName);
+    await _sharedPreferences.setString(_keyUserLastName, lastName);
     // if (batchId != null) {
     //   await _sharedPreferences.setString(_keyUserBatchId, batchId);
     // }
@@ -56,7 +59,8 @@ class UserSessionService {
     await _sharedPreferences.remove(_keyUserId);
     await _sharedPreferences.remove(_keyUserEmail);
     await _sharedPreferences.remove(_keyUsername);
-    await _sharedPreferences.remove(_keyUserFullName);
+    await _sharedPreferences.remove(_keyUserFirstName);
+    await _sharedPreferences.remove(_keyUserLastName);
     await _sharedPreferences.remove(_keyUserProfileImage);
   }
 
@@ -77,8 +81,12 @@ class UserSessionService {
     return _sharedPreferences.getString(_keyUsername);
   }
 
-  String? getUserFullName() {
-    return _sharedPreferences.getString(_keyUserFullName);
+  String? getUserFirstName() {
+    return _sharedPreferences.getString(_keyUserFirstName);
+  }
+
+  String? getUserLastName() {
+    return _sharedPreferences.getString(_keyUserLastName);
   }
 
   String? getUserProfileImage() {

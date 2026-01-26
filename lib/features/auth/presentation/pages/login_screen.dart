@@ -250,7 +250,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     width: 20,
                                     height: 20,
                                   ),
-                                  label: const Text('Google'),
+                                  label: const Text(
+                                    'Google',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                   style: OutlinedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 16,

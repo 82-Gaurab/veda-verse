@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:vedaverse/features/auth/presentation/widgets/auth_header.dart';
 import 'package:vedaverse/features/auth/presentation/widgets/password_field.dart';
 import 'package:vedaverse/features/auth/presentation/widgets/terms_checkbox.dart';
 import 'package:vedaverse/features/onboarding/presentation/pages/first_on_boarding_screen.dart';
 import 'package:vedaverse/core/widgets/my_input_form_field.dart';
-import 'package:vedaverse/core/widgets/my_progress_bar.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -18,7 +19,8 @@ class SignUpScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -40,16 +42,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => FirstOnBoardingScreen(
-            fullName: _fullNameController.text,
+            firstName: _firstNameController.text,
             email: _emailController.text,
             password: _passwordController.text,
             confirmPassword: _confirmPasswordController.text,
             username: _emailController.text.trim().split("@").first,
+            lastName: _lastNameController.text,
           ),
         ),
       );
     }
   }
+
+  void _navigateToLogin() => Navigator.of(context).pop();
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +62,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final authState = ref.watch(authViewModelProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: context.surfaceColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: context.softShadow,
+            ),
+            child: Icon(Icons.arrow_back, color: context.textPrimary, size: 20),
+          ),
+          onPressed: _navigateToLogin,
+        ),
+      ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -76,34 +95,40 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(height: 30),
-                          MyProgressBar(notProgressFlex: 7),
 
-                          SizedBox(height: 50),
+                          // MyProgressBar(notProgressFlex: 7),
 
-                          Text(
-                            "Create New Account",
-                            style: TextStyle(
-                              fontSize: 35,
-                              color: Color(0xFF38B120),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          Text(
-                            "Enter Username, Email and Password to create new account",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          // SizedBox(height: 50),
+                          const AuthHeader(
+                            icon: Icons.person_add_rounded,
+                            title: 'Join Us Today',
+                            subtitle: 'Create your account to get started',
                           ),
 
                           SizedBox(height: 50),
 
-                          MyInputFormField(
-                            controller: _fullNameController,
-                            labelText: "Username",
-                            icon: Icon(Icons.person),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _firstNameController,
+                                  decoration: InputDecoration(
+                                    labelText: "First Name",
+                                    prefixIcon: Icon(Icons.person),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _lastNameController,
+                                  decoration: InputDecoration(
+                                    labelText: "Last Name",
+                                    prefixIcon: Icon(Icons.person),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 15),
 
@@ -144,7 +169,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             },
                           ),
 
-                          SizedBox(height: 15),
+                          SizedBox(height: 20),
 
                           TermsCheckbox(
                             value: _agreedToTerms,
