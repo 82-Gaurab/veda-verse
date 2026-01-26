@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/features/splash/presentation/pages/splash_screen.dart';
-import 'package:vedaverse/app/theme/theme_data.dart';
+import 'package:vedaverse/app/theme/app_theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: getApplicationTheme(),
+      theme: AppTheme.lightTheme,
       home: SplashScreen(),
     );
   }

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:vedaverse/features/auth/presentation/widgets/password_field.dart';
+import 'package:vedaverse/features/auth/presentation/widgets/terms_checkbox.dart';
 import 'package:vedaverse/features/onboarding/presentation/pages/first_on_boarding_screen.dart';
-import 'package:vedaverse/core/widgets/my_button.dart';
 import 'package:vedaverse/core/widgets/my_input_form_field.dart';
 import 'package:vedaverse/core/widgets/my_progress_bar.dart';
 
@@ -21,6 +25,31 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  bool _agreedToTerms = false;
+
+  Future<void> _handleSignUp() async {
+    if (!_agreedToTerms) {
+      SnackbarUtils.showError(
+        context,
+        'Please agree to the Terms & Conditions',
+      );
+      return;
+    }
+    if (_formKey.currentState!.validate()) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FirstOnBoardingScreen(
+            fullName: _fullNameController.text,
+            email: _emailController.text,
+            password: _passwordController.text,
+            confirmPassword: _confirmPasswordController.text,
+            username: _emailController.text.trim().split("@").first,
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,63 +114,80 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             icon: Icon(Icons.email),
                           ),
                           SizedBox(height: 15),
-
-                          MyInputFormField(
+                          PasswordField(
                             controller: _passwordController,
-                            labelText: "Password",
-                            obscureText: true,
-                            icon: Icon(Icons.key),
+                            labelText: 'Password',
+                            hintText: 'Create a strong password',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a password';
+                              }
+                              if (value.length < 6) {
+                                return 'Password must be at least 6 characters';
+                              }
+                              return null;
+                            },
                           ),
-                          SizedBox(height: 15),
-
-                          MyInputFormField(
+                          const SizedBox(height: 15),
+                          PasswordField(
                             controller: _confirmPasswordController,
-                            labelText: "Confirm Password",
-                            obscureText: true,
-                            icon: Icon(Icons.key_off),
+                            labelText: 'Confirm Password',
+                            hintText: 'Re-enter your password',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please confirm your password';
+                              }
+                              if (value != _passwordController.text) {
+                                return 'Passwords do not match';
+                              }
+                              return null;
+                            },
                           ),
 
                           SizedBox(height: 15),
 
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.check_box,
-                                color: Color(0xFFFFAE37),
-                                size: 30,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                "Remember Me",
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ],
+                          TermsCheckbox(
+                            value: _agreedToTerms,
+                            onChanged: (value) =>
+                                setState(() => _agreedToTerms = value),
                           ),
-
                           Spacer(),
 
-                          MyButton(
-                            text: "Sign Up",
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FirstOnBoardingScreen(
-                                      fullName: _fullNameController.text,
-                                      email: _emailController.text,
-                                      password: _passwordController.text,
-                                      confirmPassword:
-                                          _confirmPasswordController.text,
-                                      username: _emailController.text
-                                          .trim()
-                                          .split("@")
-                                          .first,
+                          SizedBox(
+                            height: 56,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: authState.status == AuthStatus.loading
+                                  ? null
+                                  : _handleSignUp,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: authState.status == AuthStatus.loading
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Sign Up',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              }
-                            },
+                            ),
                           ),
                         ],
                       ),

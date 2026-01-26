@@ -46,12 +46,12 @@ class _FinalOnBoardingScreenState extends ConsumerState<FinalOnBoardingScreen> {
   Widget build(BuildContext context) {
     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
       if (next.status == AuthStatus.error) {
-        showMySnackBar(
-          context: context,
-          message: next.errorMessage ?? "Registration failed",
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? "Registration failed",
         );
       } else if (next.status == AuthStatus.register) {
-        showMySnackBar(context: context, message: "Registration successful");
+        SnackbarUtils.showSuccess(context, "Registration successful");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => LoginScreen()),
