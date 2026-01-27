@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/features/auth/domain/usecases/login_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/register_usecase.dart';
+import 'package:vedaverse/features/auth/domain/usecases/upload_image_usecase.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 
 // Notifier provider
@@ -13,12 +16,14 @@ class AuthViewModel extends Notifier<AuthState> {
   late final RegisterUsecase _registerUsecase;
   late final LoginUsecase _loginUsecase;
   late final LogoutUsecase _logoutUsecase;
+  late final UploadImageUsecase _uploadImageUsecase;
 
   @override
   AuthState build() {
     _registerUsecase = ref.read(registerUsecaseProvider);
     _loginUsecase = ref.read(loginUseCaseProvider);
     _logoutUsecase = ref.read(logoutUsecaseProvider);
+    _uploadImageUsecase = ref.read(uploadImageUsecaseProvider);
     return AuthState();
   }
 
@@ -77,6 +82,28 @@ class AuthViewModel extends Notifier<AuthState> {
         status: AuthStatus.authenticated,
         entity: entity,
       ),
+    );
+  }
+
+  // upload photo
+  Future<void> uploadPhoto(File image) async {
+    state = state.copyWith(status: AuthStatus.loading);
+    final params = UploadImageUsecaseParams(image: image);
+    final result = await _uploadImageUsecase(params);
+
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: failure.message,
+        );
+      },
+      (imageName) {
+        state = state.copyWith(
+          status: AuthStatus.loaded,
+          uploadPhotoName: imageName,
+        );
+      },
     );
   }
 
