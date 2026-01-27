@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:vedaverse/features/auth/data/models/auth_api_model.dart';
 import 'package:vedaverse/features/auth/data/models/auth_hive_model.dart';
 
@@ -16,5 +18,6 @@ abstract interface class IAuthRemoteDatasource {
   Future<AuthApiModel> register(AuthApiModel model);
   Future<AuthApiModel?> login(String email, String password);
   Future<AuthApiModel?> getCurrentUser();
+  Future<String> uploadImage(File image);
   Future<bool> logout();
 }

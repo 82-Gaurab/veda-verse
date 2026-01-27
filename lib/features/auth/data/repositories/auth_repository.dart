@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -85,6 +87,21 @@ class AuthRepository implements IAuthRepository {
       return Left(LocalDataBaseFailure(message: "Failed to logout"));
     } catch (e) {
       return Left(LocalDataBaseFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadImage(File image) async {
+    // note: insert only in remote
+    if (await _networkInfo.isConnected) {
+      try {
+        final fileName = await _authRemoteDatasource.uploadImage(image);
+        return Right(fileName);
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No internet connection"));
     }
   }
 

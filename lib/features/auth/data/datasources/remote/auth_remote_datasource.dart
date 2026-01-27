@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/core/api/api_client.dart';
 import 'package:vedaverse/core/api/api_endpoints.dart';
+import 'package:vedaverse/core/services/storage/token_service.dart';
 import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/auth/data/datasources/auth_datasource.dart';
 import 'package:vedaverse/features/auth/data/models/auth_api_model.dart';
@@ -8,21 +12,27 @@ import 'package:vedaverse/features/auth/data/models/auth_api_model.dart';
 final authRemoteDatasourceProvider = Provider<IAuthRemoteDatasource>((ref) {
   final apiClient = ref.read(apiClientProvider);
   final userSessionService = ref.read(userSessionServiceProvider);
+  final tokenService = ref.read(tokenServiceProvider);
+
   return AuthRemoteDatasource(
     apiClient: apiClient,
     userSessionService: userSessionService,
+    tokenService: tokenService,
   );
 });
 
 class AuthRemoteDatasource implements IAuthRemoteDatasource {
   final ApiClient _apiClient;
   final UserSessionService _userSessionService;
+  final TokenService _tokenService;
 
   AuthRemoteDatasource({
     required ApiClient apiClient,
     required UserSessionService userSessionService,
+    required TokenService tokenService,
   }) : _apiClient = apiClient,
-       _userSessionService = userSessionService;
+       _userSessionService = userSessionService,
+       _tokenService = tokenService;
 
   @override
   Future<AuthApiModel?> login(String email, String password) async {
@@ -42,6 +52,9 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
         firstName: user.firstName,
         lastName: user.lastName,
       );
+      // info: save token
+      final token = response.data["token"] as String?;
+      await _tokenService.saveToken(token!);
       return user;
     }
     return null;
@@ -73,5 +86,24 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   Future<bool> logout() {
     // TODO: implement logout
     throw UnimplementedError();
+  }
+
+  @override
+  Future<String> uploadImage(File image) async {
+    final fileName = image.path.split('/').last;
+    final formData = FormData.fromMap({
+      "itemPhoto": await MultipartFile.fromFile(image.path, filename: fileName),
+    });
+
+    // get token from token services
+    final token = _tokenService.getToken();
+
+    final response = await _apiClient.uploadFile(
+      ApiEndpoints.userUploadPhoto,
+      formData: formData,
+      options: Options(headers: {"Authorization": "Bearer $token"}),
+    );
+
+    return response.data["data"];
   }
 }
