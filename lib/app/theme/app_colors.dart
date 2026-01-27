@@ -82,7 +82,7 @@ class AppColors {
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF6C63FF), Color(0xFF5B54E8)],
+    colors: [Color(0xFF7B6CF6), Color(0xFF5B54E8)],
   );
 
   static const LinearGradient secondaryGradient = LinearGradient(

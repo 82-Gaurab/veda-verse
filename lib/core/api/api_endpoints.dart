@@ -5,26 +5,27 @@ import 'package:flutter/foundation.dart';
 class ApiEndpoints {
   ApiEndpoints._();
 
-  static const bool isPhysicalDevice = false;
+  static const bool isPhysicalDevice = true;
 
   static const String compIpAddress = "192.168.100.8";
 
-  static const String portPath = "4000/api/v1";
+  static const String port = "4000";
+  static const String apiPath = "/api/v1";
 
   //Info: Base URL
   static String get baseUrl {
     if (isPhysicalDevice) {
-      return "http://$compIpAddress:$portPath";
+      return "http://$compIpAddress:$port$apiPath";
     }
     if (kIsWeb) {
-      return "http://localhost:$portPath";
+      return "http://localhost:$port$apiPath";
     } else if (Platform.isAndroid) {
       // info: for android
-      return "http://10.0.2.2:$portPath";
+      return "http://10.0.2.2:$port$apiPath";
     } else if (Platform.isIOS) {
-      return "http://localhost:$portPath";
+      return "http://localhost:$port$apiPath";
     } else {
-      return "http://localhost:$portPath";
+      return "http://localhost:$port$apiPath";
     }
   }
 
