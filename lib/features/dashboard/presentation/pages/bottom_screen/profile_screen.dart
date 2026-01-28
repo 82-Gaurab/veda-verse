@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
+import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/dashboard/presentation/widgets/menu_item.dart';
@@ -14,6 +19,128 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  final ImagePicker _imagePicker = ImagePicker();
+  final List<XFile> _selectedMedia = []; // info: store selected images, videos
+
+  //info: code for dialogBox : show dialog for menu
+  Future<void> _pickMedia() async {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: context.surfaceColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(Icons.camera),
+              title: Text("Open Camera"),
+              onTap: () {
+                Navigator.pop(context);
+                _pickFromCamera();
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.image),
+              title: Text("Choose from Gallery"),
+              onTap: () {
+                Navigator.pop(context);
+                _pickFromGallery();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //info: ask permission from user
+  Future<bool> _getUserPermission(Permission permission) async {
+    final status = await permission.status;
+    if (status.isGranted) {
+      return true;
+    }
+
+    if (status.isDenied) {
+      final result = await permission.request();
+      return result.isGranted;
+    }
+
+    if (status.isPermanentlyDenied) {
+      _showPermissionDeniedDialog();
+      return false;
+    }
+    return false;
+  }
+
+  // info: Function to show permission popup dialog
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Give Permission"),
+        content: Text("To use this feature go in permission setting"),
+        actions: [
+          TextButton(onPressed: () {}, child: Text("Cancel")),
+          TextButton(onPressed: () {}, child: Text("Open Setting")),
+        ],
+      ),
+    );
+  }
+
+  //Info: Code for camera
+  Future<void> _pickFromCamera() async {
+    final hasPermission = await _getUserPermission(Permission.camera);
+    if (!hasPermission) return;
+
+    final XFile? photo = await _imagePicker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 80,
+    );
+
+    if (photo != null) {
+      setState(() {
+        _selectedMedia.clear();
+        _selectedMedia.add(photo);
+      });
+
+      // info: upload image to server
+      await ref
+          .read(authViewModelProvider.notifier)
+          .uploadPhoto(File(photo.path));
+    }
+  }
+
+  //info: code for gallery
+  Future<void> _pickFromGallery() async {
+    try {
+      final hasPermission = await _getUserPermission(Permission.storage);
+      if (!hasPermission) return;
+      final XFile? image = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+      );
+      if (image != null) {
+        setState(() {
+          _selectedMedia.clear();
+          _selectedMedia.add(image);
+        });
+
+        // info: upload image to server
+        await ref
+            .read(authViewModelProvider.notifier)
+            .uploadPhoto(File(image.path));
+      }
+    } catch (e) {
+      debugPrint("Gallery error : $e");
+      if (mounted) {
+        SnackbarUtils.showError(context, "Gallery not accessed");
+      }
+    }
+  }
+
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -82,13 +209,32 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             color: Colors.transparent,
                           ),
                           child: CircleAvatar(
-                            // backgroundImage: AssetImage("assets/images/logo.png"),
+                            // backgroundImage: _selectedMedia.isNotEmpty
+                            //     ? FileImage(File(_selectedMedia[0].path))
+                            //     : null,
                             radius: 90,
-                            child: Icon(
-                              Icons.person_rounded,
-                              size: 60,
-                              color: AppColors.primary,
-                            ),
+
+                            child: _selectedMedia.isEmpty
+                                ? Icon(
+                                    Icons.person_rounded,
+                                    size: 60,
+                                    color: AppColors.primary,
+                                  )
+                                : ClipOval(
+                                    child: Image.file(
+                                      File(_selectedMedia[0].path),
+                                      width: 180,
+                                      height: 180,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                            // child: _selectedMedia.isEmpty
+                            //     ? Icon(
+                            //         Icons.person_rounded,
+                            //         size: 60,
+                            //         color: AppColors.primary,
+                            //       )
+                            //     : null,
                           ),
                         ),
                         Positioned(
@@ -96,7 +242,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           right: 7,
                           child: GestureDetector(
                             onTap: () {
-                              _showLogoutDialog(context);
+                              _pickMedia();
                             },
                             child: Card(
                               color: AppColors.onboarding1Secondary,
@@ -114,6 +260,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 5),
                     Text("Name", style: TextStyle(fontSize: 20)),
                     Text("Email@email.com", style: TextStyle(fontSize: 20)),
                   ],
@@ -159,6 +306,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 titleColor: Colors.red,
                 onTap: () => _showLogoutDialog(context),
               ),
+              const SizedBox(height: 10),
             ],
           ),
         ),
