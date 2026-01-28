@@ -92,7 +92,10 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   Future<String> uploadImage(File image) async {
     final fileName = image.path.split('/').last;
     final formData = FormData.fromMap({
-      "itemPhoto": await MultipartFile.fromFile(image.path, filename: fileName),
+      "profilePicture": await MultipartFile.fromFile(
+        image.path,
+        filename: fileName,
+      ),
     });
 
     // get token from token services

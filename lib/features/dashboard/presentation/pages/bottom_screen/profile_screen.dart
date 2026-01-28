@@ -116,8 +116,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   //info: code for gallery
   Future<void> _pickFromGallery() async {
     try {
-      final hasPermission = await _getUserPermission(Permission.storage);
-      if (!hasPermission) return;
+      // final hasPermission = await _getUserPermission(Permission.storage);
+      // if (!hasPermission) return;
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 80,
