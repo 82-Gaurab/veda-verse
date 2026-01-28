@@ -109,4 +109,14 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
 
     return response.data["data"];
   }
+
+  @override
+  Future<bool> updateUser(AuthApiModel user) async {
+    final response = await _apiClient.put(
+      ApiEndpoints.updateUser,
+      data: user.toJson(),
+    );
+
+    return response.data["success"];
+  }
 }

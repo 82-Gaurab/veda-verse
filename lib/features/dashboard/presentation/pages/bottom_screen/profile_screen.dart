@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/dashboard/presentation/widgets/menu_item.dart';
@@ -186,6 +187,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userSession = ref.read(userSessionServiceProvider);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -261,8 +264,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ],
                     ),
                     SizedBox(height: 5),
-                    Text("Name", style: TextStyle(fontSize: 20)),
-                    Text("Email@email.com", style: TextStyle(fontSize: 20)),
+                    Text(
+                      "${userSession.getUserFirstName()} ${userSession.getUserLastName()}",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      userSession.getUserEmail()!,
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ],
                 ),
               ),

@@ -44,6 +44,7 @@ class AuthViewModel extends Notifier<AuthState> {
       password: password,
       confirmPassword: confirmPassword,
       lastName: lastName,
+      profilePicture: 'default',
     );
 
     final result = await _registerUsecase(params);

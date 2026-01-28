@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class ApiEndpoints {
   ApiEndpoints._();
 
-  static const bool isPhysicalDevice = true;
+  static const bool isPhysicalDevice = false;
 
   static const String compIpAddress = "192.168.100.8";
 
@@ -42,6 +42,7 @@ class ApiEndpoints {
   // static const String users = "/users";
   static const String userLogin = "/auth/login";
   static const String userRegister = "/auth/register";
+  static const String updateUser = "/auth/update";
   static const String userUploadPhoto = "/auth/upload-image";
   // static String userById(String id) => '/users/$id';
   // static String userPhoto(String id) => "/users/$id/photo";
