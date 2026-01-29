@@ -37,7 +37,7 @@ class AuthHiveModel extends HiveObject {
     this.password,
     this.profilePicture,
     required this.lastName,
-  }) : authId = Uuid().v4();
+  }) : authId = authId ?? Uuid().v4();
 
   // Info: To Entity
   AuthEntity toEntity() {
