@@ -9,6 +9,7 @@ import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
+import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/dashboard/presentation/widgets/menu_item.dart';
 
@@ -108,9 +109,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       });
 
       // info: upload image to server
-      await ref
-          .read(authViewModelProvider.notifier)
-          .uploadPhoto(File(photo.path));
+      // await ref
+      //     .read(authViewModelProvider.notifier)
+      //     .uploadPhoto(File(photo.path));
+
+      _handleProfileUpload(photo);
     }
   }
 
@@ -130,9 +133,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         });
 
         // info: upload image to server
-        await ref
-            .read(authViewModelProvider.notifier)
-            .uploadPhoto(File(image.path));
+        // await ref
+        //     .read(authViewModelProvider.notifier)
+        //     .uploadPhoto(File(image.path));
+        _handleProfileUpload(image);
       }
     } catch (e) {
       debugPrint("Gallery error : $e");
@@ -185,9 +189,31 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
+  Future<void> _handleProfileUpload(XFile image) async {
+    final userSession = ref.read(userSessionServiceProvider);
+
+    ref
+        .read(authViewModelProvider.notifier)
+        .updateUser(
+          firstName: "${userSession.getUserFirstName()}",
+          lastName: "${userSession.getUserLastName()}",
+          username: "${userSession.getUsername()}",
+          email: "${userSession.getUserEmail()}",
+          profilePicture: File(image.path),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userSession = ref.read(userSessionServiceProvider);
+    final userSession = ref.watch(userSessionServiceProvider);
+
+    ref.listen(authViewModelProvider, (previous, next) {
+      if (next.status == AuthStatus.error) {
+        SnackbarUtils.showError(context, next.errorMessage ?? "Update Failed");
+      } else if (next.status == AuthStatus.loaded) {
+        SnackbarUtils.showSuccess(context, "Successfully updated Profile");
+      }
+    });
 
     return Scaffold(
       body: SafeArea(
@@ -265,7 +291,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "${userSession.getUserFirstName()} ${userSession.getUserLastName()}",
+                      "${userSession.getUserProfileImage()} ${userSession.getUserLastName()}",
                       style: TextStyle(fontSize: 20),
                     ),
                     Text(

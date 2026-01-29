@@ -51,6 +51,7 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
         username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
+        profilePicture: user.profilePicture,
       );
       // info: save token
       final token = response.data["token"] as String?;
@@ -111,11 +112,40 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   }
 
   @override
-  Future<bool> updateUser(AuthApiModel user) async {
+  Future<bool> updateUser(AuthApiModel user, File profilePicture) async {
+    final token = _tokenService.getToken();
+    final fileName = profilePicture.path.split('/').last;
+    final formData = FormData.fromMap({
+      "profilePicture": await MultipartFile.fromFile(
+        profilePicture.path,
+        filename: fileName,
+      ),
+    });
+
     final response = await _apiClient.put(
       ApiEndpoints.updateUser,
-      data: user.toJson(),
+      data: formData,
+      option: Options(
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "multipart/form-data",
+        },
+      ),
     );
+
+    if (response.data["success"] == true) {
+      final data = response.data["data"] as Map<String, dynamic>;
+      final user = AuthApiModel.fromJson(data);
+      // info: Save user session
+      await _userSessionService.saveUserSession(
+        userId: user.authId!,
+        email: user.email,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profilePicture: user.profilePicture,
+      );
+    }
 
     return response.data["success"];
   }

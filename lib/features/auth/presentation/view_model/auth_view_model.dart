@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/features/auth/domain/usecases/login_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/register_usecase.dart';
+import 'package:vedaverse/features/auth/domain/usecases/update_user_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/upload_image_usecase.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 
@@ -16,6 +17,7 @@ class AuthViewModel extends Notifier<AuthState> {
   late final RegisterUsecase _registerUsecase;
   late final LoginUsecase _loginUsecase;
   late final LogoutUsecase _logoutUsecase;
+  late final UpdateUserUsecase _updateUserUsecase;
   late final UploadImageUsecase _uploadImageUsecase;
 
   @override
@@ -24,6 +26,7 @@ class AuthViewModel extends Notifier<AuthState> {
     _loginUsecase = ref.read(loginUseCaseProvider);
     _logoutUsecase = ref.read(logoutUsecaseProvider);
     _uploadImageUsecase = ref.read(uploadImageUsecaseProvider);
+    _updateUserUsecase = ref.read(updateUserUsecaseProvider);
     return AuthState();
   }
 
@@ -61,6 +64,43 @@ class AuthViewModel extends Notifier<AuthState> {
           state = state.copyWith(
             status: AuthStatus.error,
             errorMessage: "Registration Failed",
+          );
+        }
+      },
+    );
+  }
+
+  Future<void> updateUser({
+    required String firstName,
+    required String lastName,
+    required String username,
+    required String email,
+    required File profilePicture,
+  }) async {
+    state = state.copyWith(status: AuthStatus.loading);
+
+    final params = UpdateUserUsecaseParams(
+      firstName: firstName,
+      email: email,
+      username: username,
+      lastName: lastName,
+      profilePicture: profilePicture,
+    );
+
+    final result = await _updateUserUsecase(params);
+
+    result.fold(
+      (left) => state = state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: left.message,
+      ),
+      (success) {
+        if (success) {
+          state = state.copyWith(status: AuthStatus.loaded);
+        } else {
+          state = state.copyWith(
+            status: AuthStatus.error,
+            errorMessage: "Update Failed",
           );
         }
       },
