@@ -203,9 +203,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
   }
 
+  bool _imageDoesNotExists(String url) {
+    if (url == "default") {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final userSession = ref.watch(userSessionServiceProvider);
+    final profilePictureUrl = userSession.getUserProfileImage();
 
     ref.listen(authViewModelProvider, (previous, next) {
       if (next.status == AuthStatus.error) {
@@ -243,27 +251,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             //     : null,
                             radius: 90,
 
-                            child: _selectedMedia.isEmpty
+                            child: _imageDoesNotExists(profilePictureUrl!)
                                 ? Icon(
                                     Icons.person_rounded,
                                     size: 60,
                                     color: AppColors.primary,
                                   )
                                 : ClipOval(
-                                    child: Image.file(
-                                      File(_selectedMedia[0].path),
+                                    child: Image.network(
+                                      "http://10.0.2.2:4000$profilePictureUrl",
                                       width: 180,
                                       height: 180,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-                            // child: _selectedMedia.isEmpty
-                            //     ? Icon(
-                            //         Icons.person_rounded,
-                            //         size: 60,
-                            //         color: AppColors.primary,
-                            //       )
-                            //     : null,
                           ),
                         ),
                         Positioned(
@@ -291,7 +292,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "${userSession.getUserProfileImage()} ${userSession.getUserLastName()}",
+                      "${userSession.getUserFirstName()} ${userSession.getUserLastName()}",
                       style: TextStyle(fontSize: 20),
                     ),
                     Text(
