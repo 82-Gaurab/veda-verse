@@ -203,8 +203,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
   }
 
-  bool _imageDoesNotExists(String url) {
+  bool _imageDoesNotExists(String? url) {
     if (url == "default") {
+      return true;
+    }
+    if (url == null) {
       return true;
     }
     return false;
@@ -251,7 +254,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             //     : null,
                             radius: 90,
 
-                            child: _imageDoesNotExists(profilePictureUrl!)
+                            child: _imageDoesNotExists(profilePictureUrl)
                                 ? Icon(
                                     Icons.person_rounded,
                                     size: 60,
