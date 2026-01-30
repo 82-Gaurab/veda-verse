@@ -2,7 +2,8 @@ import 'package:vedaverse/features/auth/domain/entities/auth_entity.dart';
 
 class AuthApiModel {
   final String? authId;
-  final String fullName;
+  final String firstName;
+  final String lastName;
   final String email;
   final String username;
   final String? password;
@@ -13,18 +14,20 @@ class AuthApiModel {
 
   AuthApiModel({
     this.authId,
-    required this.fullName,
+    required this.firstName,
     required this.email,
     required this.username,
     this.password,
     this.profilePicture,
     this.confirmPassword,
+    required this.lastName,
   });
 
   // info: To JSON
   Map<String, dynamic> toJson() {
     return {
-      "name": fullName,
+      "firstName": firstName,
+      "lastName": lastName,
       "email": email,
       "username": username,
       "password": password,
@@ -37,7 +40,8 @@ class AuthApiModel {
   factory AuthApiModel.fromJson(Map<String, dynamic> json) {
     return AuthApiModel(
       authId: json["_id"] as String,
-      fullName: json["username"] as String,
+      firstName: json["firstName"] as String,
+      lastName: json["lastName"] as String,
       email: json["email"] as String,
       username: json["username"] as String,
       profilePicture: json["profilePicture"] as String?,
@@ -48,10 +52,11 @@ class AuthApiModel {
   AuthEntity toEntity() {
     return AuthEntity(
       authId: authId,
-      fullName: fullName,
+      firstName: firstName,
       email: email,
       username: username,
       profilePicture: profilePicture,
+      lastName: lastName,
     );
   }
 
@@ -59,7 +64,8 @@ class AuthApiModel {
   factory AuthApiModel.fromEntity(AuthEntity entity) {
     return AuthApiModel(
       authId: entity.authId,
-      fullName: entity.fullName,
+      firstName: entity.firstName,
+      lastName: entity.lastName,
       email: entity.email,
       password: entity.password,
       confirmPassword: entity.confirmPassword,

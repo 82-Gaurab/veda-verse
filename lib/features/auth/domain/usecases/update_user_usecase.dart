@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,27 +9,22 @@ import 'package:vedaverse/features/auth/data/repositories/auth_repository.dart';
 import 'package:vedaverse/features/auth/domain/entities/auth_entity.dart';
 import 'package:vedaverse/features/auth/domain/repositories/auth_repository.dart';
 
-// Provider
-final registerUsecaseProvider = Provider<RegisterUsecase>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return RegisterUsecase(authRepository: authRepository);
+final updateUserUsecaseProvider = Provider<UpdateUserUsecase>((ref) {
+  final authRepository = ref.read(authRepositoryProvider);
+  return UpdateUserUsecase(authRepository: authRepository);
 });
 
-class RegisterUsecaseParams extends Equatable {
+class UpdateUserUsecaseParams extends Equatable {
   final String firstName;
   final String lastName;
   final String email;
   final String username;
-  final String password;
-  final String confirmPassword;
-  final String profilePicture;
+  final File profilePicture;
 
-  const RegisterUsecaseParams({
+  const UpdateUserUsecaseParams({
     required this.firstName,
     required this.email,
     required this.username,
-    required this.password,
-    required this.confirmPassword,
     required this.lastName,
     required this.profilePicture,
   });
@@ -38,29 +35,26 @@ class RegisterUsecaseParams extends Equatable {
     lastName,
     email,
     username,
-    password,
     profilePicture,
   ];
 }
 
-class RegisterUsecase
-    implements UseCaseWithParams<bool, RegisterUsecaseParams> {
+class UpdateUserUsecase
+    implements UseCaseWithParams<bool, UpdateUserUsecaseParams> {
   final IAuthRepository _authRepository;
 
-  RegisterUsecase({required IAuthRepository authRepository})
+  UpdateUserUsecase({required IAuthRepository authRepository})
     : _authRepository = authRepository;
-
   @override
-  Future<Either<Failure, bool>> call(RegisterUsecaseParams params) {
+  Future<Either<Failure, bool>> call(UpdateUserUsecaseParams params) {
     final entity = AuthEntity(
       firstName: params.firstName,
+      lastName: params.lastName,
       email: params.email,
       username: params.username,
-      password: params.password,
-      confirmPassword: params.confirmPassword,
-      lastName: params.lastName,
-      profilePicture: params.profilePicture,
+      profilePicture: params.profilePicture.path,
     );
-    return _authRepository.register(entity);
+
+    return _authRepository.updateUser(entity, params.profilePicture);
   }
 }

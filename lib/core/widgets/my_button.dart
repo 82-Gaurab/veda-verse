@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vedaverse/app/theme/app_colors.dart';
 
 class MyButton extends StatelessWidget {
   final String text;
@@ -17,7 +18,7 @@ class MyButton extends StatelessWidget {
       width: double.infinity,
 
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: color),
+        style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
         onPressed: onPressed,
         child: Text(text, style: TextStyle(color: Colors.white, fontSize: 20)),
       ),

@@ -8,7 +8,8 @@ import 'package:vedaverse/core/widgets/my_button.dart';
 import 'package:vedaverse/core/widgets/my_progress_bar.dart';
 
 class FinalOnBoardingScreen extends ConsumerStatefulWidget {
-  final String fullName;
+  final String firstName;
+  final String lastName;
   final String email;
   final String password;
   final String confirmPassword;
@@ -16,11 +17,12 @@ class FinalOnBoardingScreen extends ConsumerStatefulWidget {
 
   const FinalOnBoardingScreen({
     super.key,
-    required this.fullName,
+    required this.firstName,
     required this.email,
     required this.password,
     required this.username,
     required this.confirmPassword,
+    required this.lastName,
   });
 
   @override
@@ -34,11 +36,12 @@ class _FinalOnBoardingScreenState extends ConsumerState<FinalOnBoardingScreen> {
     ref
         .read(authViewModelProvider.notifier)
         .register(
-          fullName: widget.fullName,
+          firstName: widget.firstName,
           email: widget.email,
           password: widget.password,
           username: widget.username,
           confirmPassword: widget.confirmPassword,
+          lastName: widget.lastName,
         );
   }
 
@@ -46,12 +49,12 @@ class _FinalOnBoardingScreenState extends ConsumerState<FinalOnBoardingScreen> {
   Widget build(BuildContext context) {
     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
       if (next.status == AuthStatus.error) {
-        showMySnackBar(
-          context: context,
-          message: next.errorMessage ?? "Registration failed",
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? "Registration failed",
         );
       } else if (next.status == AuthStatus.register) {
-        showMySnackBar(context: context, message: "Registration successful");
+        SnackbarUtils.showSuccess(context, "Registration successful");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => LoginScreen()),
