@@ -12,6 +12,7 @@ import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/dashboard/presentation/widgets/menu_item.dart';
+import 'package:vedaverse/features/dashboard/presentation/widgets/profile_avatar.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -203,16 +204,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
   }
 
-  bool _imageDoesNotExists(String? url) {
-    if (url == "default") {
-      return true;
-    }
-    if (url == null) {
-      return true;
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     final userSession = ref.watch(userSessionServiceProvider);
@@ -238,37 +229,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Stack(
                       clipBehavior: Clip.none,
                       children: [
-                        Container(
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppColors.onboarding1Secondary,
-                              width: 2,
-                            ),
-                            color: Colors.transparent,
-                          ),
-                          child: CircleAvatar(
-                            // backgroundImage: _selectedMedia.isNotEmpty
-                            //     ? FileImage(File(_selectedMedia[0].path))
-                            //     : null,
-                            radius: 90,
-
-                            child: _imageDoesNotExists(profilePictureUrl)
-                                ? Icon(
-                                    Icons.person_rounded,
-                                    size: 60,
-                                    color: AppColors.primary,
-                                  )
-                                : ClipOval(
-                                    child: Image.network(
-                                      "http://10.0.2.2:4000$profilePictureUrl",
-                                      width: 180,
-                                      height: 180,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                          ),
+                        ProfileAvatar(
+                          imageUrl: profilePictureUrl,
+                          onEditTap: () {
+                            _pickMedia();
+                          },
                         ),
                         Positioned(
                           bottom: 17,
