@@ -8,9 +8,7 @@ class AuthApiModel {
   final String username;
   final String? password;
   final String? confirmPassword;
-  // final String? batchId;
   final String? profilePicture;
-  // final BatchApiModel? batch;
 
   AuthApiModel({
     this.authId,
