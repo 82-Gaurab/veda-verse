@@ -4,14 +4,18 @@ class BookApiModel {
   final String? bookId;
   final String title;
   final String author;
-  final String imageUrl;
+  final String? genre;
+  final String? imageUrl;
+  final String? publishedYear;
   final double rating;
 
   const BookApiModel({
     this.bookId,
     required this.title,
     required this.author,
-    required this.imageUrl,
+    this.imageUrl,
+    this.genre,
+    this.publishedYear,
     required this.rating,
   });
 
@@ -21,7 +25,8 @@ class BookApiModel {
       bookId: json["_id"] as String,
       title: json["title"] as String,
       author: json["author"] as String,
-      imageUrl: json["imageUrl"] as String,
+      genre: json["genre"] as String,
+      publishedYear: json["publishedYear"] as String,
       rating: json["rating"] as double,
     );
   }
@@ -31,6 +36,8 @@ class BookApiModel {
       "title": title,
       "author": author,
       "imageUrl": imageUrl,
+      "publishedYear": publishedYear,
+      "genre": genre,
       "rating": rating,
     };
   }
@@ -42,6 +49,8 @@ class BookApiModel {
       title: title,
       author: author,
       imageUrl: imageUrl,
+      genre: genre,
+      publishedYear: publishedYear,
       rating: rating,
     );
   }
@@ -52,6 +61,8 @@ class BookApiModel {
       title: entity.title,
       author: entity.author,
       imageUrl: entity.imageUrl,
+      genre: entity.genre,
+      publishedYear: entity.publishedYear,
       rating: entity.rating,
     );
   }

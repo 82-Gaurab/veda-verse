@@ -4,18 +4,29 @@ class BookEntity extends Equatable {
   final String? bookId;
   final String title;
   final String author;
-  final String imageUrl;
+  final String? genre;
+  final String? imageUrl;
+  final String? publishedYear;
   final double rating;
 
   const BookEntity({
     this.bookId,
     required this.title,
     required this.author,
-    required this.imageUrl,
+    this.imageUrl,
     required this.rating,
+    this.genre,
+    this.publishedYear,
   });
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [bookId, title, author, imageUrl, rating];
+  List<Object?> get props => [
+    bookId,
+    title,
+    author,
+    imageUrl,
+    rating,
+    genre,
+    publishedYear,
+  ];
 }
