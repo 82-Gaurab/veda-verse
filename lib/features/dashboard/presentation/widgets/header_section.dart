@@ -1,29 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/core/services/storage/user_session_service.dart';
 
-class HeaderSection extends StatelessWidget {
+class HeaderSection extends ConsumerStatefulWidget {
   const HeaderSection({super.key});
 
   @override
+  ConsumerState<HeaderSection> createState() => _HeaderSectionState();
+}
+
+class _HeaderSectionState extends ConsumerState<HeaderSection> {
+  @override
   Widget build(BuildContext context) {
+    final userSession = ref.watch(userSessionServiceProvider);
+    final profilePicture = userSession.getUserProfileImage();
+    final username = userSession.getUsername();
+    final String fullUrl = "http://192.168.100.8:4000/api/v1$profilePicture";
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            const CircleAvatar(
-              radius: 22,
-              backgroundImage: NetworkImage("https://i.pravatar.cc/150?img=5"),
+            ClipOval(
+              child: Image.network(
+                fullUrl,
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
+
+                loadingBuilder: (context, child, progress) {
+                  if (progress == null) return child;
+                  return const CircularProgressIndicator();
+                },
+
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(
+                    Icons.person_rounded,
+                    size: 40,
+                    color: AppColors.primary,
+                  );
+                },
+              ),
             ),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "Hi, Sarah!",
+                  "Hi, $username!",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
-                SizedBox(height: 2),
-                Text("Good Morning", style: TextStyle(color: Colors.grey)),
+                const SizedBox(height: 2),
+                const Text(
+                  "Welcome Back",
+                  style: TextStyle(color: Colors.grey, fontSize: 20),
+                ),
               ],
             ),
           ],

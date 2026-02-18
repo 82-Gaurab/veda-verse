@@ -25,6 +25,9 @@ class BookSection extends StatelessWidget {
                 title: "Thorn and Roses",
                 author: "Sarah J. Maas",
               ),
+
+              ModernBookCard(image: "", title: "", author: ""),
+
               ModernBookCard(
                 image:
                     "https://images-na.ssl-images-amazon.com/images/I/81XQw5QwQ0L.jpg",

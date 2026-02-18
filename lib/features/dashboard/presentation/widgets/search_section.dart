@@ -18,16 +18,22 @@ class SearchSection extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: "Search for books",
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
               ),
             ),
           ),
           Container(
-            decoration: const BoxDecoration(
-              color: Color(0xffE8505B),
-              shape: BoxShape.circle,
+            padding: EdgeInsets.all(10),
+            decoration: ShapeDecoration(
+              shape: CircleBorder(),
+              gradient: RadialGradient(
+                center: Alignment.topCenter,
+                radius: 1.5,
+                colors: [Colors.greenAccent.shade400, Colors.green.shade700],
+              ),
             ),
-            padding: const EdgeInsets.all(10),
-            child: const Icon(Icons.search, color: Colors.white),
+            child: Icon(Icons.search, color: Colors.white),
           ),
         ],
       ),
