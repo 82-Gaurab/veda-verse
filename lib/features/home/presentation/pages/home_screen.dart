@@ -226,10 +226,10 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:vedaverse/features/dashboard/presentation/widgets/book_section.dart';
-import 'package:vedaverse/features/dashboard/presentation/widgets/category_section.dart';
-import 'package:vedaverse/features/dashboard/presentation/widgets/header_section.dart';
-import 'package:vedaverse/features/dashboard/presentation/widgets/search_section.dart';
+import 'package:vedaverse/features/home/presentation/widgets/book_section.dart';
+import 'package:vedaverse/features/home/presentation/widgets/category_section.dart';
+import 'package:vedaverse/features/home/presentation/widgets/header_section.dart';
+import 'package:vedaverse/features/home/presentation/widgets/search_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

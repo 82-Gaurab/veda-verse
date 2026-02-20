@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/features/dashboard/presentation/widgets/book_card.dart';
-import 'package:vedaverse/features/dashboard/presentation/widgets/section_header.dart';
+import 'package:vedaverse/features/home/presentation/widgets/book_card.dart';
+import 'package:vedaverse/features/home/presentation/widgets/section_header.dart';
 
 class BookSection extends StatelessWidget {
   final String title;

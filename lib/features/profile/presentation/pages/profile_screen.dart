@@ -11,8 +11,8 @@ import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
-import 'package:vedaverse/features/dashboard/presentation/widgets/menu_item.dart';
-import 'package:vedaverse/features/dashboard/presentation/widgets/profile_avatar.dart';
+import 'package:vedaverse/features/profile/presentation/widgets/menu_item.dart';
+import 'package:vedaverse/features/profile/presentation/widgets/profile_avatar.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
