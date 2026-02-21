@@ -40,10 +40,20 @@ class ProfileAvatar extends StatelessWidget {
                       height: 180,
                       fit: BoxFit.cover,
 
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return const CircularProgressIndicator();
-                      },
+                      frameBuilder:
+                          (context, child, frame, wasSynchronouslyLoaded) {
+                            if (wasSynchronouslyLoaded) return child;
+
+                            if (frame == null) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.primaryLight,
+                                ),
+                              );
+                            }
+
+                            return child;
+                          },
 
                       errorBuilder: (context, error, stackTrace) {
                         return Icon(
