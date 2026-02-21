@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/features/explore/presentation/widgets/book_card.dart';
-import 'package:vedaverse/features/home/presentation/widgets/search_section.dart';
+import 'package:vedaverse/features/explore/presentation/widgets/genre_card.dart';
+import 'package:vedaverse/features/explore/presentation/widgets/search_section.dart';
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({super.key});
@@ -54,11 +55,11 @@ class ExploreScreen extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    _buildCategoryChip("Fiction"),
-                    _buildCategoryChip("Science"),
-                    _buildCategoryChip("Business"),
-                    _buildCategoryChip("Romance"),
-                    _buildCategoryChip("History"),
+                    GenreCard(title: "Fiction"),
+                    GenreCard(title: "Science"),
+                    GenreCard(title: "Business"),
+                    GenreCard(title: "Romance"),
+                    GenreCard(title: "History"),
                   ],
                 ),
               ),
@@ -135,17 +136,6 @@ class ExploreScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  static Widget _buildCategoryChip(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 10),
-      child: Chip(
-        label: Text(title),
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        labelStyle: const TextStyle(color: Colors.green),
       ),
     );
   }

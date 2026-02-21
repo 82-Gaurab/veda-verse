@@ -88,6 +88,8 @@ dependencies:
 
   #Testing
   test_cov_console: ^0.2.2
+  carousel_slider: ^5.1.2
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

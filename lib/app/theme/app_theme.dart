@@ -13,9 +13,9 @@ class AppTheme {
       fontFamily: "Bricolage",
 
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: Colors.white,
-        selectedItemColor: Color(0xFFFFAE37),
-        unselectedItemColor: Color.fromARGB(255, 110, 110, 110),
+        backgroundColor: AppColors.primaryGreen,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white54,
         selectedIconTheme: IconThemeData(size: 30),
         selectedLabelStyle: TextStyle(fontSize: 18),
       ),

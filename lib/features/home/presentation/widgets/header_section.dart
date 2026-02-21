@@ -25,8 +25,8 @@ class _HeaderSectionState extends ConsumerState<HeaderSection> {
             ClipOval(
               child: Image.network(
                 fullUrl,
-                width: 80,
-                height: 80,
+                width: 50,
+                height: 50,
                 fit: BoxFit.cover,
 
                 loadingBuilder: (context, child, progress) {
@@ -49,12 +49,16 @@ class _HeaderSectionState extends ConsumerState<HeaderSection> {
               children: [
                 Text(
                   "Hi, $username!",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(height: 2),
                 const Text(
                   "Welcome Back",
-                  style: TextStyle(color: Colors.grey, fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ],
             ),
