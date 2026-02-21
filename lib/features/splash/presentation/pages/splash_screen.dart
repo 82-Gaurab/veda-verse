@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/dashboard/presentation/pages/dashboard_screen.dart';
-import 'package:vedaverse/features/splash/presentation/pages/second_screen.dart';
+import 'package:vedaverse/features/onboarding/presentation/pages/on_boarding_page.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -27,7 +27,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       );
     } else {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => SecondScreen()),
+        MaterialPageRoute(builder: (context) => OnboardingScreen()),
       );
     }
   }

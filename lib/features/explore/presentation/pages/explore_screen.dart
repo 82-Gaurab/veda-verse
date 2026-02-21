@@ -110,21 +110,25 @@ class ExploreScreen extends StatelessWidget {
                     title: "The Alchemist",
                     author: "Paulo Coelho",
                     image: "https://via.placeholder.com/60x90",
+                    price: 200,
                   ),
                   PopularBookTile(
                     title: "Rich Dad Poor Dad",
                     author: "Robert Kiyosaki",
                     image: "https://via.placeholder.com/60x90",
+                    price: 200,
                   ),
                   PopularBookTile(
                     title: "Rich Dad Poor Dad",
                     author: "Robert Kiyosaki",
                     image: "https://via.placeholder.com/60x90",
+                    price: 200,
                   ),
                   PopularBookTile(
                     title: "Rich Dad Poor Dad",
                     author: "Robert Kiyosaki",
                     image: "https://via.placeholder.com/60x90",
+                    price: 200,
                   ),
                 ],
               ),
@@ -154,12 +158,14 @@ class PopularBookTile extends StatelessWidget {
   final String title;
   final String author;
   final String image;
+  final double price;
 
   const PopularBookTile({
     super.key,
     required this.title,
     required this.author,
     required this.image,
+    required this.price,
   });
 
   @override
@@ -176,7 +182,15 @@ class PopularBookTile extends StatelessWidget {
           ),
         ),
         title: Text(title),
-        subtitle: Text(author, style: TextStyle(fontSize: 12)),
+        isThreeLine: true,
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(author, style: TextStyle(fontSize: 12)),
+            SizedBox(height: 4),
+            Text("$price", style: TextStyle(fontSize: 12, color: Colors.green)),
+          ],
+        ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       ),
     );
