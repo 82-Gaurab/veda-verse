@@ -41,13 +41,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Image.asset(
-                "assets/images/logo.png",
+                "assets/images/splash.jpg",
                 height: MediaQuery.of(context).size.height * 0.7,
               ),
               Image.asset("assets/images/title.png", height: 100),
