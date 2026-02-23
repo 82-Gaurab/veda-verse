@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
 
 class EnterOtp extends StatefulWidget {
@@ -34,30 +35,62 @@ class _EnterOtpState extends State<EnterOtp> {
           padding: EdgeInsets.all(10),
           child: Column(
             children: [
-              Text("Insert Email"),
-              Text("A OTP will be send to you"),
+              Text("Enter OTP send to your email"),
               SizedBox(height: MediaQuery.of(context).size.height * 0.2),
               Form(
                 key: _formKey,
                 child: TextFormField(
                   controller: _otpController,
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: "Email",
-                    prefixIcon: Icon(Icons.email),
+                    labelText: "Enter OTP",
+                    prefixIcon: Icon(Icons.key),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Please enter a valid email';
+                      return 'Please enter your OTP';
                     }
                     return null;
                   },
                 ),
               ),
               SizedBox(height: 20),
+              SizedBox(
+                height: 56,
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  // onPressed: authState.status == AuthStatus.loading
+                  //     ? null
+                  //     : _handleSendOTP,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: false
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          ),
+                        )
+                      : const Text(
+                          'Continue',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
+              ),
             ],
           ),
         ),
