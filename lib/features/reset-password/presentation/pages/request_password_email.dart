@@ -37,7 +37,7 @@ class _ResetPasswordEmailState extends ConsumerState<RequestPasswordEmail> {
           context,
           next.errorMessage ?? "OTP Failed to Send",
         );
-      } else if (next.status == AuthStatus.authenticated) {
+      } else if (next.status == AuthStatus.loaded) {
         SnackbarUtils.showSuccess(context, "Otp sent to email Successfully");
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => EnterOtp(otp: next.otp!)),

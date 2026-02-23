@@ -161,11 +161,11 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
     var otp = "";
     final response = await _apiClient.post(
       ApiEndpoints.userPasswordResetRequest,
-      data: email,
+      data: {"email": email},
     );
 
     if (response.data["success"] == true) {
-      otp = response.data["data"];
+      otp = response.data["data"] as String;
     }
 
     return otp;
