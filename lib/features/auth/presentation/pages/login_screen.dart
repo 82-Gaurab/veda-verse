@@ -8,6 +8,7 @@ import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.
 import 'package:vedaverse/features/dashboard/presentation/pages/dashboard_screen.dart';
 import 'package:vedaverse/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vedaverse/features/reset-password/presentation/pages/request_password_email.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -43,7 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _navigateToSignup() => AppRoutes.push(context, const SignUpScreen());
   void _handleForgotPassword() =>
-      SnackbarUtils.showInfo(context, 'Forgot password feature coming soon');
+      AppRoutes.push(context, const RequestPasswordEmail());
   void _handleGoogleSignIn() =>
       SnackbarUtils.showInfo(context, 'Google Sign In coming soon');
 

@@ -15,6 +15,7 @@ class AuthState extends Equatable {
   final AuthStatus status;
   final AuthEntity? entity;
   final String? errorMessage;
+  final String? otp;
   // store image temporarily
   final String? uploadPhotoName;
 
@@ -23,6 +24,7 @@ class AuthState extends Equatable {
     this.entity,
     this.errorMessage,
     this.uploadPhotoName,
+    this.otp,
   });
 
   AuthState copyWith({
@@ -30,11 +32,13 @@ class AuthState extends Equatable {
     AuthEntity? entity,
     String? errorMessage,
     String? uploadPhotoName,
+    String? otp,
   }) {
     return AuthState(
       status: status ?? this.status,
       entity: entity ?? this.entity,
       errorMessage: errorMessage ?? this.errorMessage,
+      otp: otp ?? this.otp,
       uploadPhotoName: uploadPhotoName ?? this.uploadPhotoName,
     );
   }
