@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
+import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/features/reset-password/presentation/pages/reset_password.dart';
 
 class EnterOtp extends StatefulWidget {
   final String otp;
-  const EnterOtp({super.key, required this.otp});
+  final String email;
+  const EnterOtp({super.key, required this.otp, required this.email});
 
   @override
   State<EnterOtp> createState() => _EnterOtpState();
@@ -15,6 +19,14 @@ class _EnterOtpState extends State<EnterOtp> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    void _handleContinue() {
+      if (_otpController.text == widget.otp) {
+        AppRoutes.pushReplacement(context, ResetPassword(email: widget.email));
+      } else {
+        SnackbarUtils.showError(context, 'Wrong OTP');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -27,7 +39,9 @@ class _EnterOtpState extends State<EnterOtp> {
             ),
             child: Icon(Icons.arrow_back, color: context.textPrimary, size: 20),
           ),
-          onPressed: () {},
+          onPressed: () {
+            () => Navigator.of(context).pop();
+          },
         ),
       ),
       body: SafeArea(
@@ -59,10 +73,7 @@ class _EnterOtpState extends State<EnterOtp> {
                 height: 56,
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
-                  // onPressed: authState.status == AuthStatus.loading
-                  //     ? null
-                  //     : _handleSendOTP,
+                  onPressed: _handleContinue,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
@@ -71,24 +82,10 @@ class _EnterOtpState extends State<EnterOtp> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: false
-                      ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          ),
-                        )
-                      : const Text(
-                          'Continue',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],

@@ -40,7 +40,10 @@ class _ResetPasswordEmailState extends ConsumerState<RequestPasswordEmail> {
       } else if (next.status == AuthStatus.loaded) {
         SnackbarUtils.showSuccess(context, "Otp sent to email Successfully");
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => EnterOtp(otp: next.otp!)),
+          MaterialPageRoute(
+            builder: (context) =>
+                EnterOtp(otp: next.otp!, email: _emailController.text),
+          ),
         );
       }
     });
