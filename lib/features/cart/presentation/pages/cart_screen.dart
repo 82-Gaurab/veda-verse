@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/books/domain/entity/book_entity.dart';
-import 'package:vedaverse/features/wishlist/presentation/widgets/wishlist_card.dart';
+import 'package:vedaverse/features/cart/presentation/widgets/cart_card.dart';
 
-class WishlistScreen extends StatefulWidget {
-  const WishlistScreen({super.key});
+class CartScreen extends ConsumerStatefulWidget {
+  const CartScreen({super.key});
 
   @override
-  State<WishlistScreen> createState() => _WishlistScreenState();
+  ConsumerState<CartScreen> createState() => _CartScreenState();
 }
 
-class _WishlistScreenState extends State<WishlistScreen> {
-  List<BookEntity> whishListBooks = [
+class _CartScreenState extends ConsumerState<CartScreen> {
+  List<BookEntity> cartBooks = [
     BookEntity(
       title: "somthingasdfadsfadsfadsfasdfasdf",
       author: "salkf",
@@ -23,16 +25,27 @@ class _WishlistScreenState extends State<WishlistScreen> {
     BookEntity(title: "q", author: "salkf", price: 2.0),
     BookEntity(title: "eqq", author: "salkf", price: 2.0),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(authViewModelProvider.notifier).getMyInfo();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authViewModelProvider);
     return Scaffold(
+      appBar: AppBar(title: Text(authState.entity!.firstName)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             child: Column(
-              children: whishListBooks.map((book) {
-                return WishlistCard(book: book);
+              children: cartBooks.map((book) {
+                return CartCard(book: book);
               }).toList(),
             ),
           ),

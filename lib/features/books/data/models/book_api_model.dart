@@ -31,7 +31,9 @@ class BookApiModel {
           (json["genre"] as List?)?.map((e) => e["name"] as String).toList() ??
           [],
       publishedYear: json["publishedYear"] as String,
+      description: json["description"],
       price: (json["price"] as num).toDouble(),
+      coverImg: json["coverImg"],
     );
   }
   //note: To JSON
@@ -55,6 +57,7 @@ class BookApiModel {
       coverImg: coverImg,
       genre: genre,
       publishedYear: publishedYear,
+      description: description,
       price: price,
     );
   }

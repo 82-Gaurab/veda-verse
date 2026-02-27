@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
-import 'package:vedaverse/features/books/domain/entity/book_entity.dart';
 import 'package:vedaverse/features/books/presentation/state/book_state.dart';
 import 'package:vedaverse/features/books/presentation/view_model/book_view_model.dart';
 import 'package:vedaverse/features/explore/presentation/widgets/book_card.dart';
 import 'package:vedaverse/features/explore/presentation/widgets/genre_card.dart';
 import 'package:vedaverse/features/genre/presentation/states/genre_state.dart';
-import 'package:vedaverse/features/genre/presentation/view_model/genre_viewmodel.dart';
+import 'package:vedaverse/features/genre/presentation/view_model/genre_view_model.dart';
 import 'package:vedaverse/features/home/presentation/widgets/header_section.dart';
 import 'package:vedaverse/features/home/presentation/widgets/top_pick_section.dart';
 
@@ -45,16 +44,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         SnackbarUtils.showSuccess(context, "Fetched Book Successful");
       }
     });
-
-    List<BookEntity> topPickBooks = [
-      BookEntity(title: "somthing", author: "salkf", price: 2.0),
-      BookEntity(title: "asdf", author: "salkf", price: 2.0),
-      BookEntity(title: "zzxzx", author: "salkf", price: 2.0),
-      BookEntity(title: "llp", author: "salkf", price: 2.0),
-      BookEntity(title: "kj", author: "salkf", price: 2.0),
-      BookEntity(title: "q", author: "salkf", price: 2.0),
-      BookEntity(title: "eqq", author: "salkf", price: 2.0),
-    ];
 
     final media = MediaQuery.of(context).size;
     return Scaffold(
@@ -104,14 +93,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     width: media.width,
                     height: media.width * 0.8,
                     child: CarouselSlider.builder(
-                      itemCount: topPickBooks.length,
+                      itemCount: bookState.books.length,
                       itemBuilder:
                           (
                             BuildContext context,
                             int itemIndex,
                             int pageViewIndex,
                           ) {
-                            var book = topPickBooks[itemIndex];
+                            var book = bookState.books[itemIndex];
                             return TopPicksSection(book: book);
                           },
                       options: CarouselOptions(
@@ -152,7 +141,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: BookCard(
                                   title: book.title,
                                   author: book.author,
-                                  image: book.title,
+                                  coverImg: book.coverImg,
+                                  bookId: book.bookId!,
                                 ),
                               );
                             }).toList(),
@@ -161,25 +151,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                   SizedBox(height: 10),
 
-                  Row(
-                    children: [
-                      const Text(
-                        "Genre",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Row(
+                      children: [
+                        const Text(
+                          "Genre",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
+                        Spacer(),
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(Icons.arrow_forward_ios, size: 14),
                         ),
-                        child: const Icon(Icons.arrow_forward_ios, size: 14),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 12),
 
@@ -218,17 +211,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         BookCard(
                           title: "The Silent Patient",
                           author: "Alex Michaelides",
-                          image: "https://via.placeholder.com/120x180",
+                          coverImg: "https://via.placeholder.com/120x180",
+                          bookId: '1',
                         ),
                         BookCard(
                           title: "Atomic Habits",
                           author: "James Clear",
-                          image: "https://via.placeholder.com/120x180",
+                          coverImg: "https://via.placeholder.com/120x180",
+                          bookId: '12',
                         ),
                         BookCard(
                           title: "1984",
                           author: "George Orwell",
-                          image: "https://via.placeholder.com/120x180",
+                          coverImg: "https://via.placeholder.com/120x180",
+                          bookId: '123',
                         ),
                       ],
                     ),

@@ -78,9 +78,15 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   }
 
   @override
-  Future<AuthApiModel?> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+  Future<AuthApiModel> getCurrentUser() async {
+    final token = _tokenService.getToken();
+
+    final response = await _apiClient.get(
+      ApiEndpoints.userInfo,
+      option: Options(headers: {"Authorization": "Bearer $token"}),
+    );
+
+    return response.data["data"];
   }
 
   @override

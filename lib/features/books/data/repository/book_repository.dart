@@ -44,12 +44,16 @@ class BookRepository implements IBookRepository {
 
   @override
   Future<Either<Failure, BookEntity>> getBookById(String bookId) async {
-    try {
-      final model = await _bookRemoteDatasource.getBookById(bookId);
-      final result = model.toEntity();
-      return Right(result);
-    } catch (e) {
-      return Left(ApiFailure(message: e.toString()));
+    if (await _networkInfo.isConnected) {
+      try {
+        final model = await _bookRemoteDatasource.getBookById(bookId);
+        final result = model.toEntity();
+        return Right(result);
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
     }
   }
 }

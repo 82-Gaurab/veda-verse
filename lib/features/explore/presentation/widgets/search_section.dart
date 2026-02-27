@@ -1,21 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/features/books/domain/entity/book_entity.dart';
+import 'package:vedaverse/features/books/presentation/pages/book_detail.dart';
 
 class SearchSection extends StatelessWidget {
-  const SearchSection({super.key});
+  final List<BookEntity> books;
+  const SearchSection({super.key, required this.books});
 
   @override
   Widget build(BuildContext context) {
-    // pull the data from backend
-    List<BookEntity> books = [
-      BookEntity(title: "somthing", author: "salkf", price: 2.0),
-      BookEntity(title: "asdf", author: "salkf", price: 2.0),
-      BookEntity(title: "zzxzx", author: "salkf", price: 2.0),
-      BookEntity(title: "llp", author: "salkf", price: 2.0),
-      BookEntity(title: "kj", author: "salkf", price: 2.0),
-      BookEntity(title: "q", author: "salkf", price: 2.0),
-      BookEntity(title: "eqq", author: "salkf", price: 2.0),
-    ];
     return SearchAnchor(
       builder: (BuildContext context, SearchController controller) {
         return Container(
@@ -83,11 +75,12 @@ class SearchSection extends StatelessWidget {
                   onTap: () {
                     controller.closeView(filteredItem.title);
 
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => RecipePage(recipe: filteredItem),
-                    //   ),
-                    // );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            BookDetail(bookId: filteredItem.bookId!),
+                      ),
+                    );
                   },
                 ),
               );

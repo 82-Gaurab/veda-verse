@@ -7,6 +7,7 @@ class BookEntity extends Equatable {
   final List<String>? genre;
   final String? coverImg;
   final String? publishedYear;
+  final String? description;
   final double price;
 
   const BookEntity({
@@ -17,6 +18,7 @@ class BookEntity extends Equatable {
     required this.price,
     this.genre,
     this.publishedYear,
+    this.description,
   });
 
   @override

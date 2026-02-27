@@ -23,8 +23,10 @@ class BookRemoteDatasource implements IBookRemoteDatasource {
   }
 
   @override
-  Future<BookApiModel> getBookById(String bookId) {
-    // TODO: implement getBookById
-    throw UnimplementedError();
+  Future<BookApiModel> getBookById(String bookId) async {
+    final response = await _apiClient.get(ApiEndpoints.bookById(bookId));
+    final data = response.data["data"];
+
+    return BookApiModel.fromJson(data);
   }
 }

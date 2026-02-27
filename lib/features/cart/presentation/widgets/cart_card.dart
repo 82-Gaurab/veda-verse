@@ -3,12 +3,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/features/books/domain/entity/book_entity.dart';
 
-class WishlistCard extends StatelessWidget {
+class CartCard extends StatelessWidget {
   final BookEntity book;
   final VoidCallback? onAddToCart;
   final VoidCallback? onDelete;
 
-  const WishlistCard({
+  const CartCard({
     super.key,
     required this.book,
     this.onAddToCart,

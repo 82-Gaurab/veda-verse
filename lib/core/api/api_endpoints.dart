@@ -38,9 +38,19 @@ class ApiEndpoints {
   static const String genre = "/genres/";
   static String genreById(String id) => '/genres/$id';
 
+  // Hack: ========== Review Endpoints ===========
+  static const String review = "/genres/";
+  static String reviewsByBookId(String id) => '/reviews/books/$id';
+  static const String myReviews = '/reviews/my-reviews/';
+  static const String createReview = '/reviews/';
+
   // Hack: ========== Book Endpoints ===========
   static const String books = "/books/";
   static String bookById(String id) => '/books/$id';
+
+  // Hack: ========== Order Endpoints ===========
+  static const String orders = "/orders/";
+  static String myOrders = '/orders/my-orders';
 
   // Hack: ========== User Endpoints ===========
   static const String userLogin = "/auth/login";
@@ -50,4 +60,5 @@ class ApiEndpoints {
   static const String userPasswordResetRequest =
       "/auth/request-password-reset-otp";
   static const String userPasswordReset = "/auth/reset-password-otp";
+  static const String userInfo = "/auth/me";
 }
