@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/features/reset-password/domain/usecases/reset_password_usercase.dart';
+import 'package:vedaverse/features/reset-password/domain/usecases/send_otp_request_usecase.dart';
 import 'package:vedaverse/features/reset-password/presentation/state/reset_password_state.dart';
 
 final resetPasswordViewModelProvider =
@@ -9,10 +10,13 @@ final resetPasswordViewModelProvider =
 
 class ResetPasswordViewModel extends Notifier<ResetPasswordState> {
   late final ResetPasswordUserCase _resetPasswordUserCase;
+  late final SendOtpRequestUsecase _sendOtpRequestUsecase;
 
   @override
   ResetPasswordState build() {
     _resetPasswordUserCase = ref.read(resetPasswordUseCaseProvider);
+    _sendOtpRequestUsecase = ref.read(sendOtpRequestUsecaseProvider);
+
     return ResetPasswordState();
   }
 
@@ -44,6 +48,21 @@ class ResetPasswordViewModel extends Notifier<ResetPasswordState> {
           );
         }
       },
+    );
+  }
+
+  Future<void> sendOtpRequest({required String email}) async {
+    state = state.copyWith(status: ResetStatus.loading);
+
+    final params = SendOtpRequestUsecaseParams(email: email);
+    final result = await _sendOtpRequestUsecase(params);
+
+    result.fold(
+      (left) => state = state.copyWith(
+        status: ResetStatus.error,
+        errorMessage: left.message,
+      ),
+      (otp) => state = state.copyWith(status: ResetStatus.success, otp: otp),
     );
   }
 }

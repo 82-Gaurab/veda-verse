@@ -158,35 +158,4 @@ class AuthRepository implements IAuthRepository {
       return Left(ApiFailure(message: "No Internet Connection"));
     }
   }
-
-  @override
-  Future<Either<Failure, AuthEntity>> changePassword(
-    String email,
-    String otp,
-    String newPassword,
-  ) {
-    // TODO: implement changePassword
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, String>> sendOTPRequest(String email) async {
-    if (await _networkInfo.isConnected) {
-      try {
-        final otp = await _authRemoteDatasource.sendOTPRequest(email);
-        return Right(otp);
-      } on DioException catch (e) {
-        return Left(
-          ApiFailure(
-            statusCode: e.response?.statusCode,
-            message: e.response?.data['message'] ?? "Request Failed",
-          ),
-        );
-      } catch (e) {
-        return Left(ApiFailure(message: e.toString()));
-      }
-    } else {
-      return Left(ApiFailure(message: "No Internet Connection"));
-    }
-  }
 }

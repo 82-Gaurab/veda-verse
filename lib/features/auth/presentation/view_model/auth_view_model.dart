@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/features/auth/domain/usecases/login_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/register_usecase.dart';
-import 'package:vedaverse/features/auth/domain/usecases/send_otp_request_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/update_user_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/upload_image_usecase.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
@@ -20,7 +19,6 @@ class AuthViewModel extends Notifier<AuthState> {
   late final LogoutUsecase _logoutUsecase;
   late final UpdateUserUsecase _updateUserUsecase;
   late final UploadImageUsecase _uploadImageUsecase;
-  late final SendOtpRequestUsecase _sendOtpRequestUsecase;
 
   @override
   AuthState build() {
@@ -29,7 +27,6 @@ class AuthViewModel extends Notifier<AuthState> {
     _logoutUsecase = ref.read(logoutUsecaseProvider);
     _uploadImageUsecase = ref.read(uploadImageUsecaseProvider);
     _updateUserUsecase = ref.read(updateUserUsecaseProvider);
-    _sendOtpRequestUsecase = ref.read(sendOtpRequestUsecaseProvider);
     return AuthState();
   }
 
@@ -126,21 +123,6 @@ class AuthViewModel extends Notifier<AuthState> {
         status: AuthStatus.authenticated,
         entity: entity,
       ),
-    );
-  }
-
-  Future<void> sendOtpRequest({required String email}) async {
-    state = state.copyWith(status: AuthStatus.loading);
-
-    final params = SendOtpRequestUsecaseParams(email: email);
-    final result = await _sendOtpRequestUsecase(params);
-
-    result.fold(
-      (left) => state = state.copyWith(
-        status: AuthStatus.error,
-        errorMessage: left.message,
-      ),
-      (otp) => state = state.copyWith(status: AuthStatus.loaded, otp: otp),
     );
   }
 

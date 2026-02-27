@@ -1,32 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/features/reset-password/presentation/pages/reset_password.dart';
 
-class EnterOtp extends StatefulWidget {
+class EnterOtp extends ConsumerStatefulWidget {
   final String otp;
   final String email;
   const EnterOtp({super.key, required this.otp, required this.email});
 
   @override
-  State<EnterOtp> createState() => _EnterOtpState();
+  ConsumerState<EnterOtp> createState() => _EnterOtpState();
 }
 
-class _EnterOtpState extends State<EnterOtp> {
+class _EnterOtpState extends ConsumerState<EnterOtp> {
   final TextEditingController _otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  void _handleContinue() {
+    if (_otpController.text == widget.otp) {
+      AppRoutes.pushReplacement(context, ResetPassword(email: widget.email));
+    } else {
+      SnackbarUtils.showError(context, 'Wrong OTP');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    void _handleContinue() {
-      if (_otpController.text == widget.otp) {
-        AppRoutes.pushReplacement(context, ResetPassword(email: widget.email));
-      } else {
-        SnackbarUtils.showError(context, 'Wrong OTP');
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

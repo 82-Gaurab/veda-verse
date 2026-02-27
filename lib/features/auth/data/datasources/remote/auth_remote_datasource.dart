@@ -149,25 +149,4 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
 
     return response.data["success"];
   }
-
-  @override
-  Future<String> changePassword(String email, String otp, String newPassword) {
-    // TODO: implement changePassword
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<String> sendOTPRequest(String email) async {
-    var otp = "";
-    final response = await _apiClient.post(
-      ApiEndpoints.userPasswordResetRequest,
-      data: {"email": email},
-    );
-
-    if (response.data["success"] == true) {
-      otp = response.data["data"] as String;
-    }
-
-    return otp;
-  }
 }

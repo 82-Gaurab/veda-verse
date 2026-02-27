@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
-import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
-import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/reset-password/presentation/pages/enter_otp.dart';
+import 'package:vedaverse/features/reset-password/presentation/state/reset_password_state.dart';
+import 'package:vedaverse/features/reset-password/presentation/view_model/reset_password_view_model.dart';
 
 class RequestPasswordEmail extends ConsumerStatefulWidget {
   const RequestPasswordEmail({super.key});
@@ -22,22 +22,22 @@ class _ResetPasswordEmailState extends ConsumerState<RequestPasswordEmail> {
   Future<void> _handleSendOTP() async {
     if (_formKey.currentState!.validate()) {
       ref
-          .read(authViewModelProvider.notifier)
+          .read(resetPasswordViewModelProvider.notifier)
           .sendOtpRequest(email: _emailController.text);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authViewModelProvider);
+    final resetState = ref.watch(resetPasswordViewModelProvider);
 
-    ref.listen(authViewModelProvider, (previous, next) {
-      if (next.status == AuthStatus.error) {
+    ref.listen(resetPasswordViewModelProvider, (previous, next) {
+      if (next.status == ResetStatus.error) {
         SnackbarUtils.showError(
           context,
           next.errorMessage ?? "OTP Failed to Send",
         );
-      } else if (next.status == AuthStatus.loaded) {
+      } else if (next.status == ResetStatus.success) {
         SnackbarUtils.showSuccess(context, "Otp sent to email Successfully");
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -96,7 +96,7 @@ class _ResetPasswordEmailState extends ConsumerState<RequestPasswordEmail> {
                 height: 56,
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: authState.status == AuthStatus.loading
+                  onPressed: resetState.status == ResetStatus.loading
                       ? null
                       : _handleSendOTP,
                   style: ElevatedButton.styleFrom(
@@ -107,7 +107,7 @@ class _ResetPasswordEmailState extends ConsumerState<RequestPasswordEmail> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: authState.status == AuthStatus.loading
+                  child: resetState.status == ResetStatus.loading
                       ? const SizedBox(
                           width: 24,
                           height: 24,

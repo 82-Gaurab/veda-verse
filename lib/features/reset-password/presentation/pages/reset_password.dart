@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
 import 'package:vedaverse/features/auth/presentation/widgets/password_field.dart';
 import 'package:vedaverse/features/reset-password/presentation/state/reset_password_state.dart';
 import 'package:vedaverse/features/reset-password/presentation/view_model/reset_password_view_model.dart';
@@ -33,8 +36,24 @@ class _ResetPasswordState extends ConsumerState<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     final resetPasswordState = ref.watch(resetPasswordViewModelProvider);
+    ref.listen(resetPasswordViewModelProvider, (previous, next) {
+      if (next.status == ResetStatus.error) {
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? "Password Reset Failed",
+        );
+      } else if (next.status == ResetStatus.success) {
+        SnackbarUtils.showSuccess(context, "Password Reset Successfully");
+        AppRoutes.pushReplacement(context, const LoginScreen());
+      }
+    });
+
     return Scaffold(
-      appBar: AppBar(title: Text("Reset Password"), centerTitle: true),
+      appBar: AppBar(
+        title: Text("Reset Password"),
+        centerTitle: true,
+        leading: Container(),
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(10),
@@ -71,6 +90,7 @@ class _ResetPasswordState extends ConsumerState<ResetPassword> {
                     return null;
                   },
                 ),
+                SizedBox(height: 15),
                 SizedBox(
                   height: 56,
                   width: double.infinity,
@@ -98,7 +118,7 @@ class _ResetPasswordState extends ConsumerState<ResetPassword> {
                             ),
                           )
                         : const Text(
-                            'Login',
+                            'Reset Password',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

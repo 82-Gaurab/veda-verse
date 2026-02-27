@@ -24,4 +24,19 @@ class ResetRemoteDatasource implements IResetRemoteDatasource {
 
     return response.data["success"];
   }
+
+  @override
+  Future<String> sendOTPRequest(String email) async {
+    var otp = "";
+    final response = await _apiClient.post(
+      ApiEndpoints.userPasswordResetRequest,
+      data: {"email": email},
+    );
+
+    if (response.data["success"] == true) {
+      otp = response.data["data"] as String;
+    }
+
+    return otp;
+  }
 }

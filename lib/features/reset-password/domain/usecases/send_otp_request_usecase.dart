@@ -3,12 +3,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/core/error/failures.dart';
 import 'package:vedaverse/core/usecases/app_usecase.dart';
-import 'package:vedaverse/features/auth/data/repositories/auth_repository.dart';
-import 'package:vedaverse/features/auth/domain/repositories/auth_repository.dart';
+import 'package:vedaverse/features/reset-password/data/repository/reset_password_repository.dart';
+import 'package:vedaverse/features/reset-password/domain/repository/reset_password_repository.dart';
 
 final sendOtpRequestUsecaseProvider = Provider<SendOtpRequestUsecase>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return SendOtpRequestUsecase(authRepository: authRepository);
+  final resetPasswordRepository = ref.watch(resetPasswordRepositoryProvider);
+  return SendOtpRequestUsecase(
+    resetPasswordRepository: resetPasswordRepository,
+  );
 });
 
 class SendOtpRequestUsecaseParams extends Equatable {
@@ -21,12 +23,13 @@ class SendOtpRequestUsecaseParams extends Equatable {
 
 class SendOtpRequestUsecase
     implements UseCaseWithParams<String, SendOtpRequestUsecaseParams> {
-  final IAuthRepository _authRepository;
+  final IResetPasswordRepository _resetPasswordRepository;
 
-  SendOtpRequestUsecase({required IAuthRepository authRepository})
-    : _authRepository = authRepository;
+  SendOtpRequestUsecase({
+    required IResetPasswordRepository resetPasswordRepository,
+  }) : _resetPasswordRepository = resetPasswordRepository;
   @override
   Future<Either<Failure, String>> call(SendOtpRequestUsecaseParams params) {
-    return _authRepository.sendOTPRequest(params.email);
+    return _resetPasswordRepository.sendOTPRequest(params.email);
   }
 }
