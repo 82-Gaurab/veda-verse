@@ -34,9 +34,9 @@ class ApiEndpoints {
   static const Duration connectionTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
 
-  // Hack: ========== Batch Endpoints ===========
-  static const String genre = "/genre";
-  static String genreById(String id) => '/genre/$id';
+  // Hack: ========== Genre Endpoints ===========
+  static const String genre = "/genres/";
+  static String genreById(String id) => '/genres/$id';
 
   // Hack: ========== Book Endpoints ===========
   static const String books = "/books/";

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:vedaverse/features/genre/domain/entities/genre_entity.dart';
 
-enum GenreStatus { initial, loading, loaded, error, created, updated, deleted }
+enum GenreStatus { initial, loading, loaded, error }
 
 class GenreState extends Equatable {
   final GenreStatus status;

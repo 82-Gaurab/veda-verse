@@ -8,13 +8,13 @@ class SearchSection extends StatelessWidget {
   Widget build(BuildContext context) {
     // pull the data from backend
     List<BookEntity> books = [
-      BookEntity(title: "somthing", author: "salkf", rating: 2.0),
-      BookEntity(title: "asdf", author: "salkf", rating: 2.0),
-      BookEntity(title: "zzxzx", author: "salkf", rating: 2.0),
-      BookEntity(title: "llp", author: "salkf", rating: 2.0),
-      BookEntity(title: "kj", author: "salkf", rating: 2.0),
-      BookEntity(title: "q", author: "salkf", rating: 2.0),
-      BookEntity(title: "eqq", author: "salkf", rating: 2.0),
+      BookEntity(title: "somthing", author: "salkf", price: 2.0),
+      BookEntity(title: "asdf", author: "salkf", price: 2.0),
+      BookEntity(title: "zzxzx", author: "salkf", price: 2.0),
+      BookEntity(title: "llp", author: "salkf", price: 2.0),
+      BookEntity(title: "kj", author: "salkf", price: 2.0),
+      BookEntity(title: "q", author: "salkf", price: 2.0),
+      BookEntity(title: "eqq", author: "salkf", price: 2.0),
     ];
     return SearchAnchor(
       builder: (BuildContext context, SearchController controller) {

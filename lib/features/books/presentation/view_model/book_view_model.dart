@@ -1,7 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/features/books/domain/entity/book_entity.dart';
 import 'package:vedaverse/features/books/domain/usecases/get_all_book_usecase.dart';
 import 'package:vedaverse/features/books/domain/usecases/get_book_by_id_usecase.dart';
 import 'package:vedaverse/features/books/presentation/state/book_state.dart';
+
+final bookViewModelProvider = NotifierProvider<BookViewModel, BookState>(() {
+  return BookViewModel();
+});
 
 class BookViewModel extends Notifier<BookState> {
   late final GetAllBookUsecase _getAllBookUsecase;
@@ -25,8 +30,16 @@ class BookViewModel extends Notifier<BookState> {
         status: BookStatus.error,
         errorMessage: failure.message,
       ),
-      (books) =>
-          state = state.copyWith(status: BookStatus.loaded, books: books),
+      (books) {
+        if (books.isEmpty) {
+          state = state.copyWith(
+            status: BookStatus.loaded,
+            books: [BookEntity(title: "title", author: "author", price: 4)],
+          );
+        } else {
+          state = state.copyWith(status: BookStatus.loaded, books: books);
+        }
+      },
     );
   }
 

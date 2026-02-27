@@ -1,39 +1,59 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/features/books/domain/entity/book_entity.dart';
+import 'package:vedaverse/features/books/presentation/state/book_state.dart';
+import 'package:vedaverse/features/books/presentation/view_model/book_view_model.dart';
 import 'package:vedaverse/features/explore/presentation/widgets/book_card.dart';
 import 'package:vedaverse/features/explore/presentation/widgets/genre_card.dart';
+import 'package:vedaverse/features/genre/presentation/states/genre_state.dart';
+import 'package:vedaverse/features/genre/presentation/view_model/genre_viewmodel.dart';
 import 'package:vedaverse/features/home/presentation/widgets/header_section.dart';
 import 'package:vedaverse/features/home/presentation/widgets/top_pick_section.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(genreViewModelProvider.notifier).getAllGenres();
+      ref.read(bookViewModelProvider.notifier).getAllBooks();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final genreState = ref.watch(genreViewModelProvider);
+    final bookState = ref.watch(bookViewModelProvider);
+
+    ref.listen(bookViewModelProvider, (previous, next) {
+      if (next.status == BookStatus.error) {
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? "Failed to Fetch Book Data",
+        );
+      } else if (next.status == BookStatus.loaded) {
+        SnackbarUtils.showSuccess(context, "Fetched Book Successful");
+      }
+    });
+
     List<BookEntity> topPickBooks = [
-      BookEntity(title: "somthing", author: "salkf", rating: 2.0),
-      BookEntity(title: "asdf", author: "salkf", rating: 2.0),
-      BookEntity(title: "zzxzx", author: "salkf", rating: 2.0),
-      BookEntity(title: "llp", author: "salkf", rating: 2.0),
-      BookEntity(title: "kj", author: "salkf", rating: 2.0),
-      BookEntity(title: "q", author: "salkf", rating: 2.0),
-      BookEntity(title: "eqq", author: "salkf", rating: 2.0),
-    ];
-    List<BookEntity> bestSellerBooks = [
-      BookEntity(title: "somthing", author: "salkf", rating: 2.0),
-      BookEntity(title: "asdf", author: "salkf", rating: 2.0),
-      BookEntity(title: "zzxzx", author: "salkf", rating: 2.0),
-      BookEntity(title: "llp", author: "salkf", rating: 2.0),
-      BookEntity(title: "kj", author: "salkf", rating: 2.0),
-      BookEntity(title: "q", author: "salkf", rating: 2.0),
-      BookEntity(title: "eqq", author: "salkf", rating: 2.0),
+      BookEntity(title: "somthing", author: "salkf", price: 2.0),
+      BookEntity(title: "asdf", author: "salkf", price: 2.0),
+      BookEntity(title: "zzxzx", author: "salkf", price: 2.0),
+      BookEntity(title: "llp", author: "salkf", price: 2.0),
+      BookEntity(title: "kj", author: "salkf", price: 2.0),
+      BookEntity(title: "q", author: "salkf", price: 2.0),
+      BookEntity(title: "eqq", author: "salkf", price: 2.0),
     ];
 
     final media = MediaQuery.of(context).size;
@@ -121,18 +141,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: bestSellerBooks.map((book) {
-                        return Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: BookCard(
-                            title: book.title,
-                            author: book.author,
-                            image: book.title,
+                    child: bookState.status == BookStatus.loading
+                        ? const Center(child: CircularProgressIndicator())
+                        : bookState.books.isEmpty
+                        ? const Text("No Books found")
+                        : Row(
+                            children: bookState.books.map((book) {
+                              return Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: BookCard(
+                                  title: book.title,
+                                  author: book.author,
+                                  image: book.title,
+                                ),
+                              );
+                            }).toList(),
                           ),
-                        );
-                      }).toList(),
-                    ),
                   ),
 
                   SizedBox(height: 10),
@@ -161,16 +185,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   SizedBox(
                     height: 40,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        GenreCard(title: "Fiction"),
-                        GenreCard(title: "Science"),
-                        GenreCard(title: "Business"),
-                        GenreCard(title: "Romance"),
-                        GenreCard(title: "History"),
-                      ],
-                    ),
+                    child: genreState.status == GenreStatus.loading
+                        ? const Center(child: CircularProgressIndicator())
+                        : genreState.genres.isEmpty
+                        ? const Text("No genres found")
+                        : ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: genreState.genres.map((genre) {
+                              return GenreCard(title: genre.genreTitle);
+                            }).toList(),
+                          ),
                   ),
 
                   SizedBox(height: 15),

@@ -4,19 +4,21 @@ class BookApiModel {
   final String? bookId;
   final String title;
   final String author;
-  final String? genre;
-  final String? imageUrl;
+  final String? description;
+  final List<String>? genre;
+  final String? coverImg;
   final String? publishedYear;
-  final double rating;
+  final double price;
 
   const BookApiModel({
     this.bookId,
     required this.title,
     required this.author,
-    this.imageUrl,
+    this.coverImg,
     this.genre,
     this.publishedYear,
-    required this.rating,
+    required this.price,
+    this.description,
   });
 
   //note: From JSON
@@ -25,9 +27,11 @@ class BookApiModel {
       bookId: json["_id"] as String,
       title: json["title"] as String,
       author: json["author"] as String,
-      genre: json["genre"] as String,
+      genre:
+          (json["genre"] as List?)?.map((e) => e["name"] as String).toList() ??
+          [],
       publishedYear: json["publishedYear"] as String,
-      rating: json["rating"] as double,
+      price: (json["price"] as num).toDouble(),
     );
   }
   //note: To JSON
@@ -35,10 +39,10 @@ class BookApiModel {
     return {
       "title": title,
       "author": author,
-      "imageUrl": imageUrl,
+      "imageUrl": coverImg,
       "publishedYear": publishedYear,
       "genre": genre,
-      "rating": rating,
+      "rating": price,
     };
   }
 
@@ -48,10 +52,10 @@ class BookApiModel {
       bookId: bookId,
       title: title,
       author: author,
-      imageUrl: imageUrl,
+      coverImg: coverImg,
       genre: genre,
       publishedYear: publishedYear,
-      rating: rating,
+      price: price,
     );
   }
 
@@ -60,10 +64,10 @@ class BookApiModel {
     return BookApiModel(
       title: entity.title,
       author: entity.author,
-      imageUrl: entity.imageUrl,
+      coverImg: entity.coverImg,
       genre: entity.genre,
       publishedYear: entity.publishedYear,
-      rating: entity.rating,
+      price: entity.price,
     );
   }
   //note: To Entity List

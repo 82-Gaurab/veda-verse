@@ -4,17 +4,17 @@ class BookEntity extends Equatable {
   final String? bookId;
   final String title;
   final String author;
-  final String? genre;
-  final String? imageUrl;
+  final List<String>? genre;
+  final String? coverImg;
   final String? publishedYear;
-  final double rating;
+  final double price;
 
   const BookEntity({
     this.bookId,
     required this.title,
     required this.author,
-    this.imageUrl,
-    required this.rating,
+    this.coverImg,
+    required this.price,
     this.genre,
     this.publishedYear,
   });
@@ -24,8 +24,8 @@ class BookEntity extends Equatable {
     bookId,
     title,
     author,
-    imageUrl,
-    rating,
+    coverImg,
+    price,
     genre,
     publishedYear,
   ];
