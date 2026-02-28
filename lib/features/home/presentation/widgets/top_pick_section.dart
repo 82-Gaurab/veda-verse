@@ -7,33 +7,29 @@ import 'package:vedaverse/features/books/presentation/pages/book_detail.dart';
 
 class TopPicksSection extends StatelessWidget {
   final BookEntity book;
+
   const TopPicksSection({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+    final media = MediaQuery.of(context).size;
     final String fullUrl = "${ApiEndpoints.baseUrl}${book.coverImg}";
 
     return GestureDetector(
       onTap: () => AppRoutes.push(context, BookDetail(bookId: book.bookId!)),
       child: SizedBox(
-        // color: Colors.red,
         width: media.width * 0.32,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black38,
-                    offset: Offset(0, 2),
-                    blurRadius: 5,
-                  ),
-                ],
+                color: theme.cardColor,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: theme.brightness == Brightness.dark
+                    ? AppColors.darkSoftShadow
+                    : AppColors.softShadow,
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
@@ -42,7 +38,6 @@ class TopPicksSection extends StatelessWidget {
                   width: 130,
                   height: 180,
                   fit: BoxFit.cover,
-
                   frameBuilder:
                       (context, child, frame, wasSynchronouslyLoaded) {
                         if (wasSynchronouslyLoaded) return child;
@@ -57,7 +52,6 @@ class TopPicksSection extends StatelessWidget {
 
                         return child;
                       },
-
                   errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
                       "assets/images/book-cover.jpg",
@@ -72,11 +66,9 @@ class TopPicksSection extends StatelessWidget {
             const SizedBox(height: 15),
             Text(
               book.title,
-              maxLines: 3,
+              maxLines: 2,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                // color: Colors.white,
-                fontSize: 14,
+              style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -84,7 +76,9 @@ class TopPicksSection extends StatelessWidget {
               book.author,
               maxLines: 1,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+              ),
             ),
           ],
         ),

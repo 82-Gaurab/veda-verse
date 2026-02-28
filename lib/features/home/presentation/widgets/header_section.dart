@@ -81,7 +81,7 @@ class _HeaderSectionState extends ConsumerState<HeaderSection> {
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(Icons.shopping_cart_outlined),

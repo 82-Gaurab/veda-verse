@@ -43,14 +43,30 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       }
     });
     return Scaffold(
-      appBar: AppBar(elevation: 0, backgroundColor: Colors.white),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(
+          context,
+        ).scaffoldBackgroundColor, // adapts to theme
+        automaticallyImplyLeading: true, // shows back button automatically
+        title: Text(
+          'My Cart',
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: false,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).iconTheme.color, // back button color adapts
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              SizedBox(height: 30),
-              Text('My Cart'),
               SizedBox(height: 30),
 
               SingleChildScrollView(
@@ -79,7 +95,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                                     ? null
                                     : _handleCheckout,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primaryGreen,
+                                  backgroundColor: AppColors.primary,
                                   foregroundColor: Colors.white,
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(

@@ -36,6 +36,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final genreState = ref.watch(genreViewModelProvider);
     final bookState = ref.watch(bookViewModelProvider);
 
+    final books = bookState.books;
+
+    final topPicks = books.take(6).toList();
+    final bestSellers = books.skip(6).take(6).toList();
+
     ref.listen(bookViewModelProvider, (previous, next) {
       if (next.status == BookStatus.error) {
         SnackbarUtils.showError(
@@ -47,7 +52,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final media = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xffF6EFE7),
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.homeDarkBackground
+          : AppColors.homeLightBackground,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -62,7 +69,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     width: media.width,
                     height: media.width,
                     decoration: BoxDecoration(
-                      color: AppColors.primaryGreen,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.primary.withValues(alpha: 0.85)
+                          : AppColors.primary,
                       borderRadius: BorderRadius.circular(media.width * 0.5),
                     ),
                   ),
@@ -75,11 +84,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   HeaderSection(),
                   SizedBox(height: media.width * 0.13),
                   Row(
-                    children: const [
+                    children: [
                       Text(
                         "Our Top Picks",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
                         ),
@@ -93,14 +102,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     width: media.width,
                     height: media.width * 0.8,
                     child: CarouselSlider.builder(
-                      itemCount: bookState.books.length,
+                      itemCount: topPicks.length,
                       itemBuilder:
                           (
                             BuildContext context,
                             int itemIndex,
                             int pageViewIndex,
                           ) {
-                            var book = bookState.books[itemIndex];
+                            var book = topPicks[itemIndex];
                             return TopPicksSection(book: book);
                           },
                       options: CarouselOptions(
@@ -133,7 +142,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Icon(
@@ -184,7 +193,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(Icons.arrow_forward_ios, size: 14),
@@ -201,7 +210,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         : bookState.books.isEmpty
                         ? const Text("No Books found")
                         : Row(
-                            children: bookState.books.map((book) {
+                            children: bestSellers.map((book) {
                               return Padding(
                                 padding: const EdgeInsets.all(0),
                                 child: BookCard(

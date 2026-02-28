@@ -65,21 +65,33 @@ class _ReviewFormState extends ConsumerState<ReviewForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final reviewState = ref.watch(reviewViewModelProvider);
 
     return Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.only(bottom: 25),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor, // uses light/dark card color
         borderRadius: BorderRadius.circular(20),
+        boxShadow: theme.brightness == Brightness.dark
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Write a Review",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 15),
 
@@ -89,14 +101,13 @@ class _ReviewFormState extends ConsumerState<ReviewForm> {
             decoration: InputDecoration(
               hintText: "Review title",
               filled: true,
-              fillColor: Colors.grey.shade100,
+              fillColor: theme.inputDecorationTheme.fillColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
               ),
             ),
           ),
-
           const SizedBox(height: 12),
 
           /// Comment Field
@@ -106,37 +117,35 @@ class _ReviewFormState extends ConsumerState<ReviewForm> {
             decoration: InputDecoration(
               hintText: "Write your review...",
               filled: true,
-              fillColor: Colors.grey.shade100,
+              fillColor: theme.inputDecorationTheme.fillColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
               ),
             ),
           ),
-
           const SizedBox(height: 15),
 
           /// Rating Slider
-          const Text("Rating"),
+          Text("Rating", style: theme.textTheme.bodyMedium),
           Slider(
             value: _rating,
             min: 1,
             max: 5,
             divisions: 8,
             label: _rating.toString(),
-            activeColor: AppColors.primaryGreen,
+            activeColor: AppColors.primary,
             onChanged: (value) {
               setState(() => _rating = value);
             },
           ),
-
           const SizedBox(height: 10),
 
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryGreen,
+                backgroundColor: AppColors.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -153,9 +162,12 @@ class _ReviewFormState extends ConsumerState<ReviewForm> {
                         color: Colors.white,
                       ),
                     )
-                  : const Text(
+                  : Text(
                       "Post Review",
-                      style: TextStyle(color: Colors.white),
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: theme.colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
             ),
           ),

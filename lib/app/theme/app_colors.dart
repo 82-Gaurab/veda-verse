@@ -2,10 +2,11 @@ import "package:flutter/material.dart";
 
 class AppColors {
   AppColors._();
+  static const Color homeLightBackground = Color(0xffF6EFE7);
+  static const Color homeDarkBackground = Color(0xff0E0E0E);
 
   // Primary Colors - Modern Gradient Blue/Purple
-  static const Color primary = Color(0xFF7B6CF6);
-  static const Color primaryGreen = Color(0xFF5ABD8C);
+  static const Color primary = Color(0xFF5ABD8C);
   static const Color primaryDark = Color(0xFF5B54E8);
   static const Color primaryLight = Color(0xFF8A7BBE);
 
@@ -84,7 +85,10 @@ class AppColors {
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF7B6CF6), Color(0xFF5B54E8)],
+    colors: [
+      Color.fromARGB(255, 0, 231, 119),
+      Color.fromARGB(255, 59, 149, 63),
+    ],
   );
 
   static const LinearGradient secondaryGradient = LinearGradient(

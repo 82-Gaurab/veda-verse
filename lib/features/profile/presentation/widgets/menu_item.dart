@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
-import 'package:vedaverse/app/theme/theme_extensions.dart';
 
 class MenuItem extends StatelessWidget {
   final IconData icon;
@@ -22,11 +21,22 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: AppColors.softShadow,
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Material(
         color: Colors.transparent,
@@ -41,14 +51,12 @@ class MenuItem extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: (iconColor ?? AppColors.primary).withAlpha(
-                      26,
-                    ), // 10% opacity
+                    color: (iconColor ?? AppColors.primary).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     icon,
-                    color: iconColor ?? AppColors.primary,
+                    color: iconColor ?? theme.iconTheme.color,
                     size: 24,
                   ),
                 ),
@@ -59,7 +67,7 @@ class MenuItem extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: titleColor ?? AppColors.textPrimary,
+                      color: titleColor ?? theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                 ),
@@ -67,7 +75,7 @@ class MenuItem extends StatelessWidget {
                     Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 16,
-                      color: context.textSecondary50,
+                      color: theme.textTheme.bodySmall?.color?.withOpacity(0.5),
                     ),
               ],
             ),

@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
-import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
@@ -28,14 +27,13 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final ImagePicker _imagePicker = ImagePicker();
-  final List<XFile> _selectedMedia = []; // info: store selected images, videos
+  final List<XFile> _selectedMedia = [];
 
-  //info: code for dialogBox : show dialog for menu
   Future<void> _pickMedia() async {
     showModalBottomSheet(
       context: context,
-      backgroundColor: context.surfaceColor,
-      shape: RoundedRectangleBorder(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => SafeArea(
@@ -43,16 +41,32 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.camera),
-              title: Text("Open Camera"),
+              leading: Icon(
+                Icons.camera,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              title: Text(
+                "Open Camera",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _pickFromCamera();
               },
             ),
             ListTile(
-              leading: Icon(Icons.image),
-              title: Text("Choose from Gallery"),
+              leading: Icon(
+                Icons.image,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              title: Text(
+                "Choose from Gallery",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _pickFromGallery();
@@ -64,12 +78,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  //info: ask permission from user
   Future<bool> _getUserPermission(Permission permission) async {
     final status = await permission.status;
-    if (status.isGranted) {
-      return true;
-    }
+    if (status.isGranted) return true;
 
     if (status.isDenied) {
       final result = await permission.request();
@@ -83,22 +94,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return false;
   }
 
-  // info: Function to show permission popup dialog
   void _showPermissionDeniedDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Give Permission"),
-        content: Text("To use this feature go in permission setting"),
+        title: const Text("Give Permission"),
+        content: const Text("To use this feature, go to permission settings"),
         actions: [
-          TextButton(onPressed: () {}, child: Text("Cancel")),
-          TextButton(onPressed: () {}, child: Text("Open Setting")),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          TextButton(onPressed: () {}, child: const Text("Open Settings")),
         ],
       ),
     );
   }
 
-  //Info: Code for camera
   Future<void> _pickFromCamera() async {
     final hasPermission = await _getUserPermission(Permission.camera);
     if (!hasPermission) return;
@@ -107,27 +119,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       source: ImageSource.camera,
       imageQuality: 80,
     );
-
     if (photo != null) {
       setState(() {
         _selectedMedia.clear();
         _selectedMedia.add(photo);
       });
-
-      // info: upload image to server
-      // await ref
-      //     .read(authViewModelProvider.notifier)
-      //     .uploadPhoto(File(photo.path));
-
       _handleProfileUpload(photo);
     }
   }
 
-  //info: code for gallery
   Future<void> _pickFromGallery() async {
     try {
-      // final hasPermission = await _getUserPermission(Permission.storage);
-      // if (!hasPermission) return;
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 80,
@@ -137,8 +139,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           _selectedMedia.clear();
           _selectedMedia.add(image);
         });
-
-        // info: upload image to server
         _handleProfileUpload(image);
       }
     } catch (e) {
@@ -164,7 +164,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             onPressed: () => Navigator.pop(dialogContext),
             child: Text(
               'Cancel',
-              style: TextStyle(color: context.textSecondary),
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
             ),
           ),
           TextButton(
@@ -174,7 +176,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               if (context.mounted) {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (_) => LoginScreen()),
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
                   (route) => false,
                 );
               }
@@ -220,11 +222,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     });
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text("Profile"),
+              // Profile Header
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  "Profile",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                  ),
+                ),
+              ),
               Center(
                 child: Column(
                   children: [
@@ -233,22 +247,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       children: [
                         ProfileAvatar(
                           imageUrl: profilePictureUrl,
-                          onEditTap: () {
-                            _pickMedia();
-                          },
+                          onEditTap: _pickMedia,
                         ),
                         Positioned(
                           bottom: 17,
                           right: 7,
                           child: GestureDetector(
-                            onTap: () {
-                              _pickMedia();
-                            },
+                            onTap: _pickMedia,
                             child: Card(
                               color: AppColors.onboarding1Secondary,
-                              shape: CircleBorder(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(7.0),
+                              shape: const CircleBorder(),
+                              child: const Padding(
+                                padding: EdgeInsets.all(7.0),
                                 child: Icon(
                                   Icons.edit,
                                   color: Colors.white,
@@ -260,58 +270,56 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
                       "${userSession.getUserFirstName()} ${userSession.getUserLastName()}",
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      ),
                     ),
                     Text(
-                      userSession.getUserEmail()!,
-                      style: TextStyle(fontSize: 20),
+                      userSession.getUserEmail() ?? '',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                      ),
                     ),
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
 
-              SizedBox(height: 20),
-
+              // Menu Items
               MenuItem(
                 icon: Icons.person_outline_rounded,
                 title: "Manage Profile",
-                onTap: () {
-                  AppRoutes.push(context, UpdateScreen());
-                },
+                onTap: () => AppRoutes.push(context, UpdateScreen()),
               ),
               const SizedBox(height: 12),
               MenuItem(
                 icon: Icons.lock_outline_rounded,
                 title: "Password & Security",
-                onTap: () {
-                  AppRoutes.push(context, PasswordScreen());
-                },
+                onTap: () => AppRoutes.push(context, PasswordScreen()),
               ),
               const SizedBox(height: 12),
               MenuItem(
                 icon: Icons.history,
                 title: "Order History",
-                onTap: () {
-                  AppRoutes.push(context, MyOrders());
-                },
+                onTap: () => AppRoutes.push(context, MyOrders()),
               ),
               const SizedBox(height: 12),
               MenuItem(
                 icon: Icons.newspaper_outlined,
                 title: "My Reviews",
-                onTap: () {
-                  AppRoutes.push(context, MyReviews());
-                },
+                onTap: () => AppRoutes.push(context, MyReviews()),
               ),
               const SizedBox(height: 12),
               MenuItem(
                 icon: Icons.logout,
-                iconColor: Colors.red,
+                iconColor: Theme.of(context).colorScheme.error,
                 title: "Log Out",
-                titleColor: Colors.red,
+                titleColor: Theme.of(context).colorScheme.error,
                 onTap: () => _showLogoutDialog(context),
               ),
               const SizedBox(height: 10),

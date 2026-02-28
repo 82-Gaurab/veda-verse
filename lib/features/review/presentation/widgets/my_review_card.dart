@@ -11,6 +11,9 @@ class MyReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     final bookTitle = review.bookTitle;
     final rating = (review.rating as num).toDouble();
     final createdAt = DateTime.parse("${review.createdAt}");
@@ -19,11 +22,13 @@ class MyReviewCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : Colors.black.withOpacity(0.05),
             blurRadius: 10,
             spreadRadius: 2,
           ),
@@ -34,8 +39,8 @@ class MyReviewCard extends StatelessWidget {
         children: [
           // Book Title
           Text(
-            bookTitle!,
-            style: const TextStyle(
+            bookTitle ?? '',
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: AppColors.primary,
@@ -65,17 +70,27 @@ class MyReviewCard extends StatelessWidget {
               ),
               Text(
                 DateFormat('dd MMM yyyy').format(createdAt),
-                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+                ),
               ),
             ],
           ),
 
-          const Divider(height: 20),
+          Divider(
+            height: 20,
+            color: isDark ? Colors.white24 : Colors.grey[300],
+          ),
 
           /// Review Title
           Text(
             review.title,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+              color: theme.textTheme.bodyLarge?.color,
+            ),
           ),
 
           const SizedBox(height: 6),
@@ -83,7 +98,10 @@ class MyReviewCard extends StatelessWidget {
           /// Review Comment
           Text(
             review.comment,
-            style: const TextStyle(height: 1.5, color: Colors.black87),
+            style: TextStyle(
+              height: 1.5,
+              color: theme.textTheme.bodyMedium?.color,
+            ),
           ),
         ],
       ),

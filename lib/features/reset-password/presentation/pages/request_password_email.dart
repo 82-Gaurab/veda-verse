@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
@@ -60,7 +61,9 @@ class _ResetPasswordEmailState extends ConsumerState<RequestPasswordEmail> {
             ),
             child: Icon(Icons.arrow_back, color: context.textPrimary, size: 20),
           ),
-          onPressed: () {},
+          onPressed: () {
+            AppRoutes.pop(context);
+          },
         ),
       ),
       body: SafeArea(

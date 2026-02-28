@@ -33,15 +33,20 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : Colors.black.withOpacity(0.05),
             blurRadius: 8,
             spreadRadius: 2,
           ),
@@ -56,9 +61,10 @@ class OrderCard extends StatelessWidget {
             children: [
               Text(
                 "Order #${orderId.substring(0, 6)}",
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
+                  color: theme.textTheme.bodyLarge?.color,
                 ),
               ),
               Container(
@@ -86,10 +92,16 @@ class OrderCard extends StatelessWidget {
 
           Text(
             "Placed on ${DateFormat('dd MMM yyyy').format(createdAt)}",
-            style: TextStyle(color: Colors.grey[600], fontSize: 13),
+            style: TextStyle(
+              color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+              fontSize: 13,
+            ),
           ),
 
-          const Divider(height: 20),
+          Divider(
+            height: 20,
+            color: isDark ? Colors.white24 : Colors.grey[300],
+          ),
 
           /// Books
           Column(
@@ -102,32 +114,47 @@ class OrderCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         "${book["title"]}",
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: theme.textTheme.bodyMedium?.color,
+                        ),
                       ),
                     ),
-                    Text("x${book["quantity"]}"),
+                    Text(
+                      "x${book["quantity"]}",
+                      style: TextStyle(
+                        color: theme.textTheme.bodyMedium?.color,
+                      ),
+                    ),
                   ],
                 ),
               );
             }).toList(),
           ),
 
-          const Divider(height: 20),
+          Divider(
+            height: 20,
+            color: isDark ? Colors.white24 : Colors.grey[300],
+          ),
 
           /// Total
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 "Total",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: theme.textTheme.bodyLarge?.color,
+                ),
               ),
               Text(
                 "Rs. ${totalPrice.toStringAsFixed(0)}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: AppColors.primaryGreen,
+                  color: AppColors.primary,
                 ),
               ),
             ],

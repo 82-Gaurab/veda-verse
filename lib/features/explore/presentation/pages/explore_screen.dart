@@ -31,39 +31,45 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final genreState = ref.watch(genreViewModelProvider);
     final bookState = ref.watch(bookViewModelProvider);
+
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: theme.scaffoldBackgroundColor,
+
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
-        title: const Text(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        surfaceTintColor: Colors.transparent,
+        title: Text(
           "Explore Books",
-          style: TextStyle(color: Colors.black),
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: false,
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// Search Bar
+              /// Search
               SearchSection(books: bookState.books),
 
               const SizedBox(height: 24),
 
               /// Genre
-              Row(
-                children: [
-                  const Text(
-                    "Genre",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
+              Text(
+                "Genre",
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+
               const SizedBox(height: 12),
 
               SizedBox(
@@ -71,50 +77,57 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 child: genreState.status == GenreStatus.loading
                     ? const Center(child: CircularProgressIndicator())
                     : genreState.genres.isEmpty
-                    ? const Text("No genres found")
+                    ? Text("No genres found", style: theme.textTheme.bodyMedium)
                     : ListView(
                         scrollDirection: Axis.horizontal,
-                        children: genreState.genres
-                            .map(
-                              (genre) => GestureDetector(
-                                onTap: () =>
-                                    _handleGenreSelection(genre.genreId!),
-                                child: GenreCard(title: genre.genreTitle),
-                              ),
-                            )
-                            .toList(),
+                        children: [
+                          GestureDetector(
+                            onTap: () => ref
+                                .read(bookViewModelProvider.notifier)
+                                .getAllBooks(),
+                            child: const GenreCard(title: "All"),
+                          ),
+                          const SizedBox(width: 8),
+                          ...genreState.genres.map(
+                            (genre) => GestureDetector(
+                              onTap: () =>
+                                  _handleGenreSelection(genre.genreId!),
+                              child: GenreCard(title: genre.genreTitle),
+                            ),
+                          ),
+                        ],
                       ),
               ),
 
               const SizedBox(height: 24),
 
-              /// Featured Books
-              const Text(
+              /// Books
+              Text(
                 "Books",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+
               const SizedBox(height: 12),
+
               bookState.status == BookStatus.loading
                   ? const Center(child: CircularProgressIndicator())
                   : bookState.books.isEmpty
-                  ? const Text("No Books found")
-                  : LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Center(
-                          child: Wrap(
-                            spacing: 16,
-                            runSpacing: 16,
-                            children: bookState.books.map((book) {
-                              return BookCard(
-                                title: book.title,
-                                author: book.author,
-                                coverImg: book.coverImg,
-                                bookId: book.bookId!,
-                              );
-                            }).toList(),
-                          ),
-                        );
-                      },
+                  ? Text("No Books found", style: theme.textTheme.bodyMedium)
+                  : Center(
+                      child: Wrap(
+                        spacing: 16,
+                        runSpacing: 16,
+                        children: bookState.books.map((book) {
+                          return BookCard(
+                            title: book.title,
+                            author: book.author,
+                            coverImg: book.coverImg,
+                            bookId: book.bookId!,
+                          );
+                        }).toList(),
+                      ),
                     ),
             ],
           ),

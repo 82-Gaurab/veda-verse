@@ -20,21 +20,25 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final String fullUrl = "${ApiEndpoints.baseUrl}$coverImg";
+
     return GestureDetector(
       onTap: () {
         AppRoutes.push(context, BookDetail(bookId: bookId));
       },
       child: Container(
         width: 140,
-        padding: const EdgeInsets.only(bottom: 3),
+        padding: const EdgeInsets.only(bottom: 6),
         margin: const EdgeInsets.only(right: 15),
         decoration: BoxDecoration(
-          color: Colors.grey.shade200,
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(16),
+          boxShadow: theme.brightness == Brightness.dark
+              ? AppColors.darkSoftShadow
+              : AppColors.softShadow,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipRRect(
@@ -44,7 +48,6 @@ class BookCard extends StatelessWidget {
                 width: 130,
                 height: 180,
                 fit: BoxFit.cover,
-
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   if (wasSynchronouslyLoaded) return child;
 
@@ -58,35 +61,50 @@ class BookCard extends StatelessWidget {
 
                   return child;
                 },
-
                 errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.book, size: 60, color: AppColors.primary);
+                  return Image.asset(
+                    "assets/images/book-cover.jpg",
+                    width: 130,
+                    height: 180,
+                    fit: BoxFit.cover,
+                  );
                 },
               ),
             ),
             const SizedBox(height: 8),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
                   ),
-                ),
-                Text(
-                  author,
-                  style: const TextStyle(color: Colors.grey, fontSize: 14),
-                ),
-                Text(
-                  "Rs 100",
-                  style: const TextStyle(color: Colors.green, fontSize: 14),
-                ),
-              ],
+                  Text(
+                    author,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.textTheme.bodySmall?.color?.withValues(
+                        alpha: 0.7,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Rs 100",
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

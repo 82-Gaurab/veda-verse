@@ -11,20 +11,23 @@ class ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final profileUrl = "${ApiEndpoints.baseUrl}${review.profilePicture}";
 
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor, // theme-adaptable background
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-          ),
-        ],
+        boxShadow: theme.brightness == Brightness.dark
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                ),
+              ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,10 +43,7 @@ class ReviewCard extends StatelessWidget {
                   fit: BoxFit.cover,
                   frameBuilder:
                       (context, child, frame, wasSynchronouslyLoaded) {
-                        if (wasSynchronouslyLoaded) {
-                          return child;
-                        }
-
+                        if (wasSynchronouslyLoaded) return child;
                         if (frame == null) {
                           return const Center(
                             child: CircularProgressIndicator(
@@ -51,14 +51,13 @@ class ReviewCard extends StatelessWidget {
                             ),
                           );
                         }
-
                         return child;
                       },
                   errorBuilder: (context, error, stackTrace) {
-                    return const Icon(
+                    return Icon(
                       Icons.person_rounded,
                       size: 40,
-                      color: AppColors.primary,
+                      color: theme.colorScheme.primary,
                     );
                   },
                 ),
@@ -69,7 +68,10 @@ class ReviewCard extends StatelessWidget {
                 children: [
                   Text(
                     review.username ?? "",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.textTheme.bodyMedium?.color,
+                    ),
                   ),
                   const SizedBox(height: 4),
 
@@ -85,7 +87,7 @@ class ReviewCard extends StatelessWidget {
                       itemSize: 15,
                       itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                       itemBuilder: (context, _) =>
-                          const Icon(Icons.star, color: AppColors.accent2),
+                          Icon(Icons.star, color: AppColors.accent2),
                       onRatingUpdate: (rating) {},
                     ),
                   ),
@@ -93,13 +95,14 @@ class ReviewCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 12),
 
           // Review Title
           Text(
             review.title,
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
           ),
 
           const SizedBox(height: 6),
@@ -107,7 +110,10 @@ class ReviewCard extends StatelessWidget {
           // Review Comment
           Text(
             review.comment,
-            style: const TextStyle(height: 1.5, color: Colors.black87),
+            style: theme.textTheme.bodySmall?.copyWith(
+              height: 1.5,
+              color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.8),
+            ),
           ),
         ],
       ),

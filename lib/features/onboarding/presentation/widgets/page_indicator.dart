@@ -29,8 +29,8 @@ class PageIndicator extends StatelessWidget {
             gradient: currentPage == index
                 ? LinearGradient(
                     colors: [
-                      activeColor ?? AppColors.primaryGreen,
-                      (activeColor ?? AppColors.primaryGreen).withAlpha(
+                      activeColor ?? AppColors.primary,
+                      (activeColor ?? AppColors.primary).withAlpha(
                         179,
                       ), // 70% opacity
                     ],
@@ -41,7 +41,7 @@ class PageIndicator extends StatelessWidget {
             boxShadow: currentPage == index
                 ? [
                     BoxShadow(
-                      color: (activeColor ?? AppColors.primaryGreen).withAlpha(
+                      color: (activeColor ?? AppColors.primary).withAlpha(
                         102,
                       ), // 40% opacity
                       blurRadius: 8,

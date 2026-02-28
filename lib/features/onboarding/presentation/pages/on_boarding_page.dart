@@ -6,7 +6,6 @@ import '../widgets/onboarding_content.dart';
 import '../widgets/page_indicator.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/theme_extensions.dart';
 import '../../../../app/routes/app_routes.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -34,7 +33,6 @@ class _OnboardingPageState extends ConsumerState<OnboardingScreen>
         AppColors.onboarding1Secondary,
       ],
     ),
-
     OnboardingItem(
       title: 'Easy & Secure Checkout',
       description:
@@ -46,7 +44,6 @@ class _OnboardingPageState extends ConsumerState<OnboardingScreen>
         AppColors.onboarding2Secondary,
       ],
     ),
-
     OnboardingItem(
       title: 'Fast Delivery to Your Door',
       description:
@@ -66,16 +63,16 @@ class _OnboardingPageState extends ConsumerState<OnboardingScreen>
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
-    );
-    _animationController.forward();
+    )..forward();
   }
 
   void _onPageChanged(int index) {
     setState(() {
       _currentPage = index;
     });
-    _animationController.reset();
-    _animationController.forward();
+    _animationController
+      ..reset()
+      ..forward();
   }
 
   void _nextPage() {
@@ -85,15 +82,11 @@ class _OnboardingPageState extends ConsumerState<OnboardingScreen>
         curve: Curves.easeInOutCubic,
       );
     } else {
-      _navigateToLogin();
+      AppRoutes.pushReplacement(context, const LoginScreen());
     }
   }
 
   void _skipOnboarding() {
-    _navigateToLogin();
-  }
-
-  void _navigateToLogin() {
     AppRoutes.pushReplacement(context, const LoginScreen());
   }
 
@@ -106,9 +99,20 @@ class _OnboardingPageState extends ConsumerState<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(gradient: AppColors.backgroundGradient),
+        decoration: BoxDecoration(
+          gradient: isDark
+              ? LinearGradient(
+                  colors: [Colors.grey[900]!, Colors.grey[800]!],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : AppColors.backgroundGradient,
+        ),
         child: SafeArea(
           child: Column(
             children: [
@@ -125,7 +129,9 @@ class _OnboardingPageState extends ConsumerState<OnboardingScreen>
                           horizontal: 20,
                           vertical: 12,
                         ),
-                        backgroundColor: AppColors.white30,
+                        backgroundColor: isDark
+                            ? Colors.white12
+                            : AppColors.white30,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -135,7 +141,10 @@ class _OnboardingPageState extends ConsumerState<OnboardingScreen>
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: context.textPrimary,
+                          color: theme
+                              .textTheme
+                              .bodyLarge!
+                              .color, // <-- updated here
                         ),
                       ),
                     ),
@@ -152,7 +161,10 @@ class _OnboardingPageState extends ConsumerState<OnboardingScreen>
                   itemBuilder: (context, index) {
                     return FadeTransition(
                       opacity: _animationController,
-                      child: OnboardingContent(item: _onboardingItems[index]),
+                      child: OnboardingContent(
+                        item: _onboardingItems[index],
+                        isDarkMode: isDark,
+                      ),
                     );
                   },
                 ),
@@ -180,7 +192,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingScreen>
                       gradient: LinearGradient(
                         colors: _onboardingItems[_currentPage].gradientColors,
                       ),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_forward_rounded,
                         color: Colors.white,
                         size: 20,
