@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
+import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/core/widgets/my_input_form_field.dart';
@@ -21,14 +22,21 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
   final _formKey = GlobalKey<FormState>();
 
   Future<void> _handleUpdate() async {
+    final userSession = ref.read(userSessionServiceProvider);
+    final firstName = _firstNameController.text.trim() == ""
+        ? userSession.getUserFirstName()
+        : _firstNameController.text;
+    final lastName = _lastNameController.text.trim() == ""
+        ? userSession.getUserLastName()
+        : _lastNameController.text;
     if (_formKey.currentState!.validate()) {
       ref
           .read(authViewModelProvider.notifier)
           .updateUser(
-            firstName: _firstNameController.text,
-            email: _usernameController.text,
+            firstName: firstName!,
+            email: userSession.getUserEmail()!,
             username: _usernameController.text,
-            lastName: _lastNameController.text,
+            lastName: lastName!,
           );
 
       _navigateBack();
@@ -72,35 +80,26 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
                     child: IntrinsicHeight(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(height: 30),
                           Text('Update you profile'),
 
                           SizedBox(height: 50),
 
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _firstNameController,
-                                  decoration: InputDecoration(
-                                    labelText: "First Name",
-                                    prefixIcon: Icon(Icons.person),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _lastNameController,
-                                  decoration: InputDecoration(
-                                    labelText: "Last Name",
-                                    prefixIcon: Icon(Icons.person),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          TextFormField(
+                            controller: _firstNameController,
+                            decoration: InputDecoration(
+                              labelText: "First Name",
+                              prefixIcon: Icon(Icons.person),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          TextFormField(
+                            controller: _lastNameController,
+                            decoration: InputDecoration(
+                              labelText: "Last Name",
+                              prefixIcon: Icon(Icons.person),
+                            ),
                           ),
                           SizedBox(height: 15),
 
@@ -110,7 +109,7 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
                             inputType: TextInputType.emailAddress,
                             icon: Icon(Icons.email),
                           ),
-                          Spacer(),
+                          SizedBox(height: 20),
 
                           SizedBox(
                             height: 56,

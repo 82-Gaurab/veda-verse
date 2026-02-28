@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
-import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
-import 'package:vedaverse/features/books/domain/entity/book_entity.dart';
+import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/features/cart/presentation/state/cart_state.dart';
+import 'package:vedaverse/features/cart/presentation/view_model/cart_view_model.dart';
 import 'package:vedaverse/features/cart/presentation/widgets/cart_card.dart';
+import 'package:vedaverse/features/order/presentation/states/order_state.dart';
+import 'package:vedaverse/features/order/presentation/view_model/order_view_model.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
@@ -13,49 +16,104 @@ class CartScreen extends ConsumerStatefulWidget {
 }
 
 class _CartScreenState extends ConsumerState<CartScreen> {
-  List<BookEntity> cartBooks = [
-    BookEntity(
-      title: "somthingasdfadsfadsfadsfasdfasdf",
-      author: "salkf",
-      price: 2.0,
-    ),
-    BookEntity(title: "asdf", author: "salkf", price: 2.0),
-    BookEntity(title: "zzxzx", author: "salkf", price: 2.0),
-    BookEntity(title: "llp", author: "salkf", price: 2.0),
-    BookEntity(title: "kj", author: "salkf", price: 2.0),
-    BookEntity(title: "q", author: "salkf", price: 2.0),
-    BookEntity(title: "eqq", author: "salkf", price: 2.0),
-  ];
+  Future<void> _handleCheckout() async {
+    ref.read(orderViewModelProvider.notifier).createOrder();
+  }
 
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(authViewModelProvider.notifier).getMyInfo();
+      ref.read(cartViewModelProvider.notifier).getMyCart();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authViewModelProvider);
-    // final cartBooks = authState.entity!.cart;
+    final cartState = ref.watch(cartViewModelProvider);
+    final orderState = ref.watch(orderViewModelProvider);
+    final cartBooks = cartState.entities ?? [];
+
+    ref.listen(cartViewModelProvider, (previous, next) {
+      if (next.status == CartStatus.error) {
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? "Failed to fetch cart data",
+        );
+      }
+    });
     return Scaffold(
-      appBar: AppBar(title: Text(authState.entity!.firstName)),
+      appBar: AppBar(elevation: 0, backgroundColor: Colors.white),
       body: SafeArea(
-        child: authState.status == AuthStatus.loading
-            ? const Center(child: CircularProgressIndicator())
-            : cartBooks.isEmpty
-            ? const Text("No Review found")
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: Column(
-                    children: cartBooks.map((book) {
-                      return CartCard(book: book);
-                    }).toList(),
-                  ),
-                ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              SizedBox(height: 30),
+              Text('My Cart'),
+              SizedBox(height: 30),
+
+              SingleChildScrollView(
+                child: cartState.status == CartStatus.loading
+                    ? const Center(child: CircularProgressIndicator())
+                    : cartBooks.isEmpty
+                    ? Center(child: const Text("No Item in Cart"))
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                children: cartBooks.map((book) {
+                                  return CartCard(book: book);
+                                }).toList(),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              height: 56,
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed:
+                                    orderState.status == OrderStatus.loading
+                                    ? null
+                                    : _handleCheckout,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primaryGreen,
+                                  foregroundColor: Colors.white,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: orderState.status == OrderStatus.loading
+                                    ? const SizedBox(
+                                        width: 24,
+                                        height: 24,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Colors.white,
+                                              ),
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Checkout',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
               ),
+            ],
+          ),
+        ),
       ),
     );
   }

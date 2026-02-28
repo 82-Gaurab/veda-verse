@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/core/api/api_endpoints.dart';
 
 class ProfileAvatar extends StatelessWidget {
   final String? imageUrl;
@@ -17,7 +18,7 @@ class ProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String fullUrl = "http://192.168.100.8:4000/api/v1$imageUrl";
+    final String fullUrl = "${ApiEndpoints.baseUrl}$imageUrl";
 
     return Stack(
       clipBehavior: Clip.none,

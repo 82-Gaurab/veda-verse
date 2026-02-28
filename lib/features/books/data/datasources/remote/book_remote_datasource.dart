@@ -29,4 +29,13 @@ class BookRemoteDatasource implements IBookRemoteDatasource {
 
     return BookApiModel.fromJson(data);
   }
+
+  @override
+  Future<List<BookApiModel>> getBooksByGenreId(String genreId) async {
+    final response = await _apiClient.get(ApiEndpoints.booksByGenreId(genreId));
+
+    final data = response.data["data"] as List;
+
+    return data.map((json) => BookApiModel.fromJson(json)).toList();
+  }
 }

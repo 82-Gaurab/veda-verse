@@ -49,4 +49,26 @@ class CartRepository implements ICartRepository {
       return Left(ApiFailure(message: "No internet"));
     }
   }
+
+  @override
+  Future<Either<Failure, List<CartEntity>>> getMyCart() async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final response = await _cartRemoteDatasource.getMyCart();
+        final entity = CartApiModel.toEntityList(response);
+        return Right(entity);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            statusCode: e.response?.statusCode,
+            message: e.response?.data['message'] ?? "Fetching cart Failed",
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
+  }
 }

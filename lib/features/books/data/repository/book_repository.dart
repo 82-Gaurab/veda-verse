@@ -56,4 +56,25 @@ class BookRepository implements IBookRepository {
       return Left(ApiFailure(message: "No Internet Connection"));
     }
   }
+
+  @override
+  Future<Either<Failure, List<BookEntity>>> getBooksByGenreId(
+    String genreId,
+  ) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final bookModels = await _bookRemoteDatasource.getBooksByGenreId(
+          genreId,
+        );
+
+        final result = BookApiModel.toEntityList(bookModels);
+
+        return Right(result);
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
+  }
 }

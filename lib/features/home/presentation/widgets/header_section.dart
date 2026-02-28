@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/core/api/api_endpoints.dart';
 import 'package:vedaverse/core/services/storage/user_session_service.dart';
+import 'package:vedaverse/features/cart/presentation/pages/cart_screen.dart';
 
 class HeaderSection extends ConsumerStatefulWidget {
   const HeaderSection({super.key});
@@ -16,7 +19,7 @@ class _HeaderSectionState extends ConsumerState<HeaderSection> {
     final userSession = ref.watch(userSessionServiceProvider);
     final profilePicture = userSession.getUserProfileImage();
     final username = userSession.getUsername();
-    final String fullUrl = "http://192.168.100.8:4000/api/v1$profilePicture";
+    final String fullUrl = "${ApiEndpoints.baseUrl}$profilePicture";
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -73,13 +76,16 @@ class _HeaderSectionState extends ConsumerState<HeaderSection> {
             ),
           ],
         ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+        GestureDetector(
+          onTap: () => AppRoutes.push(context, const CartScreen()),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.shopping_cart_outlined),
           ),
-          child: const Icon(Icons.shopping_cart_outlined),
         ),
       ],
     );

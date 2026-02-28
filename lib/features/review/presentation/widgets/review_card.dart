@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/core/api/api_endpoints.dart';
+import 'package:vedaverse/features/review/domain/entities/review_entity.dart';
 
 class ReviewCard extends StatelessWidget {
-  final dynamic review;
+  final ReviewEntity review;
 
   const ReviewCard({super.key, required this.review});
 
   @override
   Widget build(BuildContext context) {
-    final profileUrl =
-        "http://192.168.100.8:4000/api/v1${review.profilePicture}";
+    final profileUrl = "${ApiEndpoints.baseUrl}${review.profilePicture}";
 
     return Container(
       margin: const EdgeInsets.only(bottom: 15),

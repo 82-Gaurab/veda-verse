@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/core/api/api_endpoints.dart';
 import 'package:vedaverse/features/books/presentation/pages/book_detail.dart';
 
 class BookCard extends StatelessWidget {
@@ -19,7 +20,7 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String fullUrl = "http://192.168.100.8:4000/api/v1$coverImg";
+    final String fullUrl = "${ApiEndpoints.baseUrl}$coverImg";
     return GestureDetector(
       onTap: () {
         AppRoutes.push(context, BookDetail(bookId: bookId));

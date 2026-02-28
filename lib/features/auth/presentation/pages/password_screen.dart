@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/auth/presentation/widgets/password_field.dart';
@@ -20,6 +20,8 @@ class _PasswordScreenState extends ConsumerState<PasswordScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+
+  void _navigateBack() => Navigator.of(context).pop();
 
   Future<void> _handleChangePassword() async {
     final userSession = ref.read(userSessionServiceProvider);
@@ -45,15 +47,24 @@ class _PasswordScreenState extends ConsumerState<PasswordScreen> {
         );
       } else if (next.status == ResetStatus.success) {
         SnackbarUtils.showSuccess(context, "Password Changed Successfully");
-        AppRoutes.pop(context);
+        _navigateBack();
       }
     });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Change Password"),
-        centerTitle: true,
-        leading: Container(),
+        leading: IconButton(
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: context.surfaceColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: context.softShadow,
+            ),
+            child: Icon(Icons.arrow_back, color: context.textPrimary, size: 20),
+          ),
+          onPressed: _navigateBack,
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -62,6 +73,10 @@ class _PasswordScreenState extends ConsumerState<PasswordScreen> {
             key: _formKey,
             child: Column(
               children: [
+                SizedBox(height: 30),
+                Text('Change Your Password'),
+
+                SizedBox(height: 50),
                 PasswordField(
                   controller: _passwordController,
                   labelText: 'Password',

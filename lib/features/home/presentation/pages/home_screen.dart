@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/features/books/presentation/state/book_state.dart';
 import 'package:vedaverse/features/books/presentation/view_model/book_view_model.dart';
+import 'package:vedaverse/features/explore/presentation/pages/explore_screen.dart';
 import 'package:vedaverse/features/explore/presentation/widgets/book_card.dart';
 import 'package:vedaverse/features/explore/presentation/widgets/genre_card.dart';
 import 'package:vedaverse/features/genre/presentation/states/genre_state.dart';
@@ -40,8 +42,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           context,
           next.errorMessage ?? "Failed to Fetch Book Data",
         );
-      } else if (next.status == BookStatus.loaded) {
-        SnackbarUtils.showSuccess(context, "Fetched Book Successful");
       }
     });
 
@@ -114,6 +114,58 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
 
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Row(
+                      children: [
+                        const Text(
+                          "Genre",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            AppRoutes.push(context, ExploreScreen());
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  SizedBox(
+                    height: 40,
+                    child: genreState.status == GenreStatus.loading
+                        ? const Center(child: CircularProgressIndicator())
+                        : genreState.genres.isEmpty
+                        ? const Text("No genres found")
+                        : ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: genreState.genres.map((genre) {
+                              return GestureDetector(
+                                onTap: () {
+                                  AppRoutes.push(context, ExploreScreen());
+                                },
+                                child: GenreCard(title: genre.genreTitle),
+                              );
+                            }).toList(),
+                          ),
+                  ),
+
                   SizedBox(height: 20),
                   Row(
                     children: [
@@ -122,6 +174,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          AppRoutes.push(context, ExploreScreen());
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(Icons.arrow_forward_ios, size: 14),
                         ),
                       ),
                     ],
@@ -150,85 +216,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
 
                   SizedBox(height: 10),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                    child: Row(
-                      children: [
-                        const Text(
-                          "Genre",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Spacer(),
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(Icons.arrow_forward_ios, size: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  SizedBox(
-                    height: 40,
-                    child: genreState.status == GenreStatus.loading
-                        ? const Center(child: CircularProgressIndicator())
-                        : genreState.genres.isEmpty
-                        ? const Text("No genres found")
-                        : ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: genreState.genres.map((genre) {
-                              return GenreCard(title: genre.genreTitle);
-                            }).toList(),
-                          ),
-                  ),
-
-                  SizedBox(height: 15),
-                  Row(
-                    children: [
-                      Text(
-                        "Recently Added",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: const [
-                        BookCard(
-                          title: "The Silent Patient",
-                          author: "Alex Michaelides",
-                          coverImg: "https://via.placeholder.com/120x180",
-                          bookId: '1',
-                        ),
-                        BookCard(
-                          title: "Atomic Habits",
-                          author: "James Clear",
-                          coverImg: "https://via.placeholder.com/120x180",
-                          bookId: '12',
-                        ),
-                        BookCard(
-                          title: "1984",
-                          author: "George Orwell",
-                          coverImg: "https://via.placeholder.com/120x180",
-                          bookId: '123',
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ],

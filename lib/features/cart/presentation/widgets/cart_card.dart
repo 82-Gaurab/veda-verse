@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:vedaverse/app/theme/app_colors.dart';
-import 'package:vedaverse/features/books/domain/entity/book_entity.dart';
+
+import 'package:vedaverse/features/cart/domain/entities/cart_entity.dart';
 
 class CartCard extends StatelessWidget {
-  final BookEntity book;
+  final CartEntity book;
   final VoidCallback? onAddToCart;
   final VoidCallback? onDelete;
 
@@ -39,37 +38,26 @@ class CartCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    book.title,
-                    style: const TextStyle(fontSize: 16),
+                    book.title!,
+                    style: const TextStyle(fontSize: 20),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    book.author,
+                    book.author!,
                     style: const TextStyle(fontSize: 14),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 6),
-                  IgnorePointer(
-                    ignoring: true,
-                    child: RatingBar.builder(
-                      initialRating: 2.5,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 15,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                      itemBuilder: (context, _) =>
-                          Icon(Icons.star, color: AppColors.accent2),
-                      onRatingUpdate: (rating) {},
-                    ),
+                  Text(
+                    "Quantity: ${book.quantity}",
+                    style: TextStyle(fontSize: 14),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    "Rs 100",
+                  Text(
+                    "Rs ${book.price}",
                     style: TextStyle(color: Colors.green, fontSize: 14),
                   ),
                 ],
@@ -78,19 +66,10 @@ class CartCard extends StatelessWidget {
 
             const SizedBox(width: 8),
 
-            Column(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.shopping_cart_outlined),
-                  onPressed: onAddToCart,
-                  tooltip: "Add to Cart",
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete_outline, color: Colors.red),
-                  onPressed: onDelete,
-                  tooltip: "Remove",
-                ),
-              ],
+            IconButton(
+              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              onPressed: onDelete,
+              tooltip: "Remove",
             ),
           ],
         ),

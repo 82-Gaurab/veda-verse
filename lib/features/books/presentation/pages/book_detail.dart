@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
+import 'package:vedaverse/core/api/api_endpoints.dart';
 import 'package:vedaverse/features/books/presentation/state/book_state.dart';
 import 'package:vedaverse/features/books/presentation/view_model/book_view_model.dart';
 import 'package:vedaverse/features/books/presentation/widgets/detail_row.dart';
+import 'package:vedaverse/features/cart/presentation/state/cart_state.dart';
 import 'package:vedaverse/features/cart/presentation/view_model/cart_view_model.dart';
 import 'package:vedaverse/features/review/presentation/widgets/review_card.dart';
 import 'package:vedaverse/features/review/presentation/state/review_state.dart';
@@ -89,6 +91,8 @@ class _BookDetailState extends ConsumerState<BookDetail> {
                   .read(cartViewModelProvider.notifier)
                   .createCart(bookId: widget.bookId, quantity: quantity);
 
+              SnackbarUtils.showSuccess(context, "$quantity book to cart");
+
               _quantityController.text = "1";
             },
             child: const Text(
@@ -128,8 +132,6 @@ class _BookDetailState extends ConsumerState<BookDetail> {
           context,
           next.errorMessage ?? "Failed To Retrieve book data",
         );
-      } else if (next.status == BookStatus.loaded) {
-        SnackbarUtils.showSuccess(context, "Retrieved book data");
       }
     });
     ref.listen(reviewViewModelProvider, (previous, next) {
@@ -138,11 +140,17 @@ class _BookDetailState extends ConsumerState<BookDetail> {
           context,
           next.errorMessage ?? "Failed To Retrieve review data",
         );
-      } else if (next.status == ReviewStatus.loaded) {
-        SnackbarUtils.showSuccess(context, "Retrieved review data");
       }
     });
-    final String fullUrl = "http://192.168.100.8:4000/api/v1${book?.coverImg}";
+    ref.listen(cartViewModelProvider, (previous, next) {
+      if (next.status == CartStatus.error) {
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? "Failed To Upload Cart",
+        );
+      }
+    });
+    final String fullUrl = "${ApiEndpoints.baseUrl}${book?.coverImg}";
 
     return Scaffold(
       backgroundColor: const Color(0xffF6EFE7),

@@ -16,6 +16,10 @@ class ExploreScreen extends ConsumerStatefulWidget {
 }
 
 class _ExploreScreenState extends ConsumerState<ExploreScreen> {
+  Future<void> _handleGenreSelection(String genreId) async {
+    ref.read(bookViewModelProvider.notifier).getBooksByGenreId(genreId);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -58,15 +62,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     "Genre",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(Icons.arrow_forward_ios, size: 14),
-                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -80,7 +75,13 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     : ListView(
                         scrollDirection: Axis.horizontal,
                         children: genreState.genres
-                            .map((genre) => GenreCard(title: genre.genreTitle))
+                            .map(
+                              (genre) => GestureDetector(
+                                onTap: () =>
+                                    _handleGenreSelection(genre.genreId!),
+                                child: GenreCard(title: genre.genreTitle),
+                              ),
+                            )
                             .toList(),
                       ),
               ),
@@ -89,118 +90,35 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
               /// Featured Books
               const Text(
-                "Top Charts",
+                "Books",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: bookState.status == BookStatus.loading
-                    ? const Center(child: CircularProgressIndicator())
-                    : bookState.books.isEmpty
-                    ? const Text("No Books found")
-                    : Row(
-                        children: bookState.books.map((book) {
-                          return Padding(
-                            padding: const EdgeInsets.all(0),
-                            child: BookCard(
-                              title: book.title,
-                              author: book.author,
-                              coverImg: book.coverImg,
-                              bookId: book.bookId!,
-                            ),
-                          );
-                        }).toList(),
-                      ),
-              ),
-
-              const SizedBox(height: 24),
-
-              /// Popular Books
-              const Text(
-                "Top Selling",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-
-              Column(
-                children: const [
-                  PopularBookTile(
-                    title: "The Alchemist",
-                    author: "Paulo Coelho",
-                    image: "https://via.placeholder.com/60x90",
-                    price: 200,
-                  ),
-                  PopularBookTile(
-                    title: "Rich Dad Poor Dad",
-                    author: "Robert Kiyosaki",
-                    image: "https://via.placeholder.com/60x90",
-                    price: 200,
-                  ),
-                  PopularBookTile(
-                    title: "Rich Dad Poor Dad",
-                    author: "Robert Kiyosaki",
-                    image: "https://via.placeholder.com/60x90",
-                    price: 200,
-                  ),
-                  PopularBookTile(
-                    title: "Rich Dad Poor Dad",
-                    author: "Robert Kiyosaki",
-                    image: "https://via.placeholder.com/60x90",
-                    price: 200,
-                  ),
-                ],
-              ),
+              bookState.status == BookStatus.loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : bookState.books.isEmpty
+                  ? const Text("No Books found")
+                  : LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Center(
+                          child: Wrap(
+                            spacing: 16,
+                            runSpacing: 16,
+                            children: bookState.books.map((book) {
+                              return BookCard(
+                                title: book.title,
+                                author: book.author,
+                                coverImg: book.coverImg,
+                                bookId: book.bookId!,
+                              );
+                            }).toList(),
+                          ),
+                        );
+                      },
+                    ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Horizontal Book Card
-
-/// Vertical Popular Book Tile
-class PopularBookTile extends StatelessWidget {
-  final String title;
-  final String author;
-  final String image;
-  final double price;
-
-  const PopularBookTile({
-    super.key,
-    required this.title,
-    required this.author,
-    required this.image,
-    required this.price,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.asset(
-            "assets/images/book-cover.jpg",
-            width: 50,
-            fit: BoxFit.contain,
-          ),
-        ),
-        title: Text(title),
-        isThreeLine: true,
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(author, style: TextStyle(fontSize: 12)),
-            SizedBox(height: 4),
-            Text("$price", style: TextStyle(fontSize: 12, color: Colors.green)),
-          ],
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       ),
     );
   }

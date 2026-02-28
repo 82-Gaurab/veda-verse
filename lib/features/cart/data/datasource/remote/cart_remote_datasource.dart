@@ -27,12 +27,25 @@ class CartRemoteDatasource implements ICartRemoteDatasource {
     final token = _tokenService.getToken();
     final data = cart.toJson();
 
-    final response = await _apiClient.post(
+    final response = await _apiClient.put(
       ApiEndpoints.carts,
       data: data,
       option: Options(headers: {"Authorization": "Bearer $token"}),
     );
 
     return response.data["success"];
+  }
+
+  @override
+  Future<List<CartApiModel>> getMyCart() async {
+    final token = _tokenService.getToken();
+    final response = await _apiClient.get(
+      ApiEndpoints.userInfo,
+      option: Options(headers: {"Authorization": "Bearer $token"}),
+    );
+
+    final cart = response.data["data"]["cart"] as List;
+
+    return cart.map((json) => CartApiModel.fromJson(json)).toList();
   }
 }

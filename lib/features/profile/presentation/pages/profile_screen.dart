@@ -139,9 +139,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         });
 
         // info: upload image to server
-        // await ref
-        //     .read(authViewModelProvider.notifier)
-        //     .uploadPhoto(File(image.path));
         _handleProfileUpload(image);
       }
     } catch (e) {
