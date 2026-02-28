@@ -52,6 +52,9 @@ class ApiEndpoints {
   static const String orders = "/orders/";
   static String myOrders = '/orders/my-orders';
 
+  // Hack: ========== Cart Endpoints ===========
+  static const String carts = "/auth/cart";
+
   // Hack: ========== User Endpoints ===========
   static const String userLogin = "/auth/login";
   static const String userRegister = "/auth/register";

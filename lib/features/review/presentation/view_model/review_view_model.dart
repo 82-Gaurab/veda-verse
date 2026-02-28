@@ -38,8 +38,10 @@ class ReviewViewModel extends Notifier<ReviewState> {
         status: ReviewStatus.error,
         errorMessage: failure.message,
       ),
-      (reviews) =>
-          state = state.copyWith(status: ReviewStatus.loaded, reviews: reviews),
+      (reviews) => state = state = state.copyWith(
+        status: ReviewStatus.loaded,
+        bookReviews: reviews,
+      ),
     );
   }
 
@@ -53,8 +55,10 @@ class ReviewViewModel extends Notifier<ReviewState> {
         status: ReviewStatus.error,
         errorMessage: failure.message,
       ),
-      (reviews) =>
-          state = state.copyWith(status: ReviewStatus.loaded, reviews: reviews),
+      (reviews) => state = state = state.copyWith(
+        status: ReviewStatus.loaded,
+        myReviews: reviews,
+      ),
     );
   }
 

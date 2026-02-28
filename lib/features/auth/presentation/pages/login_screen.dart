@@ -7,7 +7,6 @@ import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/dashboard/presentation/pages/dashboard_screen.dart';
 import 'package:vedaverse/features/auth/presentation/pages/sign_up_screen.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vedaverse/features/reset-password/presentation/pages/request_password_email.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -45,8 +44,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _navigateToSignup() => AppRoutes.push(context, const SignUpScreen());
   void _handleForgotPassword() =>
       AppRoutes.push(context, const RequestPasswordEmail());
-  void _handleGoogleSignIn() =>
-      SnackbarUtils.showInfo(context, 'Google Sign In coming soon');
 
   @override
   Widget build(BuildContext context) {
@@ -214,58 +211,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       ),
                                     ),
                             ),
-                          ),
-                          Row(
-                            children: [
-                              const Expanded(child: Divider()),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child: Text(
-                                  'OR',
-                                  style: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              const Expanded(child: Divider()),
-                            ],
-                          ),
-                          Text(
-                            'Sign in With',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-
-                          Row(
-                            children: [
-                              Expanded(
-                                child: OutlinedButton.icon(
-                                  onPressed: _handleGoogleSignIn,
-                                  icon: SvgPicture.asset(
-                                    'assets/icons/google_logo.svg',
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                  label: const Text(
-                                    'Google',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  style: OutlinedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

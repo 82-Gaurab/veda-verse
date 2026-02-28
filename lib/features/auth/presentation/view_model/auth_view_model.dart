@@ -78,7 +78,7 @@ class AuthViewModel extends Notifier<AuthState> {
     required String lastName,
     required String username,
     required String email,
-    required File profilePicture,
+    File? profilePicture,
   }) async {
     state = state.copyWith(status: AuthStatus.loading);
 

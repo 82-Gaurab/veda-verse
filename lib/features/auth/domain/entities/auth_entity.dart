@@ -16,9 +16,9 @@ class AuthEntity extends Equatable {
     required this.lastName,
     required this.email,
     required this.username,
-    this.password,
     this.profilePicture,
     this.confirmPassword,
+    this.password,
   });
 
   @override
@@ -28,8 +28,6 @@ class AuthEntity extends Equatable {
     lastName,
     email,
     username,
-    password,
-    confirmPassword,
     profilePicture,
   ];
 }

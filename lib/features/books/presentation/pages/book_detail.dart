@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/features/books/presentation/state/book_state.dart';
 import 'package:vedaverse/features/books/presentation/view_model/book_view_model.dart';
 import 'package:vedaverse/features/books/presentation/widgets/detail_row.dart';
-import 'package:vedaverse/features/books/presentation/widgets/review_card.dart';
+import 'package:vedaverse/features/cart/presentation/view_model/cart_view_model.dart';
+import 'package:vedaverse/features/review/presentation/widgets/review_card.dart';
 import 'package:vedaverse/features/review/presentation/state/review_state.dart';
 import 'package:vedaverse/features/review/presentation/view_model/review_view_model.dart';
 
@@ -18,6 +20,90 @@ class BookDetail extends ConsumerStatefulWidget {
 }
 
 class _BookDetailState extends ConsumerState<BookDetail> {
+  final TextEditingController _quantityController = TextEditingController(
+    text: "1",
+  );
+
+  @override
+  void dispose() {
+    _quantityController.dispose();
+    super.dispose();
+  }
+
+  void _showCartDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text(
+          'Add To Cart',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Enter Quantity",
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _quantityController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: "Quantity",
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: context.textSecondary),
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              final quantity =
+                  int.tryParse(_quantityController.text.trim()) ?? 0;
+
+              if (quantity <= 0) {
+                SnackbarUtils.showError(context, "Quantity must be at least 1");
+                return;
+              }
+
+              Navigator.pop(dialogContext);
+
+              await ref
+                  .read(cartViewModelProvider.notifier)
+                  .createCart(bookId: widget.bookId, quantity: quantity);
+
+              _quantityController.text = "1";
+            },
+            child: const Text(
+              'Add',
+              style: TextStyle(
+                color: AppColors.primaryGreen,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -34,7 +120,7 @@ class _BookDetailState extends ConsumerState<BookDetail> {
     final bookState = ref.watch(bookViewModelProvider);
     final book = bookState.book;
     final reviewState = ref.watch(reviewViewModelProvider);
-    final reviews = reviewState.reviews;
+    final reviews = reviewState.bookReviews;
     final media = MediaQuery.of(context).size;
     ref.listen(bookViewModelProvider, (previous, next) {
       if (next.status == BookStatus.error) {
@@ -271,7 +357,9 @@ class _BookDetailState extends ConsumerState<BookDetail> {
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _showCartDialog(context);
+                                    },
                                     child: const Text(
                                       "Add to Cart",
                                       style: TextStyle(

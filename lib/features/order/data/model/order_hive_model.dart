@@ -4,7 +4,7 @@ import 'package:vedaverse/core/constants/hive_table_constant.dart';
 import 'package:vedaverse/features/genre/domain/entities/genre_entity.dart';
 
 // hack: dart run build_runner build -d
-part 'genre_hive_model.g.dart';
+// part 'genre_hive_model.g.dart';
 
 @HiveType(typeId: HiveTableConstant.genreTypeId)
 class GenreHiveModel extends HiveObject {

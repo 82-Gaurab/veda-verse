@@ -164,7 +164,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<Either<Failure, bool>> updateUser(
     AuthEntity entity,
-    File image,
+    File? image,
   ) async {
     if (await _networkInfo.isConnected) {
       try {

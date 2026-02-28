@@ -19,14 +19,14 @@ class UpdateUserUsecaseParams extends Equatable {
   final String lastName;
   final String email;
   final String username;
-  final File profilePicture;
+  final File? profilePicture;
 
   const UpdateUserUsecaseParams({
     required this.firstName,
     required this.email,
     required this.username,
     required this.lastName,
-    required this.profilePicture,
+    this.profilePicture,
   });
 
   @override
@@ -52,7 +52,7 @@ class UpdateUserUsecase
       lastName: params.lastName,
       email: params.email,
       username: params.username,
-      profilePicture: params.profilePicture.path,
+      profilePicture: params.profilePicture?.path,
     );
 
     return _authRepository.updateUser(entity, params.profilePicture);

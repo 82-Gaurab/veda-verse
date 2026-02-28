@@ -118,15 +118,28 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   }
 
   @override
-  Future<bool> updateUser(AuthApiModel user, File profilePicture) async {
+  @override
+  Future<bool> updateUser(AuthApiModel user, File? profilePicture) async {
     final token = _tokenService.getToken();
-    final fileName = profilePicture.path.split('/').last;
-    final formData = FormData.fromMap({
-      "profilePicture": await MultipartFile.fromFile(
+
+    final Map<String, dynamic> dataMap = {
+      "email": user.email,
+      "username": user.username,
+      "firstName": user.firstName,
+      "lastName": user.lastName,
+    };
+
+    // Only add image if it exists
+    if (profilePicture != null) {
+      final fileName = profilePicture.path.split('/').last;
+
+      dataMap["profilePicture"] = await MultipartFile.fromFile(
         profilePicture.path,
         filename: fileName,
-      ),
-    });
+      );
+    }
+
+    final formData = FormData.fromMap(dataMap);
 
     final response = await _apiClient.put(
       ApiEndpoints.updateUser,
@@ -141,18 +154,18 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
 
     if (response.data["success"] == true) {
       final data = response.data["data"] as Map<String, dynamic>;
-      final user = AuthApiModel.fromJson(data);
-      // info: Save user session
+      final updatedUser = AuthApiModel.fromJson(data);
+
       await _userSessionService.saveUserSession(
-        userId: user.authId!,
-        email: user.email,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        profilePicture: user.profilePicture,
+        userId: updatedUser.authId!,
+        email: updatedUser.email,
+        username: updatedUser.username,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        profilePicture: updatedUser.profilePicture,
       );
     }
 
-    return response.data["success"];
+    return response.data["success"] == true;
   }
 }

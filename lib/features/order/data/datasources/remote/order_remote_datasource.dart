@@ -41,8 +41,14 @@ class OrderRemoteDatasource implements IOrderRemoteDatasource {
   }
 
   @override
-  Future<bool> createOrder() {
-    // TODO: implement createOrder
-    throw UnimplementedError();
+  Future<bool> createOrder() async {
+    final token = _tokenService.getToken();
+
+    final response = await _apiClient.post(
+      ApiEndpoints.orders,
+      option: Options(headers: {"Authorization": "Bearer $token"}),
+    );
+
+    return response.data["success"];
   }
 }

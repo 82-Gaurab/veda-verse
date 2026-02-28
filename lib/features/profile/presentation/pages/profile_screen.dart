@@ -4,15 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:vedaverse/app/routes/app_routes.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/app/theme/theme_extensions.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/auth/presentation/pages/login_screen.dart';
+import 'package:vedaverse/features/auth/presentation/pages/password_screen.dart';
+import 'package:vedaverse/features/auth/presentation/pages/update_screen.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:vedaverse/features/order/presentation/pages/my_orders.dart';
 import 'package:vedaverse/features/profile/presentation/widgets/menu_item.dart';
 import 'package:vedaverse/features/profile/presentation/widgets/profile_avatar.dart';
+import 'package:vedaverse/features/review/presentation/pages/my_reviews.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -276,31 +281,33 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               MenuItem(
                 icon: Icons.person_outline_rounded,
                 title: "Manage Profile",
-                onTap: () {},
+                onTap: () {
+                  AppRoutes.push(context, UpdateScreen());
+                },
               ),
               const SizedBox(height: 12),
               MenuItem(
                 icon: Icons.lock_outline_rounded,
                 title: "Password & Security",
-                onTap: () {},
+                onTap: () {
+                  AppRoutes.push(context, PasswordScreen());
+                },
               ),
               const SizedBox(height: 12),
               MenuItem(
-                icon: Icons.notifications_none_rounded,
-                title: "Notifications",
-                onTap: () {},
+                icon: Icons.history,
+                title: "Order History",
+                onTap: () {
+                  AppRoutes.push(context, MyOrders());
+                },
               ),
               const SizedBox(height: 12),
               MenuItem(
                 icon: Icons.newspaper_outlined,
-                title: "About Us",
-                onTap: () {},
-              ),
-              const SizedBox(height: 12),
-              MenuItem(
-                icon: Icons.format_color_fill_outlined,
-                title: "Theme",
-                onTap: () {},
+                title: "My Reviews",
+                onTap: () {
+                  AppRoutes.push(context, MyReviews());
+                },
               ),
               const SizedBox(height: 12),
               MenuItem(

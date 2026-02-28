@@ -28,7 +28,7 @@ class ReviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// 👤 User Row
+          // User Row
           Row(
             children: [
               ClipOval(
@@ -95,7 +95,7 @@ class ReviewCard extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          /// 📝 Review Title
+          // Review Title
           Text(
             review.title,
             style: const TextStyle(fontWeight: FontWeight.w600),
@@ -103,7 +103,7 @@ class ReviewCard extends StatelessWidget {
 
           const SizedBox(height: 6),
 
-          /// 💬 Review Comment
+          // Review Comment
           Text(
             review.comment,
             style: const TextStyle(height: 1.5, color: Colors.black87),

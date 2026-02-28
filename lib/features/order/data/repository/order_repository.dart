@@ -29,23 +29,6 @@ class OrderRepository implements IOrderRepository {
   }) : _remoteDatasource = remoteDatasource,
        _networkInfo = networkInfo;
 
-  // @override
-  // Future<Either<Failure, bool>> createOrder(
-  //     List<Map<String, dynamic>> books) async {
-  //   if (await _networkInfo.isConnected) {
-  //     try {
-  //       final result = await _remoteDatasource.createOrder(books);
-  //       return Right(result);
-  //     } on DioException catch (e) {
-  //       return Left(ApiFailure(
-  //           message: e.response?.data["message"] ??
-  //               "Failed to create order"));
-  //     }
-  //   } else {
-  //     return Left(ApiFailure(message: "No Internet Connection"));
-  //   }
-  // }
-
   @override
   Future<Either<Failure, List<OrderEntity>>> getMyOrders() async {
     if (await _networkInfo.isConnected) {
@@ -66,8 +49,20 @@ class OrderRepository implements IOrderRepository {
   }
 
   @override
-  Future<Either<Failure, OrderEntity>> createOrder() {
-    // TODO: implement createOrder
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> createOrder() async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final result = await _remoteDatasource.createOrder();
+        return Right(result);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data["message"] ?? "Failed to create order",
+          ),
+        );
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
   }
 }

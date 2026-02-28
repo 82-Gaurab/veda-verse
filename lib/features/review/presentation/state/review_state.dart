@@ -5,27 +5,45 @@ enum ReviewStatus { initial, loading, loaded, error }
 
 class ReviewState extends Equatable {
   final ReviewStatus status;
-  final List<ReviewEntity> reviews;
+
+  final List<ReviewEntity> bookReviews;
+
+  final List<ReviewEntity> myReviews;
+
   final String? errorMessage;
+
+  final bool isSubmitting;
 
   const ReviewState({
     this.status = ReviewStatus.initial,
-    this.reviews = const [],
+    this.bookReviews = const [],
+    this.myReviews = const [],
     this.errorMessage,
+    this.isSubmitting = false,
   });
 
   ReviewState copyWith({
     ReviewStatus? status,
-    List<ReviewEntity>? reviews,
+    List<ReviewEntity>? bookReviews,
+    List<ReviewEntity>? myReviews,
     String? errorMessage,
+    bool? isSubmitting,
   }) {
     return ReviewState(
       status: status ?? this.status,
-      reviews: reviews ?? this.reviews,
+      bookReviews: bookReviews ?? this.bookReviews,
+      myReviews: myReviews ?? this.myReviews,
       errorMessage: errorMessage,
+      isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }
 
   @override
-  List<Object?> get props => [status, reviews, errorMessage];
+  List<Object?> get props => [
+    status,
+    bookReviews,
+    myReviews,
+    errorMessage,
+    isSubmitting,
+  ];
 }
