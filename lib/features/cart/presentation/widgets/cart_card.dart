@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/core/api/api_endpoints.dart';
 
 import 'package:vedaverse/features/cart/domain/entities/cart_entity.dart';
 
 class CartCard extends StatelessWidget {
   final CartEntity book;
-  final VoidCallback? onAddToCart;
-  final VoidCallback? onDelete;
 
-  const CartCard({
-    super.key,
-    required this.book,
-    this.onAddToCart,
-    this.onDelete,
-  });
+  const CartCard({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
+    final String fullUrl = "${ApiEndpoints.baseUrl}${book.coverImg}";
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -23,14 +20,36 @@ class CartCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                "assets/images/book-cover.jpg",
-                height: 90,
-                width: 60,
-                fit: BoxFit.cover,
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                fullUrl,
+                width: 100,
+                height: 150,
+                fit: BoxFit.contain,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (wasSynchronouslyLoaded) return child;
+
+                  if (frame == null) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryLight,
+                      ),
+                    );
+                  }
+
+                  return child;
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    "assets/images/default-book-cover.png",
+                    width: 130,
+                    height: 180,
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
             ),
+
             const SizedBox(width: 12),
 
             Expanded(
@@ -62,14 +81,6 @@ class CartCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-
-            const SizedBox(width: 8),
-
-            IconButton(
-              icon: const Icon(Icons.delete_outline, color: Colors.red),
-              onPressed: onDelete,
-              tooltip: "Remove",
             ),
           ],
         ),

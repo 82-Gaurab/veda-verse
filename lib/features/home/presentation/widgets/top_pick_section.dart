@@ -54,7 +54,7 @@ class TopPicksSection extends StatelessWidget {
                       },
                   errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
-                      "assets/images/book-cover.jpg",
+                      "assets/images/default-book-cover.png",
                       width: media.width * 0.32,
                       height: media.width * 0.50,
                       fit: BoxFit.cover,

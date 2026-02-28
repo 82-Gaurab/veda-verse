@@ -235,13 +235,11 @@ class _BookDetailState extends ConsumerState<BookDetail> {
                                         return child;
                                       },
                                   errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      color: theme.cardColor,
-                                      child: Icon(
-                                        Icons.book,
-                                        size: 60,
-                                        color: AppColors.primary,
-                                      ),
+                                    return Image.asset(
+                                      "assets/images/default-book-cover.png",
+                                      width: media.width * 0.32,
+                                      height: media.width * 0.50,
+                                      fit: BoxFit.cover,
                                     );
                                   },
                                 ),

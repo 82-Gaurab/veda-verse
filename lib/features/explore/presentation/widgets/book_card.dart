@@ -63,7 +63,7 @@ class BookCard extends StatelessWidget {
                 },
                 errorBuilder: (context, error, stackTrace) {
                   return Image.asset(
-                    "assets/images/book-cover.jpg",
+                    "assets/images/default-book-cover.png",
                     width: 130,
                     height: 180,
                     fit: BoxFit.cover,
