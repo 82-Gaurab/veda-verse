@@ -12,6 +12,7 @@ import 'package:vedaverse/features/cart/presentation/view_model/cart_view_model.
 import 'package:vedaverse/features/review/presentation/widgets/review_card.dart';
 import 'package:vedaverse/features/review/presentation/state/review_state.dart';
 import 'package:vedaverse/features/review/presentation/view_model/review_view_model.dart';
+import 'package:vedaverse/features/review/presentation/widgets/review_form.dart';
 
 class BookDetail extends ConsumerStatefulWidget {
   final String bookId;
@@ -383,7 +384,9 @@ class _BookDetailState extends ConsumerState<BookDetail> {
 
                           const SizedBox(height: 30),
 
-                          /// Reviews Section
+                          // Reviews Section
+                          ReviewForm(bookId: widget.bookId),
+                          SizedBox(height: 10),
                           Text(
                             "Reviews (${reviews.length})",
                             style: const TextStyle(

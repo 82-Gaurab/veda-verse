@@ -48,9 +48,10 @@ class ReviewRemoteDatasource implements IRemoteReviewDatasource {
   Future<bool> createReview(String bookId, ReviewApiModel review) async {
     final token = _tokenService.getToken();
     final data = review.toJson();
+    final request = {...data, "bookId": bookId};
     final response = await _apiClient.post(
       ApiEndpoints.createReview,
-      data: data,
+      data: request,
       option: Options(headers: {"Authorization": "Bearer $token"}),
     );
 
