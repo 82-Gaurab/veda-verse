@@ -29,7 +29,7 @@ class BookCard extends StatelessWidget {
         AppRoutes.push(context, BookDetail(bookId: bookId));
       },
       child: Container(
-        width: media.width * 0.25,
+        width: media.width * 0.4,
         padding: const EdgeInsets.only(bottom: 6),
         margin: const EdgeInsets.only(right: 15),
         decoration: BoxDecoration(

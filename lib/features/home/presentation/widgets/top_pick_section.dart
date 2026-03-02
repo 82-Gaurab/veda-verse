@@ -35,8 +35,8 @@ class TopPicksSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
                   fullUrl,
-                  width: media.width * 0.22,
-                  height: media.width * 0.3,
+                  width: media.width * 0.32,
+                  height: media.width * 0.4,
                   fit: BoxFit.cover,
                   frameBuilder:
                       (context, child, frame, wasSynchronouslyLoaded) {
@@ -55,8 +55,8 @@ class TopPicksSection extends StatelessWidget {
                   errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
                       "assets/images/default-book-cover.png",
-                      width: media.width * 0.22,
-                      height: media.width * 0.30,
+                      width: media.width * 0.32,
+                      height: media.width * 0.40,
                       fit: BoxFit.cover,
                     );
                   },
