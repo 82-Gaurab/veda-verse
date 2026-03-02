@@ -68,6 +68,11 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                   }).toList();
 
                   return OrderCard(
+                    onPay: () {
+                      ref
+                          .read(orderViewModelProvider.notifier)
+                          .payOrder(order.id);
+                    },
                     orderId: order.id,
                     status: order.status,
                     totalPrice: (order.totalPrice as num).toDouble(),

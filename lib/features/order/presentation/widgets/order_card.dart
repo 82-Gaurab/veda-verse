@@ -1,6 +1,9 @@
+import 'package:esewa_flutter/esewa_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
+import 'package:vedaverse/common/my_snack_bar.dart';
 
 class OrderCard extends StatelessWidget {
   final String orderId;
@@ -8,6 +11,7 @@ class OrderCard extends StatelessWidget {
   final double totalPrice;
   final DateTime createdAt;
   final List<Map<String, dynamic>> books;
+  final VoidCallback? onPay;
 
   const OrderCard({
     super.key,
@@ -16,6 +20,7 @@ class OrderCard extends StatelessWidget {
     required this.totalPrice,
     required this.createdAt,
     required this.books,
+    this.onPay,
   });
 
   Color _getStatusColor() {
@@ -45,8 +50,8 @@ class OrderCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withOpacity(0.3)
-                : Colors.black.withOpacity(0.05),
+                ? Colors.black.withValues(alpha: 0.3)
+                : Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             spreadRadius: 2,
           ),
@@ -158,6 +163,50 @@ class OrderCard extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+
+          SizedBox(
+            height: 56,
+            width: double.infinity,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: status.toLowerCase() == "pending"
+                  ? Container(
+                      color: theme.colorScheme.primary,
+                      child: EsewaPayButton(
+                        paymentConfig: ESewaConfig.dev(
+                          amount: totalPrice,
+                          successUrl: 'https://developer.esewa.com.np/success',
+                          failureUrl: 'https://developer.esewa.com.np/failure',
+                          secretKey: '8gBm/:&EnhH.1/q',
+                        ),
+                        onFailure: (result) {
+                          SnackbarUtils.showError(
+                            context,
+                            "Payment Failure $result",
+                          );
+                        },
+                        onSuccess: (result) {
+                          if (onPay != null) {
+                            onPay!();
+                          }
+                        },
+                      ),
+                    )
+                  : Container(
+                      color: AppColors.darkBorder,
+                      child: Center(
+                        child: Text(
+                          status,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+            ),
           ),
         ],
       ),

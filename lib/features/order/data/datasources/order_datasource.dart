@@ -9,4 +9,5 @@ abstract interface class IOrderLocalDatasource {
 abstract interface class IOrderRemoteDatasource {
   Future<List<OrderApiModel>> getMyOrders();
   Future<bool> createOrder();
+  Future<bool> pay(String orderId);
 }

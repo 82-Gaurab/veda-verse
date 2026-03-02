@@ -65,4 +65,22 @@ class OrderRepository implements IOrderRepository {
       return Left(ApiFailure(message: "No Internet Connection"));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> payOrder(String orderId) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final result = await _remoteDatasource.pay(orderId);
+        return Right(result);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data["message"] ?? "Failed to pay order",
+          ),
+        );
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
+  }
 }

@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class ApiEndpoints {
   ApiEndpoints._();
 
-  static const bool isPhysicalDevice = true;
+  static const bool isPhysicalDevice = false;
 
   static const String compIpAddress = "192.168.100.8";
 
@@ -51,7 +51,8 @@ class ApiEndpoints {
 
   // Hack: ========== Order Endpoints ===========
   static const String orders = "/orders/";
-  static String myOrders = '/orders/my-orders';
+  static const String myOrders = '/orders/my-orders';
+  static String pay(String orderId) => "/orders/pay/$orderId";
 
   // Hack: ========== Cart Endpoints ===========
   static const String carts = "/auth/cart";

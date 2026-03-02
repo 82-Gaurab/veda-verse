@@ -22,13 +22,14 @@ class BookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final String fullUrl = "${ApiEndpoints.baseUrl}$coverImg";
+    final media = MediaQuery.of(context).size;
 
     return GestureDetector(
       onTap: () {
         AppRoutes.push(context, BookDetail(bookId: bookId));
       },
       child: Container(
-        width: 140,
+        width: media.width * 0.25,
         padding: const EdgeInsets.only(bottom: 6),
         margin: const EdgeInsets.only(right: 15),
         decoration: BoxDecoration(
@@ -45,8 +46,8 @@ class BookCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
                 fullUrl,
-                width: 130,
-                height: 180,
+                width: media.width * 0.22,
+                height: media.width * 0.30,
                 fit: BoxFit.cover,
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   if (wasSynchronouslyLoaded) return child;
@@ -64,8 +65,8 @@ class BookCard extends StatelessWidget {
                 errorBuilder: (context, error, stackTrace) {
                   return Image.asset(
                     "assets/images/default-book-cover.png",
-                    width: 130,
-                    height: 180,
+                    width: media.width * 0.22,
+                    height: media.width * 0.30,
                     fit: BoxFit.cover,
                   );
                 },

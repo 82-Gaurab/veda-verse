@@ -51,4 +51,16 @@ class OrderRemoteDatasource implements IOrderRemoteDatasource {
 
     return response.data["success"];
   }
+
+  @override
+  Future<bool> pay(String orderId) async {
+    final token = _tokenService.getToken();
+
+    final response = await _apiClient.put(
+      ApiEndpoints.pay(orderId),
+      option: Options(headers: {"Authorization": "Bearer $token"}),
+    );
+
+    return response.data["success"];
+  }
 }
