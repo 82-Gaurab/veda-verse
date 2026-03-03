@@ -23,6 +23,7 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
 
   Future<void> _handleUpdate() async {
     final userSession = ref.read(userSessionServiceProvider);
+    final authId = userSession.getUserId();
     final firstName = _firstNameController.text.trim() == ""
         ? userSession.getUserFirstName()
         : _firstNameController.text;
@@ -33,6 +34,7 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
       ref
           .read(authViewModelProvider.notifier)
           .updateUser(
+            authId: authId,
             firstName: firstName!,
             email: userSession.getUserEmail()!,
             username: _usernameController.text,

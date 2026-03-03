@@ -4,5 +4,4 @@ import 'package:vedaverse/features/genre/domain/entities/genre_entity.dart';
 
 abstract interface class IGenreRepository {
   Future<Either<Failure, List<GenreEntity>>> getAllGenre();
-  Future<Either<Failure, GenreEntity>> getGenreById(String genreId);
 }

@@ -74,6 +74,7 @@ class AuthViewModel extends Notifier<AuthState> {
   }
 
   Future<void> updateUser({
+    String? authId,
     required String firstName,
     required String lastName,
     required String username,
@@ -83,6 +84,7 @@ class AuthViewModel extends Notifier<AuthState> {
     state = state.copyWith(status: AuthStatus.loading);
 
     final params = UpdateUserUsecaseParams(
+      authId: authId,
       firstName: firstName,
       email: email,
       username: username,

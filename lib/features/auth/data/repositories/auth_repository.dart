@@ -54,19 +54,18 @@ class AuthRepository implements IAuthRepository {
         return Left(ApiFailure(message: e.toString()));
       }
     } else {
-      return Left(ApiFailure(message: "No internet"));
-      // try {
-      //   final model = await _authLocalDatasource.login(email, password);
+      try {
+        final model = await _authLocalDatasource.getCurrentUser();
 
-      //   if (model != null) {
-      //     final entity = model.toEntity();
-      //     return Right(entity);
-      //   }
+        if (model != null) {
+          final entity = model.toEntity();
+          return Right(entity);
+        }
 
-      //   return Left(LocalDataBaseFailure(message: "User not found"));
-      // } catch (e) {
-      //   return Left(LocalDataBaseFailure(message: e.toString()));
-      // }
+        return Left(LocalDataBaseFailure(message: "User not found"));
+      } catch (e) {
+        return Left(LocalDataBaseFailure(message: e.toString()));
+      }
     }
   }
 
@@ -182,7 +181,14 @@ class AuthRepository implements IAuthRepository {
         return Left(ApiFailure(message: e.toString()));
       }
     } else {
-      return Left(ApiFailure(message: "No Internet Connection"));
+      final hiveModel = AuthHiveModel.fromEntity(entity);
+      final success = await _authLocalDatasource.updateUser(hiveModel);
+
+      if (success) {
+        return Right(true);
+      } else {
+        return Left(ApiFailure(message: "Failed to update locally"));
+      }
     }
   }
 }

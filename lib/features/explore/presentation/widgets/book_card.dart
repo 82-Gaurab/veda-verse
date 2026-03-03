@@ -31,7 +31,7 @@ class BookCard extends StatelessWidget {
       child: Container(
         width: media.width * 0.4,
         padding: const EdgeInsets.only(bottom: 6),
-        margin: const EdgeInsets.only(right: 15),
+        margin: const EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
           color: theme.cardColor,
           borderRadius: BorderRadius.circular(16),

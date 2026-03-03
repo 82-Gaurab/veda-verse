@@ -42,6 +42,14 @@ class _CartScreenState extends ConsumerState<CartScreen> {
         );
       }
     });
+    ref.listen(orderViewModelProvider, (previous, next) {
+      if (next.status == OrderStatus.error) {
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? "Failed to create order",
+        );
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

@@ -57,6 +57,18 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     // ignore: unused_local_variable
     final authState = ref.watch(authViewModelProvider);
 
+    ref.listen(authViewModelProvider, (prev, next) {
+      if (next.status == AuthStatus.error) {
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? "Register failed",
+        );
+      } else if (next.status == AuthStatus.register) {
+        SnackbarUtils.showSuccess(context, "Registration successful");
+        _navigateToLogin();
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

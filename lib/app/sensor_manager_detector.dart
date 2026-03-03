@@ -54,11 +54,9 @@ class _SensorManagerDetectorState extends ConsumerState<SensorManagerDetector> {
             event.x * event.x + event.y * event.y + event.z * event.z,
           );
 
-          // print("Magnitude: $magnitude");
           final now = DateTime.now();
 
-          if (magnitude > 20) {
-            // print("magnitude cross threshold: $magnitude");
+          if (magnitude > 25) {
             if (_lastShakeTime == null ||
                 now.difference(_lastShakeTime!).inMilliseconds > 1000) {
               _lastShakeTime = now;

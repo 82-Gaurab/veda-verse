@@ -4,29 +4,36 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/core/error/failures.dart';
 import 'package:vedaverse/core/services/connectivity/network_info.dart';
 import 'package:vedaverse/features/cart/data/datasource/cart_datasource.dart';
+import 'package:vedaverse/features/cart/data/datasource/local/cart_local_datasource.dart';
 import 'package:vedaverse/features/cart/data/datasource/remote/cart_remote_datasource.dart';
 import 'package:vedaverse/features/cart/data/models/cart_api_model.dart';
+import 'package:vedaverse/features/cart/data/models/cart_hive_model.dart';
 import 'package:vedaverse/features/cart/domain/entities/cart_entity.dart';
 import 'package:vedaverse/features/cart/domain/repository/cart_repository.dart';
 
 final cartRepositoryProvider = Provider<ICartRepository>((ref) {
   final cartRemoteDatasource = ref.read(cartRemoteDatasourceProvider);
+  final cartLocalDatasource = ref.read(cartLocalDatasourceProvider);
   final info = ref.read(networkInfoProvider);
   return CartRepository(
     cartRemoteDatasource: cartRemoteDatasource,
+    cartLocalDatasource: cartLocalDatasource,
     networkInfo: info,
   );
 });
 
 class CartRepository implements ICartRepository {
   final ICartRemoteDatasource _cartRemoteDatasource;
+  final ICartLocalDatasource _cartLocalDatasource;
   final NetworkInfo _networkInfo;
 
   const CartRepository({
     required ICartRemoteDatasource cartRemoteDatasource,
+    required ICartLocalDatasource cartLocalDatasource,
     required NetworkInfo networkInfo,
-  }) : _networkInfo = networkInfo,
-       _cartRemoteDatasource = cartRemoteDatasource;
+  }) : _cartRemoteDatasource = cartRemoteDatasource,
+       _cartLocalDatasource = cartLocalDatasource,
+       _networkInfo = networkInfo;
 
   @override
   Future<Either<Failure, bool>> createCart(CartEntity entity) async {
@@ -46,7 +53,13 @@ class CartRepository implements ICartRepository {
         return Left(ApiFailure(message: e.toString()));
       }
     } else {
-      return Left(ApiFailure(message: "No internet"));
+      try {
+        final model = CartHiveModel.fromEntity(entity);
+        await _cartLocalDatasource.addCartItem(model);
+        return Right(true);
+      } catch (e) {
+        return Left(LocalDataBaseFailure(message: e.toString()));
+      }
     }
   }
 
@@ -68,7 +81,9 @@ class CartRepository implements ICartRepository {
         return Left(ApiFailure(message: e.toString()));
       }
     } else {
-      return Left(ApiFailure(message: "No Internet Connection"));
+      final cartItems = _cartLocalDatasource.getAllCartItems();
+      final result = cartItems.map((e) => e.toEntity()).toList();
+      return Right(result);
     }
   }
 }

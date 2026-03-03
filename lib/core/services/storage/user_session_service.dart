@@ -48,7 +48,6 @@ class UserSessionService {
     if (profilePicture != null) {
       await _sharedPreferences.setString(_keyUserProfileImage, profilePicture);
     }
-    await _sharedPreferences.setBool(_keysIsLoggedIn, true);
   }
 
   //Info: Clear user session

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/core/error/failures.dart';
 import 'package:vedaverse/core/services/connectivity/network_info.dart';
 import 'package:vedaverse/features/books/data/datasources/book_datasource.dart';
+import 'package:vedaverse/features/books/data/datasources/local/book_local_datasource.dart';
 import 'package:vedaverse/features/books/data/datasources/remote/book_remote_datasource.dart';
 import 'package:vedaverse/features/books/data/models/book_api_model.dart';
 import 'package:vedaverse/features/books/domain/entity/book_entity.dart';
@@ -10,22 +11,27 @@ import 'package:vedaverse/features/books/domain/repository/book_repository.dart'
 
 final bookRepositoryProvider = Provider<IBookRepository>((ref) {
   final bookRemoteDatasource = ref.read(bookRemoteDatasourceProvider);
+  final bookLocalDatasource = ref.read(bookLocalDatasourceProvider);
   final networkInfo = ref.read(networkInfoProvider);
   return BookRepository(
     bookRemoteDatasource: bookRemoteDatasource,
     networkInfo: networkInfo,
+    bookLocalDatasource: bookLocalDatasource,
   );
 });
 
 class BookRepository implements IBookRepository {
   final IBookRemoteDatasource _bookRemoteDatasource;
+  final IBookLocalDatasource _bookLocalDatasource;
   final NetworkInfo _networkInfo;
 
   const BookRepository({
     required IBookRemoteDatasource bookRemoteDatasource,
+    required IBookLocalDatasource bookLocalDatasource,
     required NetworkInfo networkInfo,
   }) : _bookRemoteDatasource = bookRemoteDatasource,
-       _networkInfo = networkInfo;
+       _networkInfo = networkInfo,
+       _bookLocalDatasource = bookLocalDatasource;
 
   @override
   Future<Either<Failure, List<BookEntity>>> getAllBooks() async {
@@ -38,7 +44,12 @@ class BookRepository implements IBookRepository {
         return Left(ApiFailure(message: e.toString()));
       }
     } else {
-      return Left(ApiFailure(message: "No Internet connection"));
+      try {
+        final hiveBooks = await _bookLocalDatasource.getAllBooks();
+        return Right(hiveBooks.map((e) => e.toEntity()).toList());
+      } catch (e) {
+        return Left(LocalDataBaseFailure(message: "Failed to get book by id"));
+      }
     }
   }
 
@@ -53,7 +64,13 @@ class BookRepository implements IBookRepository {
         return Left(ApiFailure(message: e.toString()));
       }
     } else {
-      return Left(ApiFailure(message: "No Internet Connection"));
+      try {
+        final hiveBook = await _bookLocalDatasource.getBookById(bookId);
+        final result = hiveBook!.toEntity();
+        return Right(result);
+      } catch (e) {
+        return Left(LocalDataBaseFailure(message: "Failed to get book by id"));
+      }
     }
   }
 

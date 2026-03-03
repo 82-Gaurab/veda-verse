@@ -53,14 +53,12 @@ class GenreRepository implements IGenreRepository {
         return Left(ApiFailure(message: e.toString()));
       }
     } else {
-      // Note: Hive code
-      return Left(ApiFailure(message: "No internet"));
+      try {
+        final hiveGenres = await _genreLocalDatasource.getAllGenre();
+        return Right(hiveGenres.map((e) => e.toEntity()).toList());
+      } catch (e) {
+        return Left(LocalDataBaseFailure(message: "Failed to get book by id"));
+      }
     }
-  }
-
-  @override
-  Future<Either<Failure, GenreEntity>> getGenreById(String genreId) {
-    // TODO: implement getGenreById
-    throw UnimplementedError();
   }
 }

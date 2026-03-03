@@ -15,6 +15,7 @@ final updateUserUsecaseProvider = Provider<UpdateUserUsecase>((ref) {
 });
 
 class UpdateUserUsecaseParams extends Equatable {
+  final String? authId;
   final String firstName;
   final String lastName;
   final String email;
@@ -27,6 +28,7 @@ class UpdateUserUsecaseParams extends Equatable {
     required this.username,
     required this.lastName,
     this.profilePicture,
+    this.authId,
   });
 
   @override
@@ -48,6 +50,7 @@ class UpdateUserUsecase
   @override
   Future<Either<Failure, bool>> call(UpdateUserUsecaseParams params) {
     final entity = AuthEntity(
+      authId: params.authId,
       firstName: params.firstName,
       lastName: params.lastName,
       email: params.email,

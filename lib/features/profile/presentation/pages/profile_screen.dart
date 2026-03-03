@@ -113,7 +113,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _pickFromCamera() async {
     final hasPermission = await _getUserPermission(Permission.camera);
-    if (!hasPermission) return;
+    if (!hasPermission) {
+      _showPermissionDeniedDialog();
+      return;
+    }
 
     final XFile? photo = await _imagePicker.pickImage(
       source: ImageSource.camera,
@@ -130,6 +133,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _pickFromGallery() async {
     try {
+      final hasPermission = await _getUserPermission(Permission.photos);
+      if (!hasPermission) {
+        _showPermissionDeniedDialog();
+        return;
+      }
+
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 80,

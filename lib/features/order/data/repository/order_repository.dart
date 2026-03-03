@@ -62,7 +62,9 @@ class OrderRepository implements IOrderRepository {
         );
       }
     } else {
-      return Left(ApiFailure(message: "No Internet Connection"));
+      return Left(
+        ApiFailure(message: "Internet connection is needed to create order"),
+      );
     }
   }
 

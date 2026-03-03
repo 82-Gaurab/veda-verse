@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vedaverse/core/constants/hive_table_constant.dart';
 import 'package:vedaverse/features/auth/domain/entities/auth_entity.dart';
+import 'package:vedaverse/features/cart/data/models/cart_hive_model.dart';
 
 // INFO: dart run build_runner build -d
 part 'auth_hive_model.g.dart';
@@ -29,6 +30,9 @@ class AuthHiveModel extends HiveObject {
   @HiveField(6)
   final String? profilePicture;
 
+  @HiveField(7)
+  final List<CartHiveModel> cart;
+
   AuthHiveModel({
     String? authId,
     required this.firstName,
@@ -37,9 +41,11 @@ class AuthHiveModel extends HiveObject {
     this.password,
     this.profilePicture,
     required this.lastName,
-  }) : authId = authId ?? Uuid().v4();
+    List<CartHiveModel>? cart,
+  }) : authId = authId ?? const Uuid().v4(),
+       cart = cart ?? [];
 
-  // Info: To Entity
+  // Hive → Entity
   AuthEntity toEntity() {
     return AuthEntity(
       authId: authId,
@@ -49,10 +55,11 @@ class AuthHiveModel extends HiveObject {
       password: password,
       profilePicture: profilePicture,
       lastName: lastName,
+      cart: cart.map((e) => e.toEntity()).toList(),
     );
   }
 
-  // Info: From Entity (factory function)
+  // Entity → Hive
   factory AuthHiveModel.fromEntity(AuthEntity entity) {
     return AuthHiveModel(
       authId: entity.authId,
@@ -62,10 +69,10 @@ class AuthHiveModel extends HiveObject {
       password: entity.password,
       profilePicture: entity.profilePicture,
       lastName: entity.lastName,
+      cart: entity.cart.map((e) => CartHiveModel.fromEntity(e)).toList(),
     );
   }
 
-  // Info: To entity list (static function)
   static List<AuthEntity> toEntityList(List<AuthHiveModel> models) {
     return models.map((model) => model.toEntity()).toList();
   }

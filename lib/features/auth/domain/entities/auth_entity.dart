@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:vedaverse/features/cart/domain/entities/cart_entity.dart';
 
 class AuthEntity extends Equatable {
   final String? authId;
@@ -10,6 +11,8 @@ class AuthEntity extends Equatable {
   final String? confirmPassword;
   final String? profilePicture;
 
+  final List<CartEntity> cart;
+
   const AuthEntity({
     this.authId,
     required this.firstName,
@@ -19,6 +22,7 @@ class AuthEntity extends Equatable {
     this.profilePicture,
     this.confirmPassword,
     this.password,
+    this.cart = const [],
   });
 
   @override
@@ -29,5 +33,6 @@ class AuthEntity extends Equatable {
     email,
     username,
     profilePicture,
+    cart,
   ];
 }
