@@ -15,18 +15,20 @@ final updateUserUsecaseProvider = Provider<UpdateUserUsecase>((ref) {
 });
 
 class UpdateUserUsecaseParams extends Equatable {
+  final String? authId;
   final String firstName;
   final String lastName;
   final String email;
   final String username;
-  final File profilePicture;
+  final File? profilePicture;
 
   const UpdateUserUsecaseParams({
     required this.firstName,
     required this.email,
     required this.username,
     required this.lastName,
-    required this.profilePicture,
+    this.profilePicture,
+    this.authId,
   });
 
   @override
@@ -48,11 +50,12 @@ class UpdateUserUsecase
   @override
   Future<Either<Failure, bool>> call(UpdateUserUsecaseParams params) {
     final entity = AuthEntity(
+      authId: params.authId,
       firstName: params.firstName,
       lastName: params.lastName,
       email: params.email,
       username: params.username,
-      profilePicture: params.profilePicture.path,
+      profilePicture: params.profilePicture?.path,
     );
 
     return _authRepository.updateUser(entity, params.profilePicture);

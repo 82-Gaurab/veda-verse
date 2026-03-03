@@ -45,9 +45,6 @@ class UserSessionService {
     await _sharedPreferences.setString(_keyUsername, username);
     await _sharedPreferences.setString(_keyUserFirstName, firstName);
     await _sharedPreferences.setString(_keyUserLastName, lastName);
-    // if (batchId != null) {
-    //   await _sharedPreferences.setString(_keyUserBatchId, batchId);
-    // }
     if (profilePicture != null) {
       await _sharedPreferences.setString(_keyUserProfileImage, profilePicture);
     }
@@ -62,6 +59,7 @@ class UserSessionService {
     await _sharedPreferences.remove(_keyUserFirstName);
     await _sharedPreferences.remove(_keyUserLastName);
     await _sharedPreferences.remove(_keyUserProfileImage);
+    await _sharedPreferences.setBool(_keysIsLoggedIn, false);
   }
 
   // Info: getter

@@ -38,9 +38,35 @@ class AuthRepository implements IAuthRepository {
        _networkInfo = networkInfo;
 
   @override
-  Future<Either<Failure, AuthEntity>> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+  Future<Either<Failure, AuthEntity>> getCurrentUser() async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final result = await _authRemoteDatasource.getCurrentUser();
+        final entity = result.toEntity();
+        return Right(entity);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data["message"] ?? "Failed To fetch data",
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      try {
+        final model = await _authLocalDatasource.getCurrentUser();
+
+        if (model != null) {
+          final entity = model.toEntity();
+          return Right(entity);
+        }
+
+        return Left(LocalDataBaseFailure(message: "User not found"));
+      } catch (e) {
+        return Left(LocalDataBaseFailure(message: e.toString()));
+      }
+    }
   }
 
   @override
@@ -137,7 +163,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<Either<Failure, bool>> updateUser(
     AuthEntity entity,
-    File image,
+    File? image,
   ) async {
     if (await _networkInfo.isConnected) {
       try {
@@ -155,7 +181,14 @@ class AuthRepository implements IAuthRepository {
         return Left(ApiFailure(message: e.toString()));
       }
     } else {
-      return Left(ApiFailure(message: "No Internet Connection"));
+      final hiveModel = AuthHiveModel.fromEntity(entity);
+      final success = await _authLocalDatasource.updateUser(hiveModel);
+
+      if (success) {
+        return Right(true);
+      } else {
+        return Left(ApiFailure(message: "Failed to update locally"));
+      }
     }
   }
 }

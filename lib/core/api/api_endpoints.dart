@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class ApiEndpoints {
   ApiEndpoints._();
 
-  static const bool isPhysicalDevice = false;
+  static const bool isPhysicalDevice = true;
 
   static const String compIpAddress = "192.168.100.8";
 
@@ -34,16 +34,36 @@ class ApiEndpoints {
   static const Duration connectionTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
 
-  // Hack: ========== Batch Endpoints ===========
-  static const String genre = "/genre";
-  static String genreById(String id) => '/genre/$id';
+  // Hack: ========== Genre Endpoints ===========
+  static const String genre = "/genres/";
+  static String genreById(String id) => '/genres/$id';
+
+  // Hack: ========== Review Endpoints ===========
+  static const String review = "/genres/";
+  static String reviewsByBookId(String id) => '/reviews/books/$id';
+  static const String myReviews = '/reviews/my-reviews/';
+  static const String createReview = '/reviews/';
+
+  // Hack: ========== Book Endpoints ===========
+  static const String books = "/books/";
+  static String bookById(String id) => '/books/$id';
+  static String booksByGenreId(String genreId) => '/books/genre/$genreId';
+
+  // Hack: ========== Order Endpoints ===========
+  static const String orders = "/orders/";
+  static const String myOrders = '/orders/my-orders';
+  static String pay(String orderId) => "/orders/pay/$orderId";
+
+  // Hack: ========== Cart Endpoints ===========
+  static const String carts = "/auth/cart";
 
   // Hack: ========== User Endpoints ===========
-  // static const String users = "/users";
   static const String userLogin = "/auth/login";
   static const String userRegister = "/auth/register";
   static const String updateUser = "/auth/update-profile";
   static const String userUploadPhoto = "/auth/upload-image";
-  // static String userById(String id) => '/users/$id';
-  // static String userPhoto(String id) => "/users/$id/photo";
+  static const String userPasswordResetRequest =
+      "/auth/request-password-reset-otp";
+  static const String userPasswordReset = "/auth/reset-password-otp";
+  static const String userInfo = "/auth/me";
 }

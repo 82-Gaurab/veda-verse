@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vedaverse/app/routes/app_routes.dart';
-import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/common/my_snack_bar.dart';
 import 'package:vedaverse/features/auth/presentation/state/auth_state.dart';
 import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:vedaverse/features/dashboard/presentation/pages/dashboard_screen.dart';
 import 'package:vedaverse/features/auth/presentation/pages/sign_up_screen.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vedaverse/features/reset-password/presentation/pages/request_password_email.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -19,7 +18,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
 
@@ -43,13 +41,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _navigateToSignup() => AppRoutes.push(context, const SignUpScreen());
   void _handleForgotPassword() =>
-      SnackbarUtils.showInfo(context, 'Forgot password feature coming soon');
-  void _handleGoogleSignIn() =>
-      SnackbarUtils.showInfo(context, 'Google Sign In coming soon');
+      AppRoutes.push(context, const RequestPasswordEmail());
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authViewModelProvider);
+    final theme = Theme.of(context);
+
     ref.listen(authViewModelProvider, (previous, next) {
       if (next.status == AuthStatus.error) {
         SnackbarUtils.showError(context, next.errorMessage ?? "Login Failed");
@@ -57,16 +55,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         SnackbarUtils.showSuccess(context, "Login Successful");
         Navigator.of(
           context,
-        ).push(MaterialPageRoute(builder: (context) => DashboardScreen()));
+        ).pushReplacement(MaterialPageRoute(builder: (_) => DashboardScreen()));
       }
     });
 
     return Scaffold(
       body: SafeArea(
         child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
+          builder: (context, constraints) {
             return Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
@@ -78,6 +76,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
+                          // Logo
                           Center(
                             child: Image.asset(
                               'assets/icons/logo.png',
@@ -85,36 +84,37 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               height: 70,
                             ),
                           ),
+
+                          // Welcome Text
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "Welcome Back",
-                                style: TextStyle(
-                                  fontSize: 35,
-                                  color: AppColors.accent1,
+                                style: theme.textTheme.headlineMedium?.copyWith(
+                                  color: theme.colorScheme.primary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
                                 "Sign in to Continue",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.bold,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: theme.textTheme.bodyMedium?.color,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
                           ),
 
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
 
+                          // Email & Password Fields
                           Column(
                             children: [
                               TextFormField(
                                 controller: _emailController,
                                 keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Email",
                                   prefixIcon: Icon(Icons.email),
                                 ),
@@ -128,25 +128,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   return null;
                                 },
                               ),
-
-                              SizedBox(height: 15),
-
+                              const SizedBox(height: 15),
                               TextFormField(
-                                obscureText: _obscurePassword,
                                 controller: _passwordController,
+                                obscureText: _obscurePassword,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.key),
                                   labelText: "Password",
+                                  prefixIcon: const Icon(Icons.key),
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _obscurePassword
                                           ? Icons.visibility_outlined
                                           : Icons.visibility_off_outlined,
                                     ),
-                                    onPressed: () => setState(
-                                      () =>
-                                          _obscurePassword = !_obscurePassword,
-                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscurePassword = !_obscurePassword;
+                                      });
+                                    },
                                   ),
                                 ),
                                 validator: (value) {
@@ -159,25 +158,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   return null;
                                 },
                               ),
-                              SizedBox(height: 20),
-                              GestureDetector(
-                                onTap: _handleForgotPassword,
-                                child: Align(
-                                  alignment: Alignment.centerRight,
+                              const SizedBox(height: 20),
+
+                              // Forgot Password
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: GestureDetector(
+                                  onTap: _handleForgotPassword,
                                   child: Text(
                                     "Forgot Password?",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.red.shade400,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: theme.colorScheme.error,
                                     ),
                                   ),
                                 ),
                               ),
-
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                             ],
                           ),
 
+                          // Login Button
                           SizedBox(
                             height: 56,
                             width: double.infinity,
@@ -186,9 +186,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ? null
                                   : _handleLogin,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
-                                foregroundColor: Colors.white,
-                                elevation: 0,
+                                backgroundColor: theme.colorScheme.primary,
+                                foregroundColor: theme.colorScheme.onPrimary,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -199,10 +198,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       height: 24,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              Colors.white,
-                                            ),
+                                        color: Colors.white,
                                       ),
                                     )
                                   : const Text(
@@ -214,76 +210,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     ),
                             ),
                           ),
-                          Row(
-                            children: [
-                              const Expanded(child: Divider()),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child: Text(
-                                  'OR',
-                                  style: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              const Expanded(child: Divider()),
-                            ],
-                          ),
-                          Text(
-                            'Sign in With',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
 
-                          Row(
-                            children: [
-                              Expanded(
-                                child: OutlinedButton.icon(
-                                  onPressed: _handleGoogleSignIn,
-                                  icon: SvgPicture.asset(
-                                    'assets/icons/google_logo.svg',
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                  label: const Text(
-                                    'Google',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  style: OutlinedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Signup Link
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 "Don't have an Account? ",
-                                style: TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 15,
-                                ),
+                                style: theme.textTheme.bodyMedium,
                               ),
                               GestureDetector(
                                 onTap: _navigateToSignup,
                                 child: Text(
                                   "Sign Up",
-                                  style: TextStyle(
-                                    color: AppColors.primary,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.primary,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 15,
                                   ),
                                 ),
                               ),

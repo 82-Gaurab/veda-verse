@@ -2,9 +2,11 @@ import "package:flutter/material.dart";
 
 class AppColors {
   AppColors._();
+  static const Color homeLightBackground = Color(0xffF6EFE7);
+  static const Color homeDarkBackground = Color(0xff0E0E0E);
 
   // Primary Colors - Modern Gradient Blue/Purple
-  static const Color primary = Color(0xFF7B6CF6);
+  static const Color primary = Color(0xFF5ABD8C);
   static const Color primaryDark = Color(0xFF5B54E8);
   static const Color primaryLight = Color(0xFF8A7BBE);
 
@@ -44,12 +46,13 @@ class AppColors {
   static const Color authPrimary = Color(0xFF2196F3);
 
   // Onboarding Colors
-  static const Color onboarding1Primary = Color(0xFF667eea);
-  static const Color onboarding1Secondary = Color(0xFF764ba2);
-  static const Color onboarding2Primary = Color(0xFFf093fb);
-  static const Color onboarding2Secondary = Color(0xFFf5576c);
-  static const Color onboarding3Primary = Color(0xFF4facfe);
-  static const Color onboarding3Secondary = Color(0xFF00f2fe);
+
+  static const Color onboarding1Primary = Color(0xFF2E7D32);
+  static const Color onboarding1Secondary = Color(0xFF81C784);
+  static const Color onboarding2Primary = Color(0xFF8D6E63);
+  static const Color onboarding2Secondary = Color(0xFFFFE0B2);
+  static const Color onboarding3Primary = Color(0xFF1A237E);
+  static const Color onboarding3Secondary = Color(0xFF26A69A);
 
   // White with opacity
   static const Color white90 = Color(0xE6FFFFFF);
@@ -82,7 +85,10 @@ class AppColors {
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF7B6CF6), Color(0xFF5B54E8)],
+    colors: [
+      Color.fromARGB(255, 0, 231, 119),
+      Color.fromARGB(255, 59, 149, 63),
+    ],
   );
 
   static const LinearGradient secondaryGradient = LinearGradient(

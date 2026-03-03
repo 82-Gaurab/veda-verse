@@ -12,6 +12,5 @@ abstract interface class IGenreLocalDatasource {
 abstract interface class IGenreRemoteDatasource {
   Future<List<GenreApiModel>> getAllGenre();
   Future<GenreApiModel?> getGenreById(String genreId);
-  Future<bool> createGenre(GenreApiModel genre);
   Future<bool> updateGenre(GenreApiModel genre);
 }

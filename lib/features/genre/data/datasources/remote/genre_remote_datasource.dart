@@ -16,12 +16,6 @@ class GenreRemoteDatasource implements IGenreRemoteDatasource {
     : _apiClient = apiClient;
 
   @override
-  Future<bool> createGenre(GenreApiModel genre) async {
-    final response = await _apiClient.post(ApiEndpoints.genre);
-    return response.data["success"] == true;
-  }
-
-  @override
   Future<List<GenreApiModel>> getAllGenre() async {
     final response = await _apiClient.get(ApiEndpoints.genre);
     final data = response.data["data"] as List;

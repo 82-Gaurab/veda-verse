@@ -1,0 +1,15 @@
+<svg width="200" height="300" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Book Shadow -->
+  <rect x="15" y="10" width="170" height="280" rx="18" fill="#00000022"/>
+
+  <!-- Spine -->
+  <rect x="0" y="0" width="25" height="280" rx="12" fill="#D9C2A3"/>
+
+  <!-- Main Cover Shape -->
+  <rect x="20" y="0" width="170" height="280" rx="18" fill="#FFFFFF"/>
+
+  <!-- Bottom Thickness -->
+  <rect x="20" y="270" width="170" height="10" rx="5" fill="#E8D8C3"/>
+
+</svg>

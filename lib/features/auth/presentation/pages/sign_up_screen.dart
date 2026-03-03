@@ -8,7 +8,6 @@ import 'package:vedaverse/features/auth/presentation/view_model/auth_view_model.
 import 'package:vedaverse/features/auth/presentation/widgets/auth_header.dart';
 import 'package:vedaverse/features/auth/presentation/widgets/password_field.dart';
 import 'package:vedaverse/features/auth/presentation/widgets/terms_checkbox.dart';
-import 'package:vedaverse/features/onboarding/presentation/pages/first_on_boarding_screen.dart';
 import 'package:vedaverse/core/widgets/my_input_form_field.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -38,19 +37,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       return;
     }
     if (_formKey.currentState!.validate()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => FirstOnBoardingScreen(
+      ref
+          .read(authViewModelProvider.notifier)
+          .register(
             firstName: _firstNameController.text,
             email: _emailController.text,
             password: _passwordController.text,
             confirmPassword: _confirmPasswordController.text,
             username: _emailController.text.trim().split("@").first,
             lastName: _lastNameController.text,
-          ),
-        ),
-      );
+          );
     }
   }
 
@@ -60,6 +56,18 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     final authState = ref.watch(authViewModelProvider);
+
+    ref.listen(authViewModelProvider, (prev, next) {
+      if (next.status == AuthStatus.error) {
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? "Register failed",
+        );
+      } else if (next.status == AuthStatus.register) {
+        SnackbarUtils.showSuccess(context, "Registration successful");
+        _navigateToLogin();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(

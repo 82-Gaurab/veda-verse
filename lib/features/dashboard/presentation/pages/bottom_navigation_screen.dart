@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vedaverse/features/dashboard/presentation/pages/bottom_screen/explore_screen.dart';
-import 'package:vedaverse/features/dashboard/presentation/pages/bottom_screen/home_screen.dart';
-import 'package:vedaverse/features/dashboard/presentation/pages/bottom_screen/profile_screen.dart';
-import 'package:vedaverse/features/dashboard/presentation/pages/bottom_screen/wishlist_screen.dart';
+import 'package:vedaverse/features/explore/presentation/pages/explore_screen.dart';
+import 'package:vedaverse/features/home/presentation/pages/home_screen.dart';
+import 'package:vedaverse/features/profile/presentation/pages/profile_screen.dart';
+import 'package:vedaverse/features/cart/presentation/pages/cart_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -17,7 +17,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   List<Widget> lstBottomScreen = [
     const HomeScreen(),
     const ExploreScreen(),
-    const WishlistScreen(),
+    const CartScreen(),
     const ProfileScreen(),
   ];
 
@@ -30,8 +30,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt_sharp),
-            label: "Wishlist",
+            icon: Icon(Icons.shopping_cart),
+            label: "Cart",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],

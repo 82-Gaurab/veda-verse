@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vedaverse/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/login_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:vedaverse/features/auth/domain/usecases/register_usecase.dart';
@@ -19,6 +20,7 @@ class AuthViewModel extends Notifier<AuthState> {
   late final LogoutUsecase _logoutUsecase;
   late final UpdateUserUsecase _updateUserUsecase;
   late final UploadImageUsecase _uploadImageUsecase;
+  late final GetMyInfoUsecase _getMyInfoUsecase;
 
   @override
   AuthState build() {
@@ -27,6 +29,7 @@ class AuthViewModel extends Notifier<AuthState> {
     _logoutUsecase = ref.read(logoutUsecaseProvider);
     _uploadImageUsecase = ref.read(uploadImageUsecaseProvider);
     _updateUserUsecase = ref.read(updateUserUsecaseProvider);
+    _getMyInfoUsecase = ref.read(getMyInfoUsecaseProvider);
     return AuthState();
   }
 
@@ -71,15 +74,17 @@ class AuthViewModel extends Notifier<AuthState> {
   }
 
   Future<void> updateUser({
+    String? authId,
     required String firstName,
     required String lastName,
     required String username,
     required String email,
-    required File profilePicture,
+    File? profilePicture,
   }) async {
     state = state.copyWith(status: AuthStatus.loading);
 
     final params = UpdateUserUsecaseParams(
+      authId: authId,
       firstName: firstName,
       email: email,
       username: username,
@@ -144,6 +149,24 @@ class AuthViewModel extends Notifier<AuthState> {
           status: AuthStatus.loaded,
           uploadPhotoName: imageName,
         );
+      },
+    );
+  }
+
+  Future<void> getMyInfo() async {
+    state = state.copyWith(status: AuthStatus.loading);
+
+    final result = await _getMyInfoUsecase();
+
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: failure.message,
+        );
+      },
+      (result) {
+        state = state.copyWith(status: AuthStatus.loaded, entity: result);
       },
     );
   }

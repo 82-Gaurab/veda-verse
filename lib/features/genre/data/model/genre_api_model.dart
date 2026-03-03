@@ -15,7 +15,7 @@ class GenreApiModel {
   factory GenreApiModel.fromJson(Map<String, dynamic> json) {
     return GenreApiModel(
       genreId: json["_id"] as String,
-      genreTitle: json["genreTitle"] as String,
+      genreTitle: json["name"] as String,
     );
   }
 
