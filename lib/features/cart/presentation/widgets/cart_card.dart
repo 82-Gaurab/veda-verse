@@ -102,7 +102,7 @@ class CartCard extends StatelessWidget {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.remove_circle_outline),
-                        onPressed: onDecrease,
+                        onPressed: book.quantity == 1 ? null : onDecrease,
                       ),
 
                       Text(
