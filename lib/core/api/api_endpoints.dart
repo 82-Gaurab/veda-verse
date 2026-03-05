@@ -56,6 +56,8 @@ class ApiEndpoints {
 
   // Hack: ========== Cart Endpoints ===========
   static const String carts = "/auth/cart";
+  static const String updateCartItem = "/auth/cart/update-quantity";
+  static const String deleteCartItem = "/auth/cart/remove";
 
   // Hack: ========== User Endpoints ===========
   static const String userLogin = "/auth/login";

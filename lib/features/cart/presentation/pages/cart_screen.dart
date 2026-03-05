@@ -20,6 +20,22 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     ref.read(orderViewModelProvider.notifier).createOrder();
   }
 
+  Future<void> _handleIncreaseQuantity(String bookId, int quantity) async {
+    ref
+        .read(cartViewModelProvider.notifier)
+        .updateCart(bookId: bookId, quantity: quantity + 1);
+  }
+
+  Future<void> _handleDecreaseQuantity(String bookId, int quantity) async {
+    ref
+        .read(cartViewModelProvider.notifier)
+        .updateCart(bookId: bookId, quantity: quantity - 1);
+  }
+
+  Future<void> _handleDeleteItem(String bookId) async {
+    ref.read(cartViewModelProvider.notifier).deleteCart(bookId);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -89,7 +105,19 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: Column(
                                 children: cartBooks.map((book) {
-                                  return CartCard(book: book);
+                                  return CartCard(
+                                    book: book,
+                                    onDecrease: () => _handleDecreaseQuantity(
+                                      book.bookId,
+                                      book.quantity,
+                                    ),
+                                    onIncrease: () => _handleIncreaseQuantity(
+                                      book.bookId,
+                                      book.quantity,
+                                    ),
+                                    onRemove: () =>
+                                        _handleDeleteItem(book.bookId),
+                                  );
                                 }).toList(),
                               ),
                             ),
