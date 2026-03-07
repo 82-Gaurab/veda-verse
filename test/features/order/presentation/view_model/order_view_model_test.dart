@@ -159,7 +159,7 @@ void main() {
 
         await readViewModel().payOrder(orderId);
 
-        expect(readState().status, equals(OrderStatus.loaded));
+        expect(readState().status, equals(OrderStatus.paid));
         expect(readState().errorMessage, isNull);
       });
 

@@ -2,8 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:vedaverse/core/error/failures.dart';
+import 'package:vedaverse/core/services/storage/user_session_service.dart';
 import 'package:vedaverse/features/cart/domain/entities/cart_entity.dart';
 import 'package:vedaverse/features/cart/domain/usecases/create_cart_usecase.dart';
 import 'package:vedaverse/features/cart/domain/usecases/get_my_cart_usecase.dart';
@@ -18,13 +20,14 @@ class MockCreateCartUsecase extends Mock implements CreateCartUsecase {}
 class MockGetMyCartUsecase extends Mock implements GetMyCartUsecase {}
 
 /// Fakes
+class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 class FakeCreateCartParams extends Fake implements CreateCartUsecaseParams {}
 
 void main() {
   late MockCreateCartUsecase mockCreateCartUsecase;
   late MockGetMyCartUsecase mockGetMyCartUsecase;
-
+  late MockSharedPreferences mockSharedPreferences;
   late ProviderContainer container;
 
   late List<CartEntity> tCartList;
@@ -36,6 +39,7 @@ void main() {
   setUp(() {
     mockCreateCartUsecase = MockCreateCartUsecase();
     mockGetMyCartUsecase = MockGetMyCartUsecase();
+    mockSharedPreferences = MockSharedPreferences();
 
     tCartList = [
       CartEntity(bookId: "book1", quantity: 2),
@@ -46,6 +50,7 @@ void main() {
       overrides: [
         createCartUsecaseProvider.overrideWithValue(mockCreateCartUsecase),
         getMyCartUsecaseProvider.overrideWithValue(mockGetMyCartUsecase),
+        sharedPreferenceProvider.overrideWithValue(mockSharedPreferences),
       ],
     );
   });

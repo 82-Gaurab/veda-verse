@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:vedaverse/features/order/domain/entities/order_entity.dart';
 
-enum OrderStatus { initial, loading, loaded, error }
+enum OrderStatus { initial, loading, loaded, error, paid }
 
 class OrderState extends Equatable {
   final OrderStatus status;

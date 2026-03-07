@@ -64,6 +64,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           context,
           next.errorMessage ?? "Failed to create order",
         );
+      } else if (next.status == OrderStatus.loaded) {
+        SnackbarUtils.showSuccess(context, "Order Created successfully");
+        ref.read(cartViewModelProvider.notifier).getMyCart();
       }
     });
     return Scaffold(
