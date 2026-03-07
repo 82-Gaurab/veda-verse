@@ -66,6 +66,8 @@ class AuthApiModel {
       lastName: entity.lastName,
       email: entity.email,
       username: entity.username,
+      password: entity.password,
+      confirmPassword: entity.confirmPassword,
       profilePicture: entity.profilePicture,
     );
   }
