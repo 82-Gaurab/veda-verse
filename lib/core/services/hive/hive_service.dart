@@ -46,37 +46,127 @@ class HiveService {
 
   Future<void> _insertDummyBooks() async {
     final bookBox = Hive.box<BookHiveModel>(HiveTableConstant.bookTable);
-    final genreBox = Hive.box<GenreHiveModel>(HiveTableConstant.genreTable);
 
-    // Skip if books already exist
     if (bookBox.isNotEmpty) return;
 
-    // Get all available genre titles
-    final availableGenres = genreBox.values.map((g) => g.genreTitle).toList();
+    final dummyBooks = [
+      BookHiveModel(
+        bookId: "69aa38bf77a915891b5897ec",
+        title: "Dragon Warrior",
+        author: "god",
+        description:
+            "This is about a warrior who fights to live life on his own terms.",
+        genre: [
+          "Historical Fiction",
+          "Horror",
+          "Self-Help",
+          "Thriller",
+          "Young Adult",
+        ],
+        publishedYear: "2019",
+        price: 1000.0,
+      ),
 
-    if (availableGenres.isEmpty) return; // No genres to assign
+      BookHiveModel(
+        bookId: "69aa1d02962f108d2f646996",
+        title: "Into the Wild",
+        author: "Jon Krakauer",
+        description:
+            "This true story follows Christopher McCandless, a young man who abandons modern life. He travels across America seeking freedom and meaning. His journey eventually leads him to the Alaskan wilderness.",
+        genre: ["Adventure", "Biography"],
+        publishedYear: "1996",
+        price: 1280.0,
+      ),
 
-    // Create 20 dummy books
-    final dummyBooks = List.generate(20, (index) {
-      // Pick 1-2 genres randomly for each book
-      final randomGenres = [
-        availableGenres[index % availableGenres.length],
-        if (availableGenres.length > 1)
-          availableGenres[(index + 1) % availableGenres.length],
-      ];
+      BookHiveModel(
+        bookId: "69aa1cf2962f108d2f646991",
+        title: "The Book Thief",
+        author: "Markus Zusak",
+        description:
+            "Set in Nazi Germany, the story follows a young girl named Liesel who discovers the power of books.",
+        genre: ["Historical Fiction", "Young Adult"],
+        publishedYear: "2005",
+        price: 1400.0,
+      ),
 
-      return BookHiveModel(
-        bookId: 'book_${index + 1}',
-        title: 'Book Title ${index + 1}',
-        author: 'Author ${index + 1}',
-        genre: randomGenres,
-        publishedYear: '20${10 + index % 10}', // 2010-2019
-        description: 'This is a description for Book ${index + 1}.',
-        price: 10.0 + index, // Example price
-      );
-    });
+      BookHiveModel(
+        bookId: "69aa1ce3962f108d2f64698c",
+        title: "Rich Dad Poor Dad",
+        author: "Robert Kiyosaki",
+        description:
+            "Lessons learned from two father figures with different views on money and financial intelligence.",
+        genre: ["Business & Finance", "Self-Help"],
+        publishedYear: "1997",
+        price: 1340.0,
+      ),
 
-    // Insert all books into Hive
+      BookHiveModel(
+        bookId: "69aa1cc7962f108d2f646987",
+        title: "The Girl with the Dragon Tattoo",
+        author: "Stieg Larsson",
+        description:
+            "Journalist Mikael Blomkvist investigates a decades-old disappearance with hacker Lisbeth Salander.",
+        genre: ["Mystery", "Thriller"],
+        publishedYear: "2005",
+        price: 1670.0,
+      ),
+
+      BookHiveModel(
+        bookId: "69aa1c39962f108d2f646980",
+        title: "Sapiens",
+        author: "Yuval Noah Harari",
+        description:
+            "Explores the history of humankind from ancient ancestors to modern society.",
+        genre: ["Historical Fiction", "Psychology"],
+        publishedYear: "2011",
+        price: 1820.0,
+      ),
+
+      BookHiveModel(
+        bookId: "69aa1c2f962f108d2f64697b",
+        title: "The Shining",
+        author: "Stephen King",
+        description:
+            "Jack Torrance becomes caretaker of the haunted Overlook Hotel.",
+        genre: ["Horror", "Psychology", "Thriller"],
+        publishedYear: "1977",
+        price: 1480.0,
+      ),
+
+      BookHiveModel(
+        bookId: "69aa1c26962f108d2f646976",
+        title: "Harry Potter and the Sorcerer's Stone",
+        author: "J.K. Rowling",
+        description:
+            "Harry Potter discovers he is a wizard and begins his journey at Hogwarts.",
+        genre: ["Adventure", "Fantasy", "Young Adult"],
+        publishedYear: "1997",
+        price: 1575.0,
+      ),
+
+      BookHiveModel(
+        bookId: "69aa1c1b962f108d2f646971",
+        title: "The Da Vinci Code",
+        author: "Dan Brown",
+        description:
+            "A murder inside the Louvre leads Robert Langdon into a secret investigation.",
+        genre: ["Mystery", "Thriller"],
+        publishedYear: "2003",
+        price: 1650.0,
+      ),
+
+      BookHiveModel(
+        bookId: "69aa1c12962f108d2f64696c",
+        title: "Think and Grow Rich",
+        author: "Napoleon Hill",
+        description:
+            "Classic book exploring the mindset needed for financial success.",
+        genre: ["Business & Finance", "Self-Help"],
+        publishedYear: "1937",
+        price: 1199.0,
+      ),
+    ];
+
     for (var book in dummyBooks) {
       await bookBox.put(book.bookId, book);
     }
