@@ -35,6 +35,10 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
           context,
           next.errorMessage ?? "Failed To fetch order data",
         );
+      } else if (next.status == OrderStatus.paid) {
+        SnackbarUtils.showSuccess(context, "Payment Successful");
+
+        ref.read(orderViewModelProvider.notifier).getMyOrders();
       }
     });
     return Scaffold(

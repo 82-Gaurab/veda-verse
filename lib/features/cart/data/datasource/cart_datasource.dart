@@ -3,6 +3,8 @@ import 'package:vedaverse/features/cart/data/models/cart_hive_model.dart';
 
 abstract interface class ICartRemoteDatasource {
   Future<bool> createCart(CartApiModel cart);
+  Future<bool> updateCartItem(CartApiModel cart);
+  Future<bool> deleteCartItem(String bookId);
   Future<List<CartApiModel>> getMyCart();
 }
 

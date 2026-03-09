@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:vedaverse/app/theme/app_colors.dart';
 import 'package:vedaverse/core/api/api_endpoints.dart';
-
 import 'package:vedaverse/features/cart/domain/entities/cart_entity.dart';
 
 class CartCard extends StatelessWidget {
   final CartEntity book;
 
-  const CartCard({super.key, required this.book});
+  final VoidCallback? onIncrease;
+  final VoidCallback? onDecrease;
+  final VoidCallback? onRemove;
+
+  const CartCard({
+    super.key,
+    required this.book,
+    this.onIncrease,
+    this.onDecrease,
+    this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +39,13 @@ class CartCard extends StatelessWidget {
                   if (wasSynchronouslyLoaded) return child;
 
                   if (frame == null) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primaryLight,
+                    return const SizedBox(
+                      width: 100,
+                      height: 150,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryLight,
+                        ),
                       ),
                     );
                   }
@@ -42,8 +55,8 @@ class CartCard extends StatelessWidget {
                 errorBuilder: (context, error, stackTrace) {
                   return Image.asset(
                     "assets/images/default-book-cover.png",
-                    width: 130,
-                    height: 180,
+                    width: 100,
+                    height: 150,
                     fit: BoxFit.cover,
                   );
                 },
@@ -62,22 +75,56 @@ class CartCard extends StatelessWidget {
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
+
                   const SizedBox(height: 4),
+
                   Text(
                     book.author!,
                     style: const TextStyle(fontSize: 14),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    "Quantity: ${book.quantity}",
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  const SizedBox(height: 6),
+
+                  const SizedBox(height: 8),
+
                   Text(
                     "Rs ${book.price}",
-                    style: TextStyle(color: Colors.green, fontSize: 14),
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove_circle_outline),
+                        onPressed: book.quantity == 1 ? null : onDecrease,
+                      ),
+
+                      Text(
+                        "${book.quantity}",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+
+                      IconButton(
+                        icon: const Icon(Icons.add_circle_outline),
+                        onPressed: onIncrease,
+                      ),
+
+                      const Spacer(),
+
+                      IconButton(
+                        icon: const Icon(
+                          Icons.delete_outline,
+                          color: Colors.red,
+                        ),
+                        onPressed: onRemove,
+                      ),
+                    ],
                   ),
                 ],
               ),

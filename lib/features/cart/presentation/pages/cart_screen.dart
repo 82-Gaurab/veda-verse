@@ -20,6 +20,22 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     ref.read(orderViewModelProvider.notifier).createOrder();
   }
 
+  Future<void> _handleIncreaseQuantity(String bookId, int quantity) async {
+    ref
+        .read(cartViewModelProvider.notifier)
+        .updateCart(bookId: bookId, quantity: quantity + 1);
+  }
+
+  Future<void> _handleDecreaseQuantity(String bookId, int quantity) async {
+    ref
+        .read(cartViewModelProvider.notifier)
+        .updateCart(bookId: bookId, quantity: quantity - 1);
+  }
+
+  Future<void> _handleDeleteItem(String bookId) async {
+    ref.read(cartViewModelProvider.notifier).deleteCart(bookId);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +64,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           context,
           next.errorMessage ?? "Failed to create order",
         );
+      } else if (next.status == OrderStatus.loaded) {
+        SnackbarUtils.showSuccess(context, "Order Created successfully");
+        ref.read(cartViewModelProvider.notifier).getMyCart();
       }
     });
     return Scaffold(
@@ -73,69 +92,84 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              SizedBox(height: 30),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 30),
 
-              SingleChildScrollView(
-                child: cartState.status == CartStatus.loading
-                    ? const Center(child: CircularProgressIndicator())
-                    : cartBooks.isEmpty
-                    ? Center(child: const Text("No Item in Cart"))
-                    : SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: Column(
-                                children: cartBooks.map((book) {
-                                  return CartCard(book: book);
-                                }).toList(),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            SizedBox(
-                              height: 56,
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed:
-                                    orderState.status == OrderStatus.loading
-                                    ? null
-                                    : _handleCheckout,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
-                                  foregroundColor: Colors.white,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                child: orderState.status == OrderStatus.loading
-                                    ? const SizedBox(
-                                        width: 24,
-                                        height: 24,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                Colors.white,
-                                              ),
-                                        ),
-                                      )
-                                    : const Text(
-                                        'Checkout',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                SingleChildScrollView(
+                  child: cartState.status == CartStatus.loading
+                      ? const Center(child: CircularProgressIndicator())
+                      : cartBooks.isEmpty
+                      ? Center(child: const Text("No Item in Cart"))
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                child: Column(
+                                  children: cartBooks.map((book) {
+                                    return CartCard(
+                                      book: book,
+                                      onDecrease: () => _handleDecreaseQuantity(
+                                        book.bookId,
+                                        book.quantity,
                                       ),
+                                      onIncrease: () => _handleIncreaseQuantity(
+                                        book.bookId,
+                                        book.quantity,
+                                      ),
+                                      onRemove: () =>
+                                          _handleDeleteItem(book.bookId),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 10),
+                              SizedBox(
+                                height: 56,
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed:
+                                      orderState.status == OrderStatus.loading
+                                      ? null
+                                      : _handleCheckout,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primary,
+                                    foregroundColor: Colors.white,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child:
+                                      orderState.status == OrderStatus.loading
+                                      ? const SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.white,
+                                                ),
+                                          ),
+                                        )
+                                      : const Text(
+                                          'Checkout',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

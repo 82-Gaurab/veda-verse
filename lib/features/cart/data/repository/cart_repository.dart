@@ -64,6 +64,60 @@ class CartRepository implements ICartRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> updateCartItem(CartEntity entity) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final model = CartApiModel.fromEntity(entity);
+        final response = await _cartRemoteDatasource.updateCartItem(model);
+        return Right(response);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            statusCode: e.response?.statusCode,
+            message: e.response?.data['message'] ?? "Update cart failed",
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      try {
+        final model = CartHiveModel.fromEntity(entity);
+        await _cartLocalDatasource.updateCartItem(model);
+        return Right(true);
+      } catch (e) {
+        return Left(LocalDataBaseFailure(message: e.toString()));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteCartItem(String bookId) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final response = await _cartRemoteDatasource.deleteCartItem(bookId);
+        return Right(response);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            statusCode: e.response?.statusCode,
+            message: e.response?.data['message'] ?? "Delete cart item failed",
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      try {
+        await _cartLocalDatasource.deleteCartItem(bookId);
+        return Right(true);
+      } catch (e) {
+        return Left(LocalDataBaseFailure(message: e.toString()));
+      }
+    }
+  }
+
+  @override
   Future<Either<Failure, List<CartEntity>>> getMyCart() async {
     if (await _networkInfo.isConnected) {
       try {

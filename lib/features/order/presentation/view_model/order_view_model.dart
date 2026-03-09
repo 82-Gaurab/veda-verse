@@ -66,7 +66,7 @@ class OrderViewModel extends Notifier<OrderState> {
         errorMessage: failure.message,
       ),
       (success) => state = state.copyWith(
-        status: success ? OrderStatus.loaded : OrderStatus.error,
+        status: success ? OrderStatus.paid : OrderStatus.error,
       ),
     );
   }

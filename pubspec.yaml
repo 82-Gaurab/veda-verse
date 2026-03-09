@@ -98,6 +98,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons: ^0.14.4
   # Code Generation
   build_runner: ^2.4.13
   json_serializable: ^6.8.0
@@ -155,3 +156,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: "AppIcon"
+  image_path: "assets/icons/app_icon.png"
+  remove_alpha_ios: true

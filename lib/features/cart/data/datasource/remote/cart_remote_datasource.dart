@@ -37,6 +37,33 @@ class CartRemoteDatasource implements ICartRemoteDatasource {
   }
 
   @override
+  Future<bool> updateCartItem(CartApiModel cart) async {
+    final token = _tokenService.getToken();
+    final data = cart.toJson();
+
+    final response = await _apiClient.patch(
+      ApiEndpoints.updateCartItem,
+      data: data,
+      option: Options(headers: {"Authorization": "Bearer $token"}),
+    );
+
+    return response.data["success"];
+  }
+
+  @override
+  Future<bool> deleteCartItem(String bookId) async {
+    final token = _tokenService.getToken();
+
+    final response = await _apiClient.delete(
+      ApiEndpoints.deleteCartItem,
+      data: {"product": bookId},
+      option: Options(headers: {"Authorization": "Bearer $token"}),
+    );
+
+    return response.data["success"];
+  }
+
+  @override
   Future<List<CartApiModel>> getMyCart() async {
     final token = _tokenService.getToken();
     final response = await _apiClient.get(
